@@ -4,11 +4,9 @@
 
 a.k.a. Locks, Mutexes, Semaphores, etc
 
-> STATUS: Actively brainstorming and soliciting feedback
+The Indexed Database API defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. We'd like to generalize this model to allow any Web Platform activity to be scheduled based on resource availability. This would allow transactions to be composed for other storage types (such as Cache Storage), across storage types, even across non-storage APIs (e.g. network fetches).
 
-The Indexed Database API defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. We'd like to generalize this model to allow any Web Platform activity to be scheduled based on resource availability. This would allow transactions to be composed for other storage types (such as Cache Storage), across storage types, even across non-storage APIs.
-
-Cooperative coordination takes place within the scope of same-origin contexts (_TODO: formalize!_); this may span multiple
+Cooperative coordination takes place within the scope of same-origin [agents](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-formalism); this may span multiple
 [agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism) (informally: process boundaries) and therefore [Atomics](http://lars-t-hansen.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject) cannot be used to achieve the same purpose.
 
 Previous discussions:
@@ -112,3 +110,12 @@ Roughly:
 * The "complete promise" is resolved when the transaction successfully commits or aborts.
 
 This doesn't precisely capture the "active" vs "inactive" semantics and several other details. We may want to go through the exercise of defining this more rigorously.
+
+## Related APIs
+
+* [Atomics](http://lars-t-hansen.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject)
+  * Resource coordination within a SharedArrayBuffer, limiting use to a particular [agent cluster](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism).
+* [Indexed DB Transactions](https://w3c.github.io/IndexedDB/#transaction-concept)
+  * No explicit control of transaction lifetimes. Requires use of full API (e.g. schema versioning).
+* [Wake Lock API](https://w3c.github.io/wake-lock/)
+  * Acquisition of a single system-provided resource.
