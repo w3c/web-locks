@@ -2,17 +2,29 @@
 
 # Origin Flags
 
+## TL;DR
+
+A new web platform API that allows script running in one tab to asynchronously acquire a flag, hold it while work is performed, then release it. While held, no other script in the origin can aquire the same flag.
+
+## Background
+
 a.k.a. Locks, Mutexes, Semaphores, etc
 
 The Indexed Database API defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. We'd like to generalize this model to allow any Web Platform activity to be scheduled based on resource availability. This would allow transactions to be composed for other storage types (such as Cache Storage), across storage types, even across non-storage APIs (e.g. network fetches).
 
 Cooperative coordination takes place within the scope of same-origin [agents](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-formalism); this may span multiple
-[agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism) (informally: process boundaries) and therefore [Atomics](http://lars-t-hansen.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject) cannot be used to achieve the same purpose.
+[agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism) (informally: process boundaries).
 
 Previous discussions:
 * [Application defined "locks" [whatwg]](https://lists.w3.org/Archives/Public/public-whatwg-archive/2009Sep/0266.html)
 
 This document proposes an API for allow contexts (windows, workers) within a web application to coordinate the usage of resources. 
+
+
+## Examples
+
+A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as Indexed DB for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronouze the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active. This can be satisfied with an API can 
+
 
 ## Concepts
 
@@ -46,7 +58,8 @@ The _mode_ property and can be used to model the common [readers-writer lock](ht
 
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
-## Basic Usage
+
+## API Proposal
 
 Proposal 1: Auto-Releasing with waitUntil():
 
@@ -88,7 +101,27 @@ An optional _timeout_ scan be specified in milliseconds. If the timeout passes b
 
 In the auto-release approach, a flag will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
 
+
 ## FAQ
+
+*Why can't [Atomics](https://tc39.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject) be used for this?*
+
+The use cases for this API require coordination across multiple
+[agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism); 
+ whereas Atomics operations operate on [SharedArrayBuffers](https://tc39.github.io/ecmascript_sharedmem/shmem.html#StructuredData.SharedArrayBuffer) which are constrained to a single agent cluster. (Informally: tabs/workers can be multi-process and atomics only work same-process.)
+
+
+*What happens if a tab is throttled/suspended?*
+
+If a tab holds a flag and stops running code it can inhibit work done by other tabs. If this is because tabs are not appropriately breaking up work it's an application problem. But browsers could throttle or even suspend tabs (e.g.
+background background tabs) to reduce power and/or memory consumption. With an API like this &mdash; or with Indexed DB 
+&mdash; this can result the [work in foreground tabs being throttled](https://bugs.chromium.org/p/chromium/issues/detail?id=675372). 
+
+To mitigate this, browsers must ensure that apps are notified before being throttled or suspended so that 
+they can release flags, and/or browsers must automatically release flags held by a context before it is
+suspended. See [A Lifecycle for the Web](https://github.com/spanicker/web-lifecycle) for possible thoughts
+around formalizing these states and notifications.
+
 
 *Can you implement explicit release in terms of auto-release?*
 
@@ -125,9 +158,10 @@ Roughly:
 
 This doesn't precisely capture the "active" vs "inactive" semantics and several other details. We may want to go through the exercise of defining this more rigorously.
 
+
 ## Related APIs
 
-* [Atomics](http://lars-t-hansen.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject)
+* [Atomics](https://tc39.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject)
   * Resource coordination within a SharedArrayBuffer, limiting use to a particular [agent cluster](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism).
 * [Indexed DB Transactions](https://w3c.github.io/IndexedDB/#transaction-concept)
   * No explicit control of transaction lifetimes. Requires use of full API (e.g. schema versioning).
