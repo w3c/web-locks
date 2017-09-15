@@ -88,7 +88,21 @@ An optional _timeout_ scan be specified in milliseconds. If the timeout passes b
 
 In the auto-release approach, a flag will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
 
-## Notes
+## FAQ
+
+*Can you implement explicit release in terms of auto-release?*
+
+```js
+async function requestExplicitFlag(...args) {
+  const flag = await requestFlag(...args);
+  flag.waitUntil(new Promise(resolve => { flag.release = resolve; }));
+  return flag;
+}
+```
+
+*Can you implement auto-release in terms of explicit-release?*
+
+More complicated since `waitUntil()` can be called multiple times. See the polyfill for an example.
 
 *How do you _compose_ IndexedDB transactions with these flags?*
 
