@@ -11,48 +11,84 @@ The Indexed Database API defines a transaction model allowing shared read and ex
 Cooperative coordination takes place within the scope of same-origin contexts (TODO: formalize!); this may span multiple
 [agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism) (informally: process boundaries) and therefore [Atomics](http://lars-t-hansen.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject) cannot be used to achieve the same purpose.
 
-
 Previous discussions:
 * [Application defined "locks" [whatwg]](https://lists.w3.org/Archives/Public/public-whatwg-archive/2009Sep/0266.html)
 
+This document proposes an API for allow contexts (windows, workers) within a web application to coordinate the usage of resources. 
+
+## Concepts
+
+A _resource_ is just a name (string) chosen by the web application.
+
+A _scope_ is a set of one or more resources. 
+
+A _mode_ is either "exclusive" or "shared".
+
+A _flag request_ is made by script for a particular _scope_ and _mode_. A scheduling algorithm looks the state of current and previous requests, and eventually grants a flag request.
+
+A _flag_ is granted request; it has the _scope_ and _mode_ of the flag request. It is represented as an object returned to script.
+
+As long as the flag is _held_ it may prevent other flag requests from being (depending on the scope and mode).
+
+A flag can be _released_ by script, at which point it may allow other flag requests to be granted.
+
+#### Resources and Scopes
+
+The _resource_ strings have no external meaning beyond the scheduling algorithm, but are global
+across browsing contexts within an origin. Web applications are free to use any resource naming
+scheme. For example, to mimic Indexed DB's transaction locking over named stores within a named
+database, an origin might use `encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)`.
+
+The _scope_ concept originates with databases, and is present in the web platform in [IndexedDB](https://w3c.github.io/IndexedDB/#transaction-scope). It allows atomic acquisition of multiple
+resources without multiple asynchronous requests and the risk of deadlock from fragile algorithms.
+
+#### Modes and Scheduling
+
+The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If a held "exclusive' flag has a resource in its scope, no other flags with that resource in scope can be granted. If a held "shared" flag has a resource in its scope, can other "shared" flags with that resource in scope can be granted.
+
+Additional properties may influence scheduling, such as timeouts, fairness, and so on.
+
 ## Basic Usage
 
+Proposal 1: Auto-Releasing with waitUntil():
+
 ```js
-function write() {
-  requestFlag('resource', 'exclusive').then(function(flag) {
-    flag.waitUntil(...);
-    ...
-  });
+async function get_lock_then_write() {
+  const flag = await requestFlag('resource', 'exclusive');
+  flag.waitUntil(async_write_func());
 }
 
-function read() {
-  requestFlag('resource', 'shared', {timeout: 200}).then(function(flag) {
-    ...
-  });
-}
-```
-
-Or with async/await syntax:
-```js
-async function write() {
-  let flag = await requestFlag('resource', 'exclusive');
-  flag.waitUntil(...);
-}
-
-async function read() {
-  let flag = await requestFlag('resource', 'shared', {timeout: 200});
-  flag.waitUntil(...);
+async function get_lock_then_read() {
+  const flag = await requestFlag('resource', 'shared', {timeout: 200});
+  flag.waitUntil(async_read_func());
 });
 ```
 
+Proposal 2: Explicit release:
 
-The _scope_ (first argument) can be a string or array of strings, e.g. `['thing1', 'thing2']`. The items in the scope have no external meaning beyond the scheduling algorithm, but are global across browsing contexts within an origin. Web applications are free to use any resource naming scheme. For example, to mimic Indexed DB's transaction locking over named stores within a named database, an origin might use `encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)`.
+```js
+async function get_lock_then_write() {
+  const flag = await requestFlag('resource', 'exclusive');
+  await async_write_func();
+  flag.release();
+}
 
-The _mode_ (second argument) is one of "exclusive" or "shared", and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If a held "exclusive' flag has an entry in its scope, no other flags with that entry in scope can become held. If a held "shared" flag has an entry in its scope, only other "shared" flags with that entry in scope can become held.
+async function get_lock_then_read() {
+  const flag = await requestFlag('resource', 'shared', {timeout: 200});
+  await async_read_func();
+  flag.release();
+});
+```
+
+_The auto-release approach mirrors [Indexed DB's auto-committing transaction](https://w3c.github.io/IndexedDB/#transaction-construct) model where explicit action is needed to hold a resource, combined with [Service Worker's ExtendableEvent](https://w3c.github.io/ServiceWorker/#extendableevent-interface) `waitUntil()` method to allow promises to control the lifetime. The explicit release model requires callers to always call the `release()` method. Either approach can be polyfilled in terms of the other. We just need to pick one._
+
+The _scope_ (first argument) can be a string or array of strings, e.g. `['thing1', 'thing2']`.
+
+The _mode_ (second argument) is one of "exclusive" or "shared".
 
 An optional _timeout_ scan be specified in milliseconds. If the timeout passes before the flag request succeeds, the promise rejects with a `TimeoutError`. A timeout of `0` can be specified to attempt to acquire the flag but fail immediately if already held.
 
-A flag will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
+In the auto-release approach, a flag will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
 
 ## Notes
 
