@@ -8,7 +8,7 @@ a.k.a. Locks, Mutexes, Semaphores, etc
 
 The Indexed Database API defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. We'd like to generalize this model to allow any Web Platform activity to be scheduled based on resource availability. This would allow transactions to be composed for other storage types (such as Cache Storage), across storage types, even across non-storage APIs.
 
-Cooperative coordination takes place within the scope of same-origin contexts (TODO: formalize!); this may span multiple
+Cooperative coordination takes place within the scope of same-origin contexts (_TODO: formalize!_); this may span multiple
 [agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism) (informally: process boundaries) and therefore [Atomics](http://lars-t-hansen.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject) cannot be used to achieve the same purpose.
 
 Previous discussions:
