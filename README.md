@@ -124,7 +124,6 @@ around formalizing these states and notifications.
 
 
 *Can you implement explicit release in terms of auto-release?*
-
 ```js
 async function requestExplicitFlag(...args) {
   const flag = await requestFlag(...args);
@@ -134,8 +133,37 @@ async function requestExplicitFlag(...args) {
 ```
 
 *Can you implement auto-release in terms of explicit-release?*
+```js
+function Extendable() {
+  let resolve, reject;
+  const promise = new Promise((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
 
-More complicated since `waitUntil()` can be called multiple times. See the polyfill for an example.
+  let ps;
+  promise.waitUntil = function(p) {
+    ps = ps ? Promise.all([ps, p]) : p;
+    const snapshot = ps;
+    ps.then(
+      () => { if (snapshot === ps) resolve(); },
+      err => { if (snapshot === ps) reject(err); }
+    );
+  };
+  return promise;
+}
+
+function requestAutoReleaseFlag(...args) {
+  const flag = await requestFlag(...args);
+  const ext = Extendable();
+  ext.then(() => flag.release(), () => flag.release());
+  ext.waitUntil(Promise.resolve().then(() => Promise.resolve().then()));
+  flag.waitUntil = ext.waitUntil.bind(ext);
+  return flag;
+}
+
+
+```
 
 *How do you _compose_ IndexedDB transactions with these flags?*
 
