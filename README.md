@@ -72,7 +72,7 @@ async function get_lock_then_write() {
 async function get_lock_then_read() {
   const flag = await requestFlag('resource', 'shared', {timeout: 200});
   flag.waitUntil(async_read_func());
-});
+}
 ```
 
 Proposal 2: Explicit release:
@@ -88,7 +88,7 @@ async function get_lock_then_read() {
   const flag = await requestFlag('resource', 'shared', {timeout: 200});
   await async_read_func();
   flag.release();
-});
+}
 ```
 
 _The auto-release approach mirrors [Indexed DB's auto-committing transaction](https://w3c.github.io/IndexedDB/#transaction-construct) model where explicit action is needed to hold a resource, combined with [Service Worker's ExtendableEvent](https://w3c.github.io/ServiceWorker/#extendableevent-interface) `waitUntil()` method to allow promises to control the lifetime. The explicit release model requires callers to always call the `release()` method. Either approach can be polyfilled in terms of the other. We just need to pick one._
