@@ -34,7 +34,7 @@ A _scope_ is a set of one or more resources.
 
 A _mode_ is either "exclusive" or "shared".
 
-A _flag request_ is made by script for a particular _scope_ and _mode_. A scheduling algorithm looks the state of current and previous requests, and eventually grants a flag request.
+A _flag request_ is made by script for a particular _scope_ and _mode_. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a flag request.
 
 A _flag_ is granted request; it has the _scope_ and _mode_ of the flag request. It is represented as an object returned to script.
 
