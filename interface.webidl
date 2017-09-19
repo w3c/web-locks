@@ -5,7 +5,7 @@
 enum FlagMode { "shared", "exclusive" };
 
 dictionary FlagOptions {
-  DOMTimeStamp timeout;
+  AbortSignal signal;
 };
 
 // [SecureContext] ?
