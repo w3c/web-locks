@@ -3,6 +3,7 @@
 //
 // * Requires [SharedWorker support](http://caniuse.com/#feat=sharedworkers)
 // * Doesn't handle disconnections (i.e. a tab holding a flag closing)
+// * AbortSignal not supported
 //
 // This part would be used in a page or worker, and loads the SharedWorker automatically.
 
@@ -122,13 +123,7 @@
     if (mode !== 'shared' && mode !== 'exclusive')
       throw TypeError('The "mode" argument must be "shared" or "exclusive"');
 
-    // 4. Let timeout be the value of options.timeout if passed, or
-    // +∞ otherwise.
-    let timeout;
-    if (typeof options === 'object' && 'timeout' in options)
-      timeout = Math.abs(Math.floor(Number(options.timeout)));
-    else
-      timeout = Infinity;
+    // TODO: options.signal
 
     // 5. Return the result of running the request a flag algorithm,
     // passing scope, mode and timeout.
@@ -141,18 +136,9 @@
       postAndWaitForResponse({
         action: 'request',
         scope: scope,
-        mode: mode,
-        timeout: timeout
+        mode: mode
       }).then(response => {
-        // i. - iv. done in worker
-
-        // v. Wait until request is grantable
-        if (response.timeout) {
-          // c. Reject p with a new TimeoutError
-          reject(new DOMException('TimeoutError'));
-          // d. Abort any steps running in parallel.
-          return;
-        }
+        // i. - v. done in worker
 
         // vi: Let waiting be a new promise.
         let resolve_waiting;
