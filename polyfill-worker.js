@@ -2,12 +2,13 @@
 //
 // This runs in a SharedWorker and is loaded automatically by part 1.
 
+// TODO: handle disconnects (not currently possible with a SharedWorker)
+// TODO: handle abort signals
+
 'use strict';
 let requests = [];
 let held = new Map();
 let counter = 0;
-
-// TODO: handle disconnects!
 
 self.addEventListener('connect', e => {
   let port = e.ports[0];
@@ -48,12 +49,6 @@ function processRequests() {
     let granted = false;
     let flag = requests[i];
 
-    if (Number.isFinite(flag.timeout) && !flag.expires) {
-      flag.expires = now + flag.timeout;
-      if (flag.timeout > 0)
-        setTimeout(processRequests, flag.timeout);
-    }
-
     if (flag.mode === 'exclusive') {
       if (!intersects(flag.scope, shared) &&
           !intersects(flag.scope, exclusive)) {
@@ -74,14 +69,7 @@ function processRequests() {
       held.set(id, flag);
       flag.port.postMessage({
         request_id: flag.request_id,
-        timeout: false,
         id: id
-      });
-    } else if (flag.expires <= now) {
-      requests.splice(i, 1);
-      flag.port.postMessage({
-        request_id: flag.request_id,
-        timeout: true
       });
     } else {
       ++i;
