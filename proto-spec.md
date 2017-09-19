@@ -88,18 +88,18 @@ To *request a flag* with _scope_, _mode_ and optional _signal_:
 3. Let _request_ be a new **flag request** (_scope_, _mode_).
 4. Append _request_ to _queue_.
 5. If _signal_ was given, run the following in parallel:
-  1. Wait until _signal_'s **aborted flag** is set.
-  2. Abort any other steps running in parallel.
-  3. Remove _request_ from _queue_.
-  4. Reject _p_ with a new "`AbortError`" **DOMException**.
+   1. Wait until _signal_'s **aborted flag** is set.
+   2. Abort any other steps running in parallel.
+   3. Remove _request_ from _queue_.
+   4. Reject _p_ with a new "`AbortError`" **DOMException**.
 6. Run the following in parallel:
-  1. Wait until _request_ is **grantable**
-  2. Abort any other steps running in parallel.
-  3. Let _waiting_ be a new promise.
-  4. Let _flag_ be a **flag** with **state** "`held`", **mode** _mode_, **scope** _scope_, and add _waiting_ to _flag_'s **waiting promise set**.
-  5. Remove _request_ from _queue_
-  6. Resolve _p_ with a new `Flag` object associated with _flag_
-  7. Schedule a microtask to resolve _waiting_.
+   1. Wait until _request_ is **grantable**
+   2. Abort any other steps running in parallel.
+   3. Let _waiting_ be a new promise.
+   4. Let _flag_ be a **flag** with **state** "`held`", **mode** _mode_, **scope** _scope_, and add _waiting_ to _flag_'s **waiting promise set**.
+   5. Remove _request_ from _queue_
+   6. Resolve _p_ with a new `Flag` object associated with _flag_
+   7. Schedule a microtask to resolve _waiting_.
 7. Return _p_.
 
 > NOTE: The final steps ensure that script waiting on the Promise from `requestFlag()` will run before _waiting_ resolves.
