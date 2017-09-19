@@ -10,7 +10,7 @@ dictionary FlagOptions {
 
 // [SecureContext] ?
 partial interface WindowOrWorkerGlobalScope {
-  Promise<Flag> requestFlag((DOMString or sequence<DOMString>) scope, FlagMode mode, FlagOptions options);
+  Promise<Flag> requestFlag((DOMString or sequence<DOMString>) scope, FlagMode mode, optional FlagOptions options);
 };
 
 // [SecureContext] ?
