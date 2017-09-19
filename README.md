@@ -70,7 +70,7 @@ async function get_lock_then_write() {
 }
 
 async function get_lock_then_read() {
-  const flag = await requestFlag('resource', 'shared', {timeout: 200});
+  const flag = await requestFlag('resource', 'shared');
   flag.waitUntil(async_read_func());
 }
 ```
@@ -85,7 +85,7 @@ async function get_lock_then_write() {
 }
 
 async function get_lock_then_read() {
-  const flag = await requestFlag('resource', 'shared', {timeout: 200});
+  const flag = await requestFlag('resource', 'shared');
   await async_read_func();
   flag.release();
 }
@@ -97,10 +97,23 @@ The _scope_ (first argument) can be a string or array of strings, e.g. `['thing1
 
 The _mode_ (second argument) is one of "exclusive" or "shared".
 
-An optional _timeout_ scan be specified in milliseconds. If the timeout passes before the flag request succeeds, the promise rejects with a `TimeoutError`. A timeout of `0` can be specified to attempt to acquire the flag but fail immediately if already held.
-
 In the auto-release approach, a flag will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
 
+## Options
+
+A third argument is an options dictionary.
+
+An optional _signal_ member can be specified which is an [AbortSignal](https://dom.spec.whatwg.org/#interface-AbortSignal). This allows aborting a flag request, for example if the request is not granted in a timely manner:
+```js
+const controller = new AbortController();
+setTimeout(() => controller.abort(), 200); // wait at most 200ms
+try {
+  const flag = await requestFlag('resource', 'shared', {signal: controller.signal});
+  // use flag here
+} catch (ex) {
+  // request rejected with a DOMException with error name "AbortError"
+}
+```
 
 ## FAQ
 
