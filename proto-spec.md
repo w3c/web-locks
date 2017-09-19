@@ -66,42 +66,41 @@ Returns a DOMString containing the associated **mode** of the **flag**.
 
 Returns the associated **released promise** of the **flag**.
 
-#### `Flag.prototype.waitUntil()`
+#### `Flag.prototype.waitUntil(p)`
 
 1. If `waitUntil(p)` is called and state is "released", then return `Promise.reject(new TypeError)`
 2. Add `p` to flag's **waiting promise set**
 3. Return flag's **released promise**.
 
-#### `requestFlag()`
+#### `requestFlag(scope, mode, options)`
 
 1. Let _scope_ be the set of unique DOMStrings in `scope` if a sequence was passed, otherwise a set containing just the string passed as `scope`
 2. If _scope_ is empty, return a new Promise rejected with `TypeError`
 3. Let _mode_ be the value of `mode`
-4. Let _timeout_ be the value of `options.timeout` if passed, or +∞ otherwise.
-5. Return the result of running the **request a flag** algorithm, passing _scope_, _mode_ and _timeout_.
+5. Return the result of running the **request a flag** algorithm, passing _scope_, _mode_ and _options_' _signal_ (if given).
 
 #### Algorithm: request a flag
 
-To *request a flag* with _scope_, _mode_ and _timeout_:
+To *request a flag* with _scope_, _mode_ and optional _signal_:
 
-1. Let _p_ be a new promise
-2. Run the following steps in parallel:
-  1. Let _queue_ be the origin's **flag request queue**
-  2. Let _request_ be a new **flag request** (_scope_, _mode_)
-  3. Append _request_ to _queue_
-  4. Run the following in parallel:
-    1. Wait until _timeout_ microseconds have passed
-    2. Remove _request_ from _queue_
-    3. Reject _p_ with a new `TimeoutError`
-    4. Abort any steps running in parallel.
-  5. Wait until _request_ is **grantable**
-  6. Let _waiting_ be a new promise.
-  7. Let _flag_ be a **flag** with **state** "`held`", **mode** _mode_, **scope** _scope_, and add _waiting_ to _flag_'s **waiting promise set**.
-  8. Remove _request_ from _queue_
-  9. Resolve _p_ with a new `Flag` object associated with _flag_
-  10. Schedule a microtask to resolve _waiting_.
-  11. Abort any steps running in parallel.
-3. Return _p_.
+1. Let _p_ be a new promise.
+2. Let _queue_ be the origin's **flag request queue**.
+3. Let _request_ be a new **flag request** (_scope_, _mode_).
+4. Append _request_ to _queue_.
+5. If _signal_ was given, run the following in parallel:
+  1. Wait until _signal_'s **aborted flag** is set.
+  2. Abort any other steps running in parallel.
+  3. Remove _request_ from _queue_.
+  4. Reject _p_ with a new "`AbortError`" **DOMException**.
+6. Run the following in parallel:
+  1. Wait until _request_ is **grantable**
+  2. Abort any other steps running in parallel.
+  3. Let _waiting_ be a new promise.
+  4. Let _flag_ be a **flag** with **state** "`held`", **mode** _mode_, **scope** _scope_, and add _waiting_ to _flag_'s **waiting promise set**.
+  5. Remove _request_ from _queue_
+  6. Resolve _p_ with a new `Flag` object associated with _flag_
+  7. Schedule a microtask to resolve _waiting_.
+7. Return _p_.
 
 > NOTE: The final steps ensure that script waiting on the Promise from `requestFlag()` will run before _waiting_ resolves.
 
@@ -110,5 +109,3 @@ To *request a flag* with _scope_, _mode_ and _timeout_:
 > TODO: Do we need to be explicit about dequeing requests from terminated execution contexts, or does that similarly "fall out" of the algorithm?
 
 > TODO: More explicitly define _"in the origin"_
-
-> TODO: Clarify that timeout 0 should at least try to acquire the flags.
