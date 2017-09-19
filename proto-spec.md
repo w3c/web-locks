@@ -77,7 +77,7 @@ Returns the associated **released promise** of the **flag**.
 1. Let _scope_ be the set of unique DOMStrings in `scope` if a sequence was passed, otherwise a set containing just the string passed as `scope`
 2. If _scope_ is empty, return a new Promise rejected with `TypeError`
 3. Let _mode_ be the value of `mode`
-5. Return the result of running the **request a flag** algorithm, passing _scope_, _mode_ and _options_' _signal_ (if given).
+5. Return the result of running the **request a flag** algorithm, passing _scope_, _mode_ and _options_' _signal_ (if present).
 
 #### Algorithm: request a flag
 
