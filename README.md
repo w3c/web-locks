@@ -62,7 +62,6 @@ Additional properties may influence scheduling, such as timeouts, fairness, and 
 ## API Proposal
 
 Proposal 1: Auto-Releasing with waitUntil():
-
 ```js
 async function get_lock_then_write() {
   const flag = await requestFlag('resource', 'exclusive');
@@ -76,7 +75,6 @@ async function get_lock_then_read() {
 ```
 
 Proposal 2: Explicit release:
-
 ```js
 async function get_lock_then_write() {
   const flag = await requestFlag('resource', 'exclusive');
@@ -91,7 +89,26 @@ async function get_lock_then_read() {
 }
 ```
 
-_The auto-release approach mirrors [Indexed DB's auto-committing transaction](https://w3c.github.io/IndexedDB/#transaction-construct) model where explicit action is needed to hold a resource, combined with [Service Worker's ExtendableEvent](https://w3c.github.io/ServiceWorker/#extendableevent-interface) `waitUntil()` method to allow promises to control the lifetime. The explicit release model requires callers to always call the `release()` method. Either approach can be polyfilled in terms of the other. We just need to pick one._
+Proposal 3: Scoped release:
+```js
+async function get_lock_then_write() {
+  await requestFlag('resource', 'exclusive', async flag => {
+    await async_write_func();
+  });
+}
+
+async function get_lock_then_read() {
+  await requestFlag('resource', 'shared', async flag => {
+    await async_read_func();
+  });
+}
+```
+
+* The auto-release approach mirrors [Indexed DB's auto-committing transaction](https://w3c.github.io/IndexedDB/#transaction-construct) model where explicit action is needed to hold a resource, combined with [Service Worker's ExtendableEvent](https://w3c.github.io/ServiceWorker/#extendableevent-interface) `waitUntil()` method to allow promises to control the lifetime. 
+* The explicit release model requires callers to always call the `release()` method, e.g. even if an exception is thrown.
+* The scoped release model requires callers to pass in an async callback which will be invoked with the flag. The callback implicitly returns a promise and the flag is released when that promise resolves.
+
+_Any of the above approaches can be implemented in terms of the other. We just need to pick one._
 
 The _scope_ (first argument) can be a string or array of strings, e.g. `['thing1', 'thing2']`.
 
@@ -99,9 +116,11 @@ The _mode_ (second argument) is one of "exclusive" or "shared".
 
 In the auto-release approach, a flag will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
 
+In the auto-release and explicit release approaches the method returns a promise that resolves with a flag, or rejects if the request was aborted. In the scoped release approach the method returns a promise that resolves/rejects with the result of the callback, or rejects if the request is aborted.
+
 ## Options
 
-A third argument is an options dictionary.
+An optional final argument is an options dictionary.
 
 An optional _signal_ member can be specified which is an [AbortSignal](https://dom.spec.whatwg.org/#interface-AbortSignal). This allows aborting a flag request, for example if the request is not granted in a timely manner:
 ```js
@@ -114,6 +133,9 @@ try {
   // request rejected with a DOMException with error name "AbortError"
 }
 ```
+
+
+
 
 ## FAQ
 
@@ -174,9 +196,38 @@ function requestAutoReleaseFlag(...args) {
   flag.waitUntil = ext.waitUntil.bind(ext);
   return flag;
 }
-
-
 ```
+
+*Can you implement explicit release in terms of scoped release?*
+```js
+function requestExplicitFlag(scope, mode, ...rest) {
+  return new Promise(resolve => {
+    requestFlag(scope, mode, flag => {
+      // p waits until flag.release() is called
+      const p = new Promise(r => { flag.release = r; }); 
+      resolve(flag);
+      return p;
+    }, ...rest);
+  });
+}
+```
+
+*Can you implement scoped release in terms of explict release?*
+```js
+async function requestScopedFlag(scope, mode, callback, ...rest) {
+  const flag = await requestFlag(scope, mode, ...rest);
+  try {
+    await callback(flag);
+  } finally {
+    flag.release();
+  }
+}
+```
+
+*Can you implement...*
+
+Staaahp!
+
 
 *How do you _compose_ IndexedDB transactions with these flags?*
 
