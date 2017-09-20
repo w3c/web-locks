@@ -8,33 +8,60 @@ dictionary FlagOptions {
   AbortSignal signal;
 };
 
-// [SecureContext] ?
+// ======================================================================
+// Proposal 1 - Auto-Release with waitUntil()
+//
+
 partial interface WindowOrWorkerGlobalScope {
-  Promise<Flag> requestFlag((DOMString or sequence<DOMString>) scope, FlagMode mode, optional FlagOptions options);
+  Promise<Flag> requestFlag((DOMString or sequence<DOMString>) scope, 
+                            FlagMode mode,
+                            optional FlagOptions options);
 };
 
-// [SecureContext] ?
 [Exposed=(Window,Worker)]
 interface Flag {
   readonly attribute FrozenArray<DOMString> scope;
   readonly attribute FlagMode mode;
   readonly attribute Promise<void> released;
-  
-  // NOTE: Not useful as-is - needs one of the lifecycle proposals (below)
-};
 
-//
-// Lifecycle Proposal 1: Auto-Releasing w/ waitUntil
-//
-
-partial interface Flag {
   void waitUntil(Promise<any> p);
 };
 
-//
-// Lifecycle Proposal 2: Explicit Release
+// ======================================================================
+// Proposal 2 - Explicit Release
 //
 
-partial interface Flag {
+partial interface WindowOrWorkerGlobalScope {
+  Promise<Flag> requestFlag((DOMString or sequence<DOMString>) scope,
+                            FlagMode mode,
+                            optional FlagOptions options);
+};
+
+[Exposed=(Window,Worker)]
+interface Flag {
+  readonly attribute FrozenArray<DOMString> scope;
+  readonly attribute FlagMode mode;
+  readonly attribute Promise<void> released;
+
   void release();
+};
+
+// ======================================================================
+// Proposal 3 - Scoped Release
+//
+
+callback FlagRequestCallback = Promise<any> (Flag flag);
+
+partial interface WindowOrWorkerGlobalScope {
+  Promise<any> requestFlag((DOMString or sequence<DOMString>) scope, 
+                           FlagMode mode,
+                           FlagRequestCallback callback,
+                           optional FlagOptions options);
+};
+
+[Exposed=(Window,Worker)]
+interface Flag {
+  readonly attribute FrozenArray<DOMString> scope;
+  readonly attribute FlagMode mode;
+  readonly attribute Promise<void> released;
 };
