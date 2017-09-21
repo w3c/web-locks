@@ -59,7 +59,7 @@ The _mode_ property and can be used to model the common [readers-writer lock](ht
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
 
-## API Proposal
+## API Proposals
 
 Proposal 1: Auto-Releasing with waitUntil():
 ```js
@@ -231,11 +231,14 @@ Staaahp!
 
 *How do you _compose_ IndexedDB transactions with these flags?*
 
-* Assuming [Promise-specific additions to the Indexed DB API](https://github.com/inexorabletash/indexeddb-promises):
-  * To wrap a flag around a transaction, use: `flag.waitUntil(tx.complete)`
-  * To wrap a transaction around a flag, use: `tx.waitUntil(flag.released)`
+Assuming [Promise-specific additions to the Indexed DB API](https://github.com/inexorabletash/indexeddb-promises):
 
-* Don't want to _force_ IDBTransactions into this model, since queuing work is valuable, i.e. you can open a transaction and schedule work against it immediately without waiting for it to be "acquired"
+ * To wrap a flag around a transaction, use: `flag.waitUntil(tx.complete)`
+ * To wrap a transaction around a flag, use: `tx.waitUntil(flag.released)`
+
+Without such additions it's more complicated.
+
+Also note that we don't want to _force_ IDBTransactions into this model of waiting for a resource before you can use it: in IDB you can open a transaction and schedule work against it immediately, even though that work will be delayed until the transaction is running.
 
 *Can we _define_ Indexed DB transactions in terms of this primitive?*
 
