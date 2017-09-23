@@ -1,6 +1,8 @@
-<img src="https://s3.amazonaws.com/inexorabletash-share/standards/logo-flags.svg" height="100" align=right>
+<img src="https://s3.amazonaws.com/inexorabletash-share/standards/logo-lock.svg" height="100" align=right>
 
-# Origin Flags
+# Web Locks API <s>Origin Flags</s>
+
+_rename in progress, please stand by..._
 
 ## TL;DR
 
