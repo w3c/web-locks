@@ -2,9 +2,9 @@
 // Common
 //
 
-enum FlagMode { "shared", "exclusive" };
+enum LockMode { "shared", "exclusive" };
 
-dictionary FlagOptions {
+dictionary LockOptions {
   AbortSignal signal;
 };
 
@@ -13,15 +13,15 @@ dictionary FlagOptions {
 //
 
 partial interface WindowOrWorkerGlobalScope {
-  Promise<Flag> requestFlag((DOMString or sequence<DOMString>) scope, 
-                            FlagMode mode,
-                            optional FlagOptions options);
+  Promise<Lock> requestLock((DOMString or sequence<DOMString>) scope, 
+                            LockMode mode,
+                            optional LockOptions options);
 };
 
 [Exposed=(Window,Worker)]
-interface Flag {
+interface Lock {
   readonly attribute FrozenArray<DOMString> scope;
-  readonly attribute FlagMode mode;
+  readonly attribute LockMode mode;
   readonly attribute Promise<void> released;
 
   void waitUntil(Promise<any> p);
@@ -32,15 +32,15 @@ interface Flag {
 //
 
 partial interface WindowOrWorkerGlobalScope {
-  Promise<Flag> requestFlag((DOMString or sequence<DOMString>) scope,
-                            FlagMode mode,
-                            optional FlagOptions options);
+  Promise<Lock> requestLock((DOMString or sequence<DOMString>) scope,
+                            LockMode mode,
+                            optional LockOptions options);
 };
 
 [Exposed=(Window,Worker)]
-interface Flag {
+interface Lock {
   readonly attribute FrozenArray<DOMString> scope;
-  readonly attribute FlagMode mode;
+  readonly attribute LockMode mode;
   readonly attribute Promise<void> released;
 
   void release();
@@ -50,18 +50,18 @@ interface Flag {
 // Proposal 3 - Scoped Release
 //
 
-callback FlagRequestCallback = Promise<any> (Flag flag);
+callback LockRequestCallback = Promise<any> (Lock lock);
 
 partial interface WindowOrWorkerGlobalScope {
-  Promise<any> requestFlag((DOMString or sequence<DOMString>) scope, 
-                           FlagMode mode,
-                           FlagRequestCallback callback,
-                           optional FlagOptions options);
+  Promise<any> requestLock((DOMString or sequence<DOMString>) scope, 
+                           LockMode mode,
+                           LockRequestCallback callback,
+                           optional LockOptions options);
 };
 
 [Exposed=(Window,Worker)]
-interface Flag {
+interface Lock {
   readonly attribute FrozenArray<DOMString> scope;
-  readonly attribute FlagMode mode;
+  readonly attribute LockMode mode;
   readonly attribute Promise<void> released;
 };
