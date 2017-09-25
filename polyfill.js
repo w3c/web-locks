@@ -2,7 +2,7 @@
 // Part 1 of a polyfill with huge caveats:
 //
 // * Requires [SharedWorker support](http://caniuse.com/#feat=sharedworkers)
-// * Doesn't handle disconnections (i.e. a tab holding a flag closing)
+// * Doesn't handle disconnections (i.e. a tab holding a lock closing)
 // * AbortSignal not supported
 //
 // This part would be used in a page or worker, and loads the SharedWorker automatically.
@@ -29,7 +29,7 @@
   }
 
   let secret = Symbol();
-  function Flag(s, id, scope, mode, waiting) {
+  function Lock(s, id, scope, mode, waiting) {
     if (s !== secret) throw TypeError('Illegal constructor');
     this._id = id;
     this._state = 'held';
@@ -41,32 +41,32 @@
     });
     this._addToWaitingPromises(waiting);
   }
-  Flag.prototype = {
+  Lock.prototype = {
     get scope() {
       // Returns a frozen array containing the DOMStrings from the
-      // associated scope of the flag, in sorted in lexicographic
+      // associated scope of the lock, in sorted in lexicographic
       // order.
       return this._scope;
     },
     get mode() {
       // Returns a DOMString containing the associated mode of the
-      // flag.
+      // lock.
       return this._mode;
     },
     get released() {
-      // Returns the associated released promise of the flag.
+      // Returns the associated released promise of the lock.
       return this._released_promise;
     },
     waitUntil: function(p) {
       // 1. If waitUntil(p) is called and state is "released", then
       // return Promise.reject(new TypeError)
       if (this._state === 'released')
-        return Promise.resolve(new TypeError('Flag is released'));
+        return Promise.resolve(new TypeError('Lock is released'));
 
-      // 2. Add p to flag's waiting promise set
+      // 2. Add p to lock's waiting promise set
       this._addToWaitingPromises(p);
 
-      // 3. Return flag's released promise.
+      // 3. Return lock's released promise.
       return this._released_promise;
     },
 
@@ -77,32 +77,32 @@
       let latest = p.then(
         result => {
           if (latest !== this._latest) return;
-          // When every promise in flag's waiting promise set
+          // When every promise in lock's waiting promise set
           // fulfills:
 
-          // 1. set flag's state to "released".
+          // 1. set lock's state to "released".
           this._state = 'released';
           worker.port.postMessage({action: 'release', id: this._id});
 
-          // 2. fulfill flag's released promise.
+          // 2. fulfill lock's released promise.
           this._resolve_released_promise();
         },
         reason => {
           if (latest !== this._latest) return;
-          // If any promise in flag's waiting promise set rejects:
+          // If any promise in lock's waiting promise set rejects:
 
-          // 1. set flag's state to "released".
+          // 1. set lock's state to "released".
           this._state = 'released';
           worker.port.postMessage({action: 'release', id: this._id});
 
-          // 2. reject flag's released promise.
+          // 2. reject lock's released promise.
           this._reject_released_promise(reason);
         });
       this._latest = latest;
     }
   };
 
-  global.requestFlag = function(scope, mode, options) {
+  global.requestLock = function(scope, mode, options) {
     if (arguments.length < 2) throw TypeError('Expected 2 arguments');
 
     // 1. Let scope be the set of unique DOMStrings in scope if a
@@ -125,10 +125,10 @@
 
     // TODO: options.signal
 
-    // 5. Return the result of running the request a flag algorithm,
+    // 5. Return the result of running the request a lock algorithm,
     // passing scope, mode and timeout.
 
-    // Algorithm: request a flag
+    // Algorithm: request a lock
 
     // 1. Let p be a new promise
     let p = new Promise((resolve, reject) => {
@@ -144,15 +144,15 @@
         let resolve_waiting;
         let waiting = new Promise(r => { resolve_waiting = r; });
 
-        // vii. Let flag be a flag with state "held", mode mode, scope
-        // scope, and add waiting to flag's waiting promise set.
-        let flag = new Flag(secret, response.id, scope, mode, waiting);
+        // vii. Let lock be a lock with state "held", mode mode, scope
+        // scope, and add waiting to lock's waiting promise set.
+        let lock = new Lock(secret, response.id, scope, mode, waiting);
 
         // viii. Remove request from queue
         // (done in worker)
 
-        // ix. Resolve p with a new Flag object associated with flag
-        resolve(flag);
+        // ix. Resolve p with a new Lock object associated with lock
+        resolve(lock);
 
         // x. Schedule a microtask to resolve waiting.
         Promise.resolve().then(resolve_waiting);

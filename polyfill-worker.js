@@ -36,9 +36,9 @@ function processRequests() {
   let shared = new Set();
   let exclusive = new Set();
   for (let entry of held) {
-    let id = entry[0], flag = entry[1];
-    let set = flag.mode === 'shared' ? shared : exclusive;
-    for (let s of flag.scope)
+    let id = entry[0], lock = entry[1];
+    let set = lock.mode === 'shared' ? shared : exclusive;
+    for (let s of lock.scope)
       set.add(s);
   }
 
@@ -47,28 +47,28 @@ function processRequests() {
   let i = 0;
   while (i < requests.length) {
     let granted = false;
-    let flag = requests[i];
+    let lock = requests[i];
 
-    if (flag.mode === 'exclusive') {
-      if (!intersects(flag.scope, shared) &&
-          !intersects(flag.scope, exclusive)) {
+    if (lock.mode === 'exclusive') {
+      if (!intersects(lock.scope, shared) &&
+          !intersects(lock.scope, exclusive)) {
         granted = true;
       }
-      for (let s of flag.scope)
+      for (let s of lock.scope)
         exclusive.add(s);
     } else {
-      if (!intersects(flag.scope, exclusive))
+      if (!intersects(lock.scope, exclusive))
         granted = true;
-      for (let s of flag.scope)
+      for (let s of lock.scope)
         shared.add(s);
     }
 
     if (granted) {
       requests.splice(i, 1);
       var id = ++counter;
-      held.set(id, flag);
-      flag.port.postMessage({
-        request_id: flag.request_id,
+      held.set(id, lock);
+      lock.port.postMessage({
+        request_id: lock.request_id,
         id: id
       });
     } else {
