@@ -2,8 +2,6 @@
 
 # Web Locks API <s>Origin Flags</s>
 
-_rename in progress, please stand by..._
-
 ## TL;DR
 
 A new web platform API that allows script running in one tab to asynchronously acquire a lock, hold it while work is performed, then release it. While held, no other script in the origin can aquire the same lock.
