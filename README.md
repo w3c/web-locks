@@ -6,7 +6,7 @@ _rename in progress, please stand by..._
 
 ## TL;DR
 
-A new web platform API that allows script running in one tab to asynchronously acquire a flag, hold it while work is performed, then release it. While held, no other script in the origin can aquire the same flag.
+A new web platform API that allows script running in one tab to asynchronously acquire a lock, hold it while work is performed, then release it. While held, no other script in the origin can aquire the same lock.
 
 ## Background
 
@@ -36,13 +36,13 @@ A _scope_ is a set of one or more resources.
 
 A _mode_ is either "exclusive" or "shared".
 
-A _flag request_ is made by script for a particular _scope_ and _mode_. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a flag request.
+A _lock request_ is made by script for a particular _scope_ and _mode_. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a lock request.
 
-A _flag_ is granted request; it has the _scope_ and _mode_ of the flag request. It is represented as an object returned to script.
+A _lock_ is granted request; it has the _scope_ and _mode_ of the lock request. It is represented as an object returned to script.
 
-As long as the flag is _held_ it may prevent other flag requests from being (depending on the scope and mode).
+As long as the lock is _held_ it may prevent other lock requests from being granted (depending on the scope and mode).
 
-A flag can be _released_ by script, at which point it may allow other flag requests to be granted.
+A lock can be _released_ by script, at which point it may allow other lock requests to be granted.
 
 #### Resources and Scopes
 
@@ -56,7 +56,7 @@ resources without multiple asynchronous requests and the risk of deadlock from f
 
 #### Modes and Scheduling
 
-The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If a held "exclusive' flag has a resource in its scope, no other flags with that resource in scope can be granted. If a held "shared" flag has a resource in its scope, can other "shared" flags with that resource in scope can be granted.
+The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If a held "exclusive" lock has a resource in its scope, no other locks with that resource in scope can be granted. If a held "shared" lock has a resource in its scope, can other "shared" lock with that resource in scope can be granted - but not "exclusive" locks.
 
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
@@ -66,41 +66,41 @@ Additional properties may influence scheduling, such as timeouts, fairness, and 
 Proposal 1: Auto-Releasing with waitUntil():
 ```js
 async function get_lock_then_write() {
-  const flag = await requestFlag('resource', 'exclusive');
-  flag.waitUntil(async_write_func());
+  const lock = await requestLock('resource', 'exclusive');
+  lock.waitUntil(async_write_func());
 }
 
 async function get_lock_then_read() {
-  const flag = await requestFlag('resource', 'shared');
-  flag.waitUntil(async_read_func());
+  const lock = await requestLock('resource', 'shared');
+  lock.waitUntil(async_read_func());
 }
 ```
 
 Proposal 2: Explicit release:
 ```js
 async function get_lock_then_write() {
-  const flag = await requestFlag('resource', 'exclusive');
+  const lock = await requestLock('resource', 'exclusive');
   await async_write_func();
-  flag.release();
+  lock.release();
 }
 
 async function get_lock_then_read() {
-  const flag = await requestFlag('resource', 'shared');
+  const lock = await requestLock('resource', 'shared');
   await async_read_func();
-  flag.release();
+  lock.release();
 }
 ```
 
 Proposal 3: Scoped release:
 ```js
 async function get_lock_then_write() {
-  await requestFlag('resource', 'exclusive', async flag => {
+  await requestLock('resource', 'exclusive', async lock => {
     await async_write_func();
   });
 }
 
 async function get_lock_then_read() {
-  await requestFlag('resource', 'shared', async flag => {
+  await requestLock('resource', 'shared', async lock => {
     await async_read_func();
   });
 }
@@ -108,7 +108,7 @@ async function get_lock_then_read() {
 
 * The auto-release approach mirrors [Indexed DB's auto-committing transaction](https://w3c.github.io/IndexedDB/#transaction-construct) model where explicit action is needed to hold a resource, combined with [Service Worker's ExtendableEvent](https://w3c.github.io/ServiceWorker/#extendableevent-interface) `waitUntil()` method to allow promises to control the lifetime. 
 * The explicit release model requires callers to always call the `release()` method, e.g. even if an exception is thrown.
-* The scoped release model requires callers to pass in an async callback which will be invoked with the flag. The callback implicitly returns a promise and the flag is released when that promise resolves.
+* The scoped release model requires callers to pass in an async callback which will be invoked with the lock. The callback implicitly returns a promise and the lock is released when that promise resolves.
 
 _Any of the above approaches can be implemented in terms of the other. We just need to pick one._
 
@@ -116,21 +116,21 @@ The _scope_ (first argument) can be a string or array of strings, e.g. `['thing1
 
 The _mode_ (second argument) is one of "exclusive" or "shared".
 
-In the auto-release approach, a flag will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
+In the auto-release approach, a lock will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
 
-In the auto-release and explicit release approaches the method returns a promise that resolves with a flag, or rejects if the request was aborted. In the scoped release approach the method returns a promise that resolves/rejects with the result of the callback, or rejects if the request is aborted.
+In the auto-release and explicit release approaches the method returns a promise that resolves with a lock, or rejects if the request was aborted. In the scoped release approach the method returns a promise that resolves/rejects with the result of the callback, or rejects if the request is aborted.
 
 ## Options
 
 An optional final argument is an options dictionary.
 
-An optional _signal_ member can be specified which is an [AbortSignal](https://dom.spec.whatwg.org/#interface-AbortSignal). This allows aborting a flag request, for example if the request is not granted in a timely manner:
+An optional _signal_ member can be specified which is an [AbortSignal](https://dom.spec.whatwg.org/#interface-AbortSignal). This allows aborting a lock request, for example if the request is not granted in a timely manner:
 ```js
 const controller = new AbortController();
 setTimeout(() => controller.abort(), 200); // wait at most 200ms
 try {
-  const flag = await requestFlag('resource', 'shared', {signal: controller.signal});
-  // use flag here
+  const lock = await requestLock('resource', 'shared', {signal: controller.signal});
+  // use lock here
 } catch (ex) {
   // request rejected with a DOMException with error name "AbortError"
 }
@@ -150,22 +150,22 @@ The use cases for this API require coordination across multiple
 
 *What happens if a tab is throttled/suspended?*
 
-If a tab holds a flag and stops running code it can inhibit work done by other tabs. If this is because tabs are not appropriately breaking up work it's an application problem. But browsers could throttle or even suspend tabs (e.g.
+If a tab holds a lock and stops running code it can inhibit work done by other tabs. If this is because tabs are not appropriately breaking up work it's an application problem. But browsers could throttle or even suspend tabs (e.g.
 background background tabs) to reduce power and/or memory consumption. With an API like this &mdash; or with Indexed DB 
 &mdash; this can result the [work in foreground tabs being throttled](https://bugs.chromium.org/p/chromium/issues/detail?id=675372). 
 
 To mitigate this, browsers must ensure that apps are notified before being throttled or suspended so that 
-they can release flags, and/or browsers must automatically release flags held by a context before it is
+they can release locks, and/or browsers must automatically release locks held by a context before it is
 suspended. See [A Lifecycle for the Web](https://github.com/spanicker/web-lifecycle) for possible thoughts
 around formalizing these states and notifications.
 
 
 *Can you implement explicit release in terms of auto-release?*
 ```js
-async function requestExplicitFlag(...args) {
-  const flag = await requestFlag(...args);
-  flag.waitUntil(new Promise(resolve => { flag.release = resolve; }));
-  return flag;
+async function requestExplicitLock(...args) {
+  const lock = await requestLock(...args);
+  lock.waitUntil(new Promise(resolve => { lock.release = resolve; }));
+  return lock;
 }
 ```
 
@@ -190,24 +190,24 @@ function Extendable() {
   return promise;
 }
 
-function requestAutoReleaseFlag(...args) {
-  const flag = await requestFlag(...args);
+function requestAutoReleaseLock(...args) {
+  const lock = await requestLock(...args);
   const ext = Extendable();
-  ext.then(() => flag.release(), () => flag.release());
+  ext.then(() => lock.release(), () => lock.release());
   ext.waitUntil(Promise.resolve().then(() => Promise.resolve().then()));
-  flag.waitUntil = ext.waitUntil.bind(ext);
-  return flag;
+  lock.waitUntil = ext.waitUntil.bind(ext);
+  return lock;
 }
 ```
 
 *Can you implement explicit release in terms of scoped release?*
 ```js
-function requestExplicitFlag(scope, mode, ...rest) {
+function requestExplicitLock(scope, mode, ...rest) {
   return new Promise(resolve => {
-    requestFlag(scope, mode, flag => {
-      // p waits until flag.release() is called
-      const p = new Promise(r => { flag.release = r; }); 
-      resolve(flag);
+    requestLock(scope, mode, lock => {
+      // p waits until lock.release() is called
+      const p = new Promise(r => { lock.release = r; }); 
+      resolve(lock);
       return p;
     }, ...rest);
   });
@@ -216,12 +216,12 @@ function requestExplicitFlag(scope, mode, ...rest) {
 
 *Can you implement scoped release in terms of explict release?*
 ```js
-async function requestScopedFlag(scope, mode, callback, ...rest) {
-  const flag = await requestFlag(scope, mode, ...rest);
+async function requestScopedLock(scope, mode, callback, ...rest) {
+  const lock = await requestLock(scope, mode, ...rest);
   try {
-    await callback(flag);
+    await callback(lock);
   } finally {
-    flag.release();
+    lock.release();
   }
 }
 ```
@@ -231,12 +231,12 @@ async function requestScopedFlag(scope, mode, callback, ...rest) {
 Staaahp!
 
 
-*How do you _compose_ IndexedDB transactions with these flags?*
+*How do you _compose_ IndexedDB transactions with these locks?*
 
 Assuming [Promise-specific additions to the Indexed DB API](https://github.com/inexorabletash/indexeddb-promises):
 
- * To wrap a flag around a transaction, use: `flag.waitUntil(tx.complete)`
- * To wrap a transaction around a flag, use: `tx.waitUntil(flag.released)`
+ * To wrap a lock around a transaction, use: `lock.waitUntil(tx.complete)`
+ * To wrap a transaction around a lock, use: `tx.waitUntil(lock.released)`
 
 Without such additions it's more complicated.
 
@@ -246,8 +246,8 @@ Also note that we don't want to _force_ IDBTransactions into this model of waiti
 
 Roughly:
 
-* The IDBTransaction requests a flag when created, and holds a "request queue" which operations are appended to.
-* When the flag is acquired it is waited on "complete promise". In addition an "active promise" is prepared. The request queue is then processed.
+* The IDBTransaction requests a lock when created, and holds a "request queue" which operations are appended to.
+* When the lock is acquired it is waited on "complete promise". In addition an "active promise" is prepared. The request queue is then processed.
 * A processed request gets a hidden promise that is resolved when the request is done. The "active promise" is extended until one turn after every processed request has completed. (Similar to the trick used here, a dependent promise is created which, when run, schedules a microtask to do the work.)
 * Any new request is processed immediately.
 * When the "active promise" resolves, there are no further requests, and the transaction attempts to commit.
