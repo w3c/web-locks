@@ -198,9 +198,9 @@ function requestAutoReleaseLock(...args) {
 
 *Can you implement explicit release in terms of scoped release?*
 ```js
-function requestExplicitLock(scope, mode, ...rest) {
+function requestExplicitLock(scope, ...rest) {
   return new Promise(resolve => {
-    requestLock(scope, mode, lock => {
+    requestLock(scope, lock => {
       // p waits until lock.release() is called
       const p = new Promise(r => { lock.release = r; });
       resolve(lock);
@@ -212,8 +212,8 @@ function requestExplicitLock(scope, mode, ...rest) {
 
 *Can you implement scoped release in terms of explict release?*
 ```js
-async function requestScopedLock(scope, mode, callback, ...rest) {
-  const lock = await requestLock(scope, mode, ...rest);
+async function requestScopedLock(scope, callback, ...rest) {
+  const lock = await requestLock(scope, ...rest);
   try {
     await callback(lock);
   } finally {
