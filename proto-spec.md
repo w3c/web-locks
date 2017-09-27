@@ -72,11 +72,11 @@ Returns the associated **released promise** of the **lock**.
 2. Add `p` to lock's **waiting promise set**
 3. Return lock's **released promise**.
 
-#### `requestLock(scope, mode, options)`
+#### `requestLock(scope, options)`
 
 1. Let _scope_ be the set of unique DOMStrings in `scope` if a sequence was passed, otherwise a set containing just the string passed as `scope`
 2. If _scope_ is empty, return a new Promise rejected with `TypeError`
-3. Let _mode_ be the value of `mode`
+3. Let _mode_ be the _options_' _mode_ if present, and "`exclusive`" otherwise.
 5. Return the result of running the **request a lock** algorithm, passing _scope_, _mode_ and _options_' _signal_ (if present).
 
 #### Algorithm: request a lock

@@ -19,7 +19,7 @@
       let listener = function(event) {
         if (event.data.request_id !== request_id) return;
         worker.port.removeEventListener(listener);
-        var response = event.data;
+        let response = event.data;
         delete response.request_id;
         resolve(response);
       };
@@ -102,8 +102,10 @@
     }
   };
 
-  global.requestLock = function(scope, mode, options) {
-    if (arguments.length < 2) throw TypeError('Expected 2 arguments');
+  global.requestLock = function(scope, options) {
+    if (arguments.length < 1) throw TypeError('Expected 1 arguments');
+
+    options = Object.assign({}, options);
 
     // 1. Let scope be the set of unique DOMStrings in scope if a
     // sequence was passed, otherwise a set containing just the string
@@ -118,8 +120,8 @@
       return Promise.reject(TypeError(
         'The "scope" argument must not be empty'));
 
-    // 3. Let mode be the value of mode
-    mode = String(mode);
+    // 3. Let mode be the value of options.mode
+    const mode = String(options.mode);
     if (mode !== 'shared' && mode !== 'exclusive')
       throw TypeError('The "mode" argument must be "shared" or "exclusive"');
 

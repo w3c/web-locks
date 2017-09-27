@@ -5,6 +5,7 @@
 enum LockMode { "shared", "exclusive" };
 
 dictionary LockOptions {
+  LockMode mode = "exclusive";
   AbortSignal signal;
 };
 
@@ -13,8 +14,7 @@ dictionary LockOptions {
 //
 
 partial interface WindowOrWorkerGlobalScope {
-  Promise<Lock> requestLock((DOMString or sequence<DOMString>) scope, 
-                            LockMode mode,
+  Promise<Lock> requestLock((DOMString or sequence<DOMString>) scope,
                             optional LockOptions options);
 };
 
@@ -33,7 +33,6 @@ interface Lock {
 
 partial interface WindowOrWorkerGlobalScope {
   Promise<Lock> requestLock((DOMString or sequence<DOMString>) scope,
-                            LockMode mode,
                             optional LockOptions options);
 };
 
@@ -53,8 +52,7 @@ interface Lock {
 callback LockRequestCallback = Promise<any> (Lock lock);
 
 partial interface WindowOrWorkerGlobalScope {
-  Promise<any> requestLock((DOMString or sequence<DOMString>) scope, 
-                           LockMode mode,
+  Promise<any> requestLock((DOMString or sequence<DOMString>) scope,
                            LockRequestCallback callback,
                            optional LockOptions options);
 };

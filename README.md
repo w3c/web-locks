@@ -18,19 +18,19 @@ Cooperative coordination takes place within the scope of same-origin [agents](ht
 Previous discussions:
 * [Application defined "locks" [whatwg]](https://lists.w3.org/Archives/Public/public-whatwg-archive/2009Sep/0266.html)
 
-This document proposes an API for allow contexts (windows, workers) within a web application to coordinate the usage of resources. 
+This document proposes an API for allow contexts (windows, workers) within a web application to coordinate the usage of resources.
 
 
 ## Examples
 
-A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as Indexed DB for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronouze the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active. 
+A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as Indexed DB for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronouze the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active.
 
 
 ## Concepts
 
 A _resource_ is just a name (string) chosen by the web application.
 
-A _scope_ is a set of one or more resources. 
+A _scope_ is a set of one or more resources.
 
 A _mode_ is either "exclusive" or "shared".
 
@@ -54,7 +54,7 @@ resources without multiple asynchronous requests and the risk of deadlock from f
 
 #### Modes and Scheduling
 
-The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If a held "exclusive" lock has a resource in its scope, no other locks with that resource in scope can be granted. If a held "shared" lock has a resource in its scope, can other "shared" lock with that resource in scope can be granted - but not "exclusive" locks.
+The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If a held "exclusive" lock has a resource in its scope, no other locks with that resource in scope can be granted. If a held "shared" lock has a resource in its scope, can other "shared" lock with that resource in scope can be granted - but not "exclusive" locks. The default mode in the API is "exclusive".
 
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
@@ -64,12 +64,12 @@ Additional properties may influence scheduling, such as timeouts, fairness, and 
 Proposal 1: Auto-Releasing with waitUntil():
 ```js
 async function get_lock_then_write() {
-  const lock = await requestLock('resource', 'exclusive');
+  const lock = await requestLock('resource');
   lock.waitUntil(async_write_func());
 }
 
 async function get_lock_then_read() {
-  const lock = await requestLock('resource', 'shared');
+  const lock = await requestLock('resource', {mode: 'shared'});
   lock.waitUntil(async_read_func());
 }
 ```
@@ -77,42 +77,40 @@ async function get_lock_then_read() {
 Proposal 2: Explicit release:
 ```js
 async function get_lock_then_write() {
-  const lock = await requestLock('resource', 'exclusive');
+  const lock = await requestLock('resource');
   await async_write_func();
   lock.release();
 }
 
 async function get_lock_then_read() {
-  const lock = await requestLock('resource', 'shared');
+  const lock = await requestLock('resource', {mode: 'shared'});
   await async_read_func();
   lock.release();
 }
 ```
 
-Proposal 3: Scoped release:
+Proposal 3: Scoped release: :star::star::star: this is the current favorite :star::star::star:
 ```js
 async function get_lock_then_write() {
-  await requestLock('resource', 'exclusive', async lock => {
+  await requestLock('resource', async lock => {
     await async_write_func();
   });
 }
 
 async function get_lock_then_read() {
-  await requestLock('resource', 'shared', async lock => {
+  await requestLock('resource', async lock => {
     await async_read_func();
-  });
+  }, {mode: 'shared'});
 }
 ```
 
-* The auto-release approach mirrors [Indexed DB's auto-committing transaction](https://w3c.github.io/IndexedDB/#transaction-construct) model where explicit action is needed to hold a resource, combined with [Service Worker's ExtendableEvent](https://w3c.github.io/ServiceWorker/#extendableevent-interface) `waitUntil()` method to allow promises to control the lifetime. 
+* The auto-release approach mirrors [Indexed DB's auto-committing transaction](https://w3c.github.io/IndexedDB/#transaction-construct) model where explicit action is needed to hold a resource, combined with [Service Worker's ExtendableEvent](https://w3c.github.io/ServiceWorker/#extendableevent-interface) `waitUntil()` method to allow promises to control the lifetime.
 * The explicit release model requires callers to always call the `release()` method, e.g. even if an exception is thrown.
 * The scoped release model requires callers to pass in an async callback which will be invoked with the lock. The callback implicitly returns a promise and the lock is released when that promise resolves.
 
 _Any of the above approaches can be implemented in terms of the other. We just need to pick one._
 
-The _scope_ (first argument) can be a string or array of strings, e.g. `['thing1', 'thing2']`.
-
-The _mode_ (second argument) is one of "exclusive" or "shared".
+The _scope_ (required first argument) can be a string or array of strings, e.g. `['thing1', 'thing2']`.
 
 In the auto-release approach, a lock will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
 
@@ -121,6 +119,8 @@ In the auto-release and explicit release approaches the method returns a promise
 ## Options
 
 An optional final argument is an options dictionary.
+
+An optional _mode_ member can be one of "exclusive" (the default if not specified) or "shared".
 
 An optional _signal_ member can be specified which is an [AbortSignal](https://dom.spec.whatwg.org/#interface-AbortSignal). This allows aborting a lock request, for example if the request is not granted in a timely manner:
 ```js
@@ -135,24 +135,22 @@ try {
 ```
 
 
-
-
 ## FAQ
 
 *Why can't [Atomics](https://tc39.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject) be used for this?*
 
 The use cases for this API require coordination across multiple
-[agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism); 
+[agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism);
  whereas Atomics operations operate on [SharedArrayBuffers](https://tc39.github.io/ecmascript_sharedmem/shmem.html#StructuredData.SharedArrayBuffer) which are constrained to a single agent cluster. (Informally: tabs/workers can be multi-process and atomics only work same-process.)
 
 
 *What happens if a tab is throttled/suspended?*
 
 If a tab holds a lock and stops running code it can inhibit work done by other tabs. If this is because tabs are not appropriately breaking up work it's an application problem. But browsers could throttle or even suspend tabs (e.g.
-background background tabs) to reduce power and/or memory consumption. With an API like this &mdash; or with Indexed DB 
-&mdash; this can result the [work in foreground tabs being throttled](https://bugs.chromium.org/p/chromium/issues/detail?id=675372). 
+background background tabs) to reduce power and/or memory consumption. With an API like this &mdash; or with Indexed DB
+&mdash; this can result the [work in foreground tabs being throttled](https://bugs.chromium.org/p/chromium/issues/detail?id=675372).
 
-To mitigate this, browsers must ensure that apps are notified before being throttled or suspended so that 
+To mitigate this, browsers must ensure that apps are notified before being throttled or suspended so that
 they can release locks, and/or browsers must automatically release locks held by a context before it is
 suspended. See [A Lifecycle for the Web](https://github.com/spanicker/web-lifecycle) for possible thoughts
 around formalizing these states and notifications.
@@ -204,7 +202,7 @@ function requestExplicitLock(scope, mode, ...rest) {
   return new Promise(resolve => {
     requestLock(scope, mode, lock => {
       // p waits until lock.release() is called
-      const p = new Promise(r => { lock.release = r; }); 
+      const p = new Promise(r => { lock.release = r; });
       resolve(lock);
       return p;
     }, ...rest);
