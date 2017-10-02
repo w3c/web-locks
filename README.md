@@ -47,7 +47,8 @@ A lock can be _released_ by script, at which point it may allow other lock reque
 The _resource_ strings have no external meaning beyond the scheduling algorithm, but are global
 across browsing contexts within an origin. Web applications are free to use any resource naming
 scheme. For example, to mimic Indexed DB's transaction locking over named stores within a named
-database, an origin might use `encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)`.
+database, an origin might use `db_name + '/' + store_name` (with appropriate restrictions on
+allowed names).
 
 The _scope_ concept originates with databases, and is present in the web platform in [IndexedDB](https://w3c.github.io/IndexedDB/#transaction-scope). It allows atomic acquisition of multiple
 resources without multiple asynchronous requests and the risk of deadlock from fragile algorithms.
