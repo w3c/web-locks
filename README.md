@@ -127,11 +127,15 @@ An optional _signal_ member can be specified which is an [AbortSignal](https://d
 ```js
 const controller = new AbortController();
 setTimeout(() => controller.abort(), 200); // wait at most 200ms
+
 try {
-  const lock = await requestLock('resource', 'shared', {signal: controller.signal});
-  // use lock here
+  // NOTE: Using "scoped release" API proposal.
+  await requestLock('resource', async lock => {
+    // Use |lock| here.
+  }, {signal: controller.signal});
+  // Done with lock here.
 } catch (ex) {
-  // request rejected with a DOMException with error name "AbortError"
+  // |ex| will be a DOMException with error name "AbortError" if timer fired.
 }
 ```
 
