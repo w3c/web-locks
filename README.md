@@ -136,7 +136,7 @@ async function get_lock_then_read() {
 
 _Any of the above approaches can be implemented in terms of the other. We just need to pick one._
 
-The _scope_ (required first argument) can be a string or array of strings, e.g. `['thing1', 'thing2']`.
+The _scope_ (required first argument) can be a string or array of strings, e.g. `'thing'` or `['thing1', 'thing2']`.
 
 In the auto-release approach, a lock will automatically be released by a subsequent microtask if `waitUntil(p)` is not called with a promise to extend its lifetime within the callback from the initial acquisition promise.
 
