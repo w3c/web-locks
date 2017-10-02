@@ -59,6 +59,33 @@ The _mode_ property and can be used to model the common [readers-writer lock](ht
 
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
+The model for granting lock requests is based on the transaction model for 
+[Indexed DB](https://w3c.github.io/IndexedDB/) is used, with IDB's "readwrite" transactions 
+the equivalent of "shared" locks and "readonly" transactions the equivalent of "exclusive" locks.
+One way to conceptualize this is to consider an ordered list of held locks and requested locks
+within an origin &mdash; here identified with numbers &mdash; with their respective scopes and
+modes:
+
+* Held:
+  * #1: scope: ['a'], mode: "exclusive"
+  * #2: scope: ['b'], mode: "shared"
+* Requested:
+  * #3: scope: ['b'], mode: "shared"
+  * #4: scope: ['a', 'b'], mode: "exclusive"
+  * #5: scope: ['b'], mode: "shared"
+  * #6: scope: ['c'], mode: "exclusive"
+
+At this point, two locks (#1, #2) are held. Request #3 can be granted immediately since it is
+for a "shared" lock on 'b' and #2 is also a "shared" lock on 'b'. Request #4 is for an exclusive
+lock on both 'a' and 'b'; it must wait for all of locks #1, #2 and #3 to be released before it
+can be granted. Request #5 arrived after request #4 and has overlapping scope, so it is blocked
+until #4 is granted then released. (See Q&A below.) The scope of request #6 doesn't overlap with
+any other held or requested lock, so it can be granted immediately.
+
+New requests get appended to the end of the list. Any lock release, request, or aborted request
+causes the state to be evaluated, with requests considered in order to determine if they can be
+granted.
+
 
 ## API Proposals
 
@@ -255,6 +282,14 @@ Roughly:
 * The "complete promise" is resolved when the transaction successfully commits or aborts.
 
 This doesn't precisely capture the "active" vs "inactive" semantics and several other details. We may want to go through the exercise of defining this more rigorously.
+
+
+*Why does a shared lock request need to wait until a previous exclusive lock request be granted/released?*
+
+This comes from developer expectations about file and database processing; if a write is scheduled
+before a read, the usual expectation is that the read will see the results of the write. When this
+was not enforced by Indexed DB implementations, developers expressed significant confusion. Given
+demand, we could add an option/mode to allow opting into the more subtle behavior.
 
 
 ## Related APIs
