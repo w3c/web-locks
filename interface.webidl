@@ -6,6 +6,7 @@ enum LockMode { "shared", "exclusive" };
 
 dictionary LockOptions {
   LockMode mode = "exclusive";
+  boolean ifAvailable = false;
   AbortSignal signal;
 };
 
