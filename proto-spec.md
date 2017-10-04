@@ -1,6 +1,5 @@
-**This is an early iteration focused on defining the algorithms for lock acquisition/release
-and a Promise-centric auto-releasing API. We not focus on this right now and instead get
-the desired API/behavior sorted out.**
+**This is an early iteration focused on defining the algorithms for lock acquisition/release.
+This may not match all the details of the README while we iterate on the API.**
 
 ----
 
@@ -62,16 +61,18 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 
 #### `requestLock(scope, callback, options)`
 
-1. Let _scope_ be the set of unique DOMStrings in `scope` if a sequence was passed, otherwise a set containing just the string passed as `scope`
-2. If _scope_ is empty, return a new Promise rejected with `TypeError`
-3. Return the result of running the **request a lock** algorithm, passing _callback_, _scope_, _option_'s _mode_, _option_'s _ifAvailable_, and _options_'s _signal_ (if present).
+1. Let _origin_ be the origin of the global scope.
+2. If _origin_ is an opaque origin, return a promise rejected with a "`SecurityError`" DOMException and abort these steps.
+3. Let _scope_ be the set of unique DOMStrings in `scope` if a sequence was passed, otherwise a set containing just the string passed as `scope`
+4. If _scope_ is empty, return a new Promise rejected with `TypeError`
+5. Return the result of running the **request a lock** algorithm, passing _origin_, _callback_, _scope_, _option_'s _mode_, _option_'s _ifAvailable_, and _options_'s _signal_ (if present).
 
 #### Algorithm: request a lock
 
-To *request a lock* with _callback_, _scope_, _mode_, _ifAvailable_, and optional _signal_:
+To *request a lock* with _origin_, _callback_, _scope_, _mode_, _ifAvailable_, and optional _signal_:
 
 1. Let _p_ be a new promise.
-2. Let _queue_ be the origin's **lock request queue**.
+2. Let _queue_ be _origin_'s **lock request queue**.
 3. Let _request_ be a new **lock request** (_scope_, _mode_).
 4. If _ifAvailable_ is true and _request_ is not **grantable**, then run these steps:
    1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
