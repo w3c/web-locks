@@ -293,6 +293,15 @@ was not enforced by Indexed DB implementations, developers expressed significant
 demand, we could add an option/mode to allow opting into the more subtle behavior.
 
 
+*Does this leak information from e.g. Incognito/Private Browsing/etc mode?*
+
+No - like storage APIs, browsers treat such anonymous sessions as if they were a completely separate
+user agent from the point of view of specs; the data is in a separate partition. This is similar
+to how some browsers support multiple user profiles; cookies, databases, certificates, etc.
+are all separated. Locks held in one user profile (or anonymous) session have no relationship to
+locks in another session, as if they in a distinct application or on another device.
+
+
 ## Related APIs
 
 * [Atomics](https://tc39.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject)
