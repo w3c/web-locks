@@ -53,7 +53,7 @@ resources without multiple asynchronous requests and the risk of deadlock from f
 
 #### Modes and Scheduling
 
-The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If a held "exclusive" lock has a resource in its scope, no other locks with that resource in scope can be granted. If a held "shared" lock has a resource in its scope, can other "shared" lock with that resource in scope can be granted - but not "exclusive" locks. The default mode in the API is "exclusive".
+The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If a held "exclusive" lock has a resource in its scope, no other locks with that resource in scope can be granted. If a held "shared" lock has a resource in its scope, other "shared" locks with that resource in scope can be granted - but not any "exclusive" locks. The default mode in the API is "exclusive".
 
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
