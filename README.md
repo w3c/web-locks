@@ -158,14 +158,29 @@ around formalizing these states and notifications.
 
 *How do you _compose_ IndexedDB transactions with these locks?*
 
-Assuming [Promise-specific additions to the Indexed DB API](https://github.com/inexorabletash/indexeddb-promises):
+ * To wrap a lock around a transaction:
+ 
+```js
+    requestLock(scope, lock => {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(...);
+        tx.oncomplete = resolve;
+        tx.onabort = e => reject(tx.error);   
+        // use tx...
+      });
+    }, options);
+```
 
- * To wrap a lock around a transaction, use: `lock.waitUntil(tx.complete)`
- * To wrap a transaction around a lock, use: `tx.waitUntil(lock.released)`
+ * To wrap a transaction around a lock is harder, since you can't keep an IndexedDB transaction alive arbitrarily. If [transactions supported `waitUntil()`](https://github.com/inexorabletash/indexeddb-promises) this would be possible:
+ 
+```js
+  const tx = db.transaction(...);
+  tx.waitUntil(requestLock(scope, async lock => {
+    // use lock and tx
+  }, options);
+```
 
-Without such additions it's more complicated.
-
-Also note that we don't want to _force_ IDBTransactions into this model of waiting for a resource before you can use it: in IDB you can open a transaction and schedule work against it immediately, even though that work will be delayed until the transaction is running.
+Note that we don't want to _force_ IDBTransactions into this model of waiting for a resource before you can use it: in IDB you can open a transaction and schedule work against it immediately, even though that work will be delayed until the transaction is running.
 
 *Can we _define_ Indexed DB transactions in terms of this primitive?*
 
