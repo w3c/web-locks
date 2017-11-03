@@ -14,12 +14,14 @@ dictionary LockOptions {
 // Proposal 1 - Auto-Release with waitUntil()
 //
 
+
 partial interface WindowOrWorkerGlobalScope {
+  [SecureContext]
   Promise<Lock> requestLock((DOMString or sequence<DOMString>) scope,
                             optional LockOptions options);
 };
 
-[Exposed=(Window,Worker)]
+[SecureContext, Exposed=(Window,Worker)]
 interface Lock {
   readonly attribute FrozenArray<DOMString> scope;
   readonly attribute LockMode mode;
@@ -33,11 +35,12 @@ interface Lock {
 //
 
 partial interface WindowOrWorkerGlobalScope {
+  [SecureContext]
   Promise<Lock> requestLock((DOMString or sequence<DOMString>) scope,
                             optional LockOptions options);
 };
 
-[Exposed=(Window,Worker)]
+[SecureContext, Exposed=(Window,Worker)]
 interface Lock {
   readonly attribute FrozenArray<DOMString> scope;
   readonly attribute LockMode mode;
@@ -53,12 +56,13 @@ interface Lock {
 callback LockRequestCallback = Promise<any> (Lock lock);
 
 partial interface WindowOrWorkerGlobalScope {
+  [SecureContext]
   Promise<any> requestLock((DOMString or sequence<DOMString>) scope,
                            LockRequestCallback callback,
                            optional LockOptions options);
 };
 
-[Exposed=(Window,Worker)]
+[SecureContext, Exposed=(Window,Worker)]
 interface Lock {
   readonly attribute FrozenArray<DOMString> scope;
   readonly attribute LockMode mode;
