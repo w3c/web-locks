@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/inexorabletash/web-locks/master/logo-lock.svg" height="100" align=right>
+<img src="https://cdn.rawgit.com/inexorabletash/web-locks/master/logo-lock.svg" height="100" align=right>
 
 # Web Locks API <s>Origin Flags</s>
 
