@@ -8,17 +8,17 @@ This may not match all the details of the README while we iterate on the API.**
 
 ### Lock
 
-A **lock** has an associated **state** which is one of "`held`", or "`released`".
-
 A **lock** has an associated **scope** which is a set of DOMStrings.
 
 A **lock** has an associated **mode** which is one of "`exclusive`" or "`shared`".
 
 A **lock** has an associated **waiting promise** which is a Promise.
 
+Each origin has an associated **held lock set** which is an [ordered set](https://infra.spec.whatwg.org/#ordered-set) of **locks**.
+
 When **lock**'s **waiting promise** settles (fulfills or rejects):
 
-1. set **lock**'s **state** to "`released`".
+1. Remove **lock** from the origin's **held lock set**.
 
 ### Lock Requests
 
@@ -29,13 +29,14 @@ Each origin has an associated **lock request queue**, which is a [queue](https:/
 A **lock request** _request_ is said to be **grantable** if the following steps return true:
 
 1. Let _queue_ be the origin's **lock request queue**
+2. Let _held_ be the origin's **held lock set**
 3. Let _mode_ be _request_'s associated **mode**
 4. Let _scope_ be _request_'s associated **scope**
 5. If _mode_ is "`exclusive`", return true if all of the following conditions are true, and false otherwise:
-  * No **lock** in the origin has **state** "`held`" and has a **scope** that intersects _scope_
+  * No **lock** in _held_ has a **scope** that intersects _scope_
   * No entry in _queue_ earlier than _request_ has a **scope** that intersects _scope_.
 6. Otherwise, mode is "`shared`"; return true if all of the following conditions are true, and false otherwise:
-  * No **lock** in the origin has **state** "`held`" and has **mode** "`exclusive`" and has a **scope** that intersects _scope_
+  * No **lock** in _held_ has **mode** "`exclusive`" and has a **scope** that intersects _scope_.
   * No entry in _queue_ earlier than _request_ has a **mode** "`exclusive`" and **scope** that intersects _scope_.
 
 
@@ -53,12 +54,6 @@ Returns a frozen array containing the DOMStrings from the associated **scope** o
 
 Returns a DOMString containing the associated **mode** of the **lock**.
 
-#### `Lock.prototype.waitUntil(p)`
-
-1. If `waitUntil(p)` is called and state is "`released`", then return `Promise.reject(new TypeError)`
-2. Add `p` to lock's **waiting promise set**
-3. Return lock's **released promise**.
-
 #### `requestLock(scope, callback, options)`
 
 1. Let _origin_ be the origin of the global scope.
@@ -73,6 +68,7 @@ To *request a lock* with _origin_, _callback_, _scope_, _mode_, _ifAvailable_, a
 
 1. Let _p_ be a new promise.
 2. Let _queue_ be _origin_'s **lock request queue**.
+2. Let _held_ be _origin_'s **held lock set**.
 3. Let _request_ be a new **lock request** (_scope_, _mode_).
 4. If _ifAvailable_ is true and _request_ is not **grantable**, then run these steps:
    1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
@@ -88,9 +84,10 @@ To *request a lock* with _origin_, _callback_, _scope_, _mode_, _ifAvailable_, a
    1. Wait until _request_ is **grantable**
    2. Abort any other steps running in parallel.
    3. Let _waiting_ be a new Promise.
-   4. Let _lock_ be a **lock** with **state** "`held`", **mode** _mode_, **scope** _scope_, and **waiting promise** _waiting_.
+   4. Let _lock_ be a **lock** with **mode** _mode_, **scope** _scope_, and **waiting promise** _waiting_.
    5. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_
-   6. Let _r_ be the result of invoking _callback_ with a new `Lock` object associated with _lock_ as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
+   6. [Append](https://infra.spec.whatwg.org/#set-append) _lock_ to _set_
+   7. Let _r_ be the result of invoking _callback_ with a new `Lock` object associated with _lock_ as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
    7. Resolve _waiting_ with _r_.
    8. Resolve _p_ with _r_.
 8. Run the following in parallel:
