@@ -8,7 +8,7 @@ This may not match all the details of the README while we iterate on the API.**
 
 ### Lock
 
-A **lock** has an associated **state** which is one of "held", or "released".
+A **lock** has an associated **state** which is one of "`held`", or "`released`".
 
 A **lock** has an associated **scope** which is a set of DOMStrings.
 
@@ -55,7 +55,7 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 
 #### `Lock.prototype.waitUntil(p)`
 
-1. If `waitUntil(p)` is called and state is "released", then return `Promise.reject(new TypeError)`
+1. If `waitUntil(p)` is called and state is "`released`", then return `Promise.reject(new TypeError)`
 2. Add `p` to lock's **waiting promise set**
 3. Return lock's **released promise**.
 
