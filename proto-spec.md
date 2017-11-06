@@ -31,12 +31,12 @@ A **lock request** _request_ is said to be **grantable** if the following steps 
 1. Let _queue_ be the origin's **lock request queue**
 3. Let _mode_ be _request_'s associated **mode**
 4. Let _scope_ be _request_'s associated **scope**
-5. If _mode_ is "exclusive", return true if all of the following conditions are true, and false otherwise:
+5. If _mode_ is "`exclusive`", return true if all of the following conditions are true, and false otherwise:
   * No **lock** in the origin has **state** "`held`" and has a **scope** that intersects _scope_
   * No entry in _queue_ earlier than _request_ has a **scope** that intersects _scope_.
-6. Otherwise, mode is "shared"; return true if all of the following conditions are true, and false otherwise:
-  * No **lock** in the origin has **state** "`held`" and has **mode** "exclusive" and has a **scope** that intersects _scope_
-  * No entry in _queue_ earlier than _request_ has a **mode** "exclusive" and **scope** that intersects _scope_.
+6. Otherwise, mode is "`shared`"; return true if all of the following conditions are true, and false otherwise:
+  * No **lock** in the origin has **state** "`held`" and has **mode** "`exclusive`" and has a **scope** that intersects _scope_
+  * No entry in _queue_ earlier than _request_ has a **mode** "`exclusive`" and **scope** that intersects _scope_.
 
 
 ## API
