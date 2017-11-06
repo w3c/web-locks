@@ -1,6 +1,18 @@
-//
-// Common
-//
+partial interface Navigator {
+  [SecureContext] readonly attribute LockManager locks;
+};
+
+[SecureContext]
+interface LockManager {
+  Promise<any> acquire((DOMString or sequence<DOMString>) scope,
+                       LockRequestCallback callback,
+                       optional LockOptions options);
+
+  Promise<LockState> queryState();
+  void forceRelease((DOMString or sequence<DOMString>) scope);
+};
+
+callback LockRequestCallback = Promise<any> (Lock lock);
 
 enum LockMode { "shared", "exclusive" };
 
@@ -10,61 +22,19 @@ dictionary LockOptions {
   AbortSignal signal;
 };
 
-// ======================================================================
-// Proposal 1 - Auto-Release with waitUntil()
-//
-
-
-partial interface WindowOrWorkerGlobalScope {
-  [SecureContext]
-  Promise<Lock> requestLock((DOMString or sequence<DOMString>) scope,
-                            optional LockOptions options);
-};
-
 [SecureContext, Exposed=(Window,Worker)]
 interface Lock {
   readonly attribute FrozenArray<DOMString> scope;
   readonly attribute LockMode mode;
   readonly attribute Promise<void> released;
-
-  void waitUntil(Promise<any> p);
 };
 
-// ======================================================================
-// Proposal 2 - Explicit Release
-//
-
-partial interface WindowOrWorkerGlobalScope {
-  [SecureContext]
-  Promise<Lock> requestLock((DOMString or sequence<DOMString>) scope,
-                            optional LockOptions options);
+dictionary LockState {
+  held sequence<LockRequest>;
+  pending sequence<LockRequest>;
 };
 
-[SecureContext, Exposed=(Window,Worker)]
-interface Lock {
-  readonly attribute FrozenArray<DOMString> scope;
-  readonly attribute LockMode mode;
-  readonly attribute Promise<void> released;
-
-  void release();
-};
-
-// ======================================================================
-// Proposal 3 - Scoped Release
-//
-
-callback LockRequestCallback = Promise<any> (Lock lock);
-
-partial interface WindowOrWorkerGlobalScope {
-  [SecureContext]
-  Promise<any> requestLock((DOMString or sequence<DOMString>) scope,
-                           LockRequestCallback callback,
-                           optional LockOptions options);
-};
-
-[SecureContext, Exposed=(Window,Worker)]
-interface Lock {
-  readonly attribute FrozenArray<DOMString> scope;
-  readonly attribute LockMode mode;
-  readonly attribute Promise<void> released;
+dictionary LockRequest {
+  sequence<DOMString> scope;
+  LockMode mode;
 };

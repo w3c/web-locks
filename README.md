@@ -90,13 +90,13 @@ granted.
 
 ```js
 async function get_lock_then_write() {
-  await requestLock('resource', async lock => {
+  await locks.acquire('resource', async lock => {
     await async_write_func();
   });
 }
 
 async function get_lock_then_read() {
-  await requestLock('resource', async lock => {
+  await locks.acquire('resource', async lock => {
     await async_read_func();
   }, {mode: 'shared'});
 }
@@ -122,7 +122,7 @@ const controller = new AbortController();
 setTimeout(() => controller.abort(), 200); // wait at most 200ms
 
 try {
-  await requestLock('resource', async lock => {
+  await locks.acquire('resource', async lock => {
     // Use |lock| here.
   }, {signal: controller.signal});
   // Done with lock here.
@@ -159,23 +159,23 @@ around formalizing these states and notifications.
 *How do you _compose_ IndexedDB transactions with these locks?*
 
  * To wrap a lock around a transaction:
- 
+
 ```js
-    requestLock(scope, lock => {
+    locks.acquire(scope, lock => {
       return new Promise((resolve, reject) => {
         const tx = db.transaction(...);
         tx.oncomplete = resolve;
-        tx.onabort = e => reject(tx.error);   
+        tx.onabort = e => reject(tx.error);
         // use tx...
       });
     }, options);
 ```
 
  * To wrap a transaction around a lock is harder, since you can't keep an IndexedDB transaction alive arbitrarily. If [transactions supported `waitUntil()`](https://github.com/inexorabletash/indexeddb-promises) this would be possible:
- 
+
 ```js
   const tx = db.transaction(...);
-  tx.waitUntil(requestLock(scope, async lock => {
+  tx.waitUntil(locks.acquire(scope, async lock => {
     // use lock and tx
   }, options);
 ```

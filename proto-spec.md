@@ -54,10 +54,10 @@ Returns a frozen array containing the DOMStrings from the associated **scope** o
 
 Returns a DOMString containing the associated **mode** of the **lock**.
 
-#### `requestLock(scope, callback, options)`
+#### `LockManager.prototype.acquire(scope, callback, options)`
 
 1. Let _origin_ be the origin of the global scope.
-2. If _origin_ is an opaque origin, return a promise rejected with a "`SecurityError`" DOMException and abort these steps.
+2. If _origin_ is an opaque origin, return a Promise rejected with a "`SecurityError`" DOMException and abort these steps.
 3. Let _scope_ be the set of unique DOMStrings in `scope` if a sequence was passed, otherwise a set containing just the string passed as `scope`
 4. If _scope_ is empty, return a new Promise rejected with `TypeError`
 5. Return the result of running the **request a lock** algorithm, passing _origin_, _callback_, _scope_, _option_'s _mode_, _option_'s _ifAvailable_, and _options_'s _signal_ (if present).
@@ -66,7 +66,7 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 
 To *request a lock* with _origin_, _callback_, _scope_, _mode_, _ifAvailable_, and optional _signal_:
 
-1. Let _p_ be a new promise.
+1. Let _p_ be a new Promise.
 2. Let _queue_ be _origin_'s **lock request queue**.
 2. Let _held_ be _origin_'s **held lock set**.
 3. Let _request_ be a new **lock request** (_scope_, _mode_).
@@ -100,3 +100,17 @@ To *request a lock* with _origin_, _callback_, _scope_, _mode_, _ifAvailable_, a
 > TODO: Define how a lock held in a terminated agent is released.
 
 > TODO: More explicitly define _"in the origin"_
+
+#### `LockManager.prototype.queryState()`
+
+1. Let _origin_ be the origin of the global scope.
+2. Let _p_ be a new Promise.
+3. Let _queue_ be _origin_'s **lock request queue**.
+4. Let _held_ be _origin_'s **held lock set**.
+5. Run the following in parallel:
+    1. _TODO: Define producing LockRequest instances from held/queue._
+    2. ...
+6. Return _p_.
+
+
+> TODO: `LockManager.prototype.forceRelease()`
