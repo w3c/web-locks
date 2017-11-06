@@ -24,7 +24,7 @@ When **lock**'s **waiting promise** settles (fulfills or rejects):
 
 A **lock request** is a tuple of (*scope*, *mode*).
 
-Each origin has an associated **lock request queue**, which is a queue of **lock requests**.
+Each origin has an associated **lock request queue**, which is a [queue](https://infra.spec.whatwg.org/#queue) of **lock requests**.
 
 A **lock request** _request_ is said to be **grantable** if the following steps return true:
 
@@ -78,25 +78,25 @@ To *request a lock* with _origin_, _callback_, _scope_, _mode_, _ifAvailable_, a
    1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
    2. Resolve _p_ with _r_.
    3. Return _p_. (The remaining steps of this algorithm are not run.)
-5. Append _request_ to _queue_.
+5. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _queue_.
 6. If _signal_ was given, run the following in parallel:
    1. Wait until _signal_'s **aborted lock** is set.
    2. Abort any other steps running in parallel.
-   3. Remove _request_ from _queue_.
+   3. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
    4. Reject _p_ with a new "`AbortError`" **DOMException**.
 7. Run the following in parallel:
    1. Wait until _request_ is **grantable**
    2. Abort any other steps running in parallel.
    3. Let _waiting_ be a new Promise.
    4. Let _lock_ be a **lock** with **state** "`held`", **mode** _mode_, **scope** _scope_, and **waiting promise** _waiting_.
-   5. Remove _request_ from _queue_
+   5. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_
    6. Let _r_ be the result of invoking _callback_ with a new `Lock` object associated with _lock_ as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
    7. Resolve _waiting_ with _r_.
    8. Resolve _p_ with _r_.
 8. Run the following in parallel:
    1. Wait until the agent from which this algorithm was invoked was terminated.
    2. Abort any other steps running in parallel.
-   3. Remove _request_ from _queue_.
+   3. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
    4. Abort these steps.
 9. Return _p_.
 
