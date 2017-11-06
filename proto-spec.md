@@ -14,7 +14,7 @@ A **lock** has an associated **scope** which is a set of DOMStrings.
 
 A **lock** has an associated **mode** which is one of "`exclusive`" or "`shared`".
 
-A **lock** has an associated **waiting promise** which is a Promises.
+A **lock** has an associated **waiting promise** which is a Promise.
 
 When **lock**'s **waiting promise** settles (fulfills or rejects):
 
