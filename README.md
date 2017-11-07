@@ -21,7 +21,7 @@ This document proposes an API for allow contexts (windows, workers) within a web
 
 ## Use Case Examples
 
-A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as Indexed DB for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronize the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active.
+A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as IndexedDB for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronize the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active.
 
 
 ## Concepts
@@ -44,7 +44,7 @@ A lock can be _released_ by script, at which point it may allow other lock reque
 
 The _resource_ strings have no external meaning beyond the scheduling algorithm, but are global
 across browsing contexts within an origin. Web applications are free to use any resource naming
-scheme. For example, to mimic Indexed DB's transaction locking over named stores within a named
+scheme. For example, to mimic [IndexedDB](https://w3c.github.io/IndexedDB/#transaction-construct)'s transaction locking over named stores within a named
 database, an origin might use `db_name + '/' + store_name` (with appropriate restrictions on
 allowed names).
 
@@ -58,7 +58,7 @@ The _mode_ property and can be used to model the common [readers-writer lock](ht
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
 The model for granting lock requests is based on the transaction model for
-[Indexed DB](https://w3c.github.io/IndexedDB/), with IDB's "readwrite" transactions
+[IndexedDB](https://w3c.github.io/IndexedDB/), with IDB's "readwrite" transactions
 the equivalent of "shared" locks and "readonly" transactions the equivalent of "exclusive" locks.
 One way to conceptualize this is to consider an ordered list of held locks and requested locks
 within an origin &mdash; here identified with numbers &mdash; with their respective scopes and
@@ -147,7 +147,7 @@ The use cases for this API require coordination across multiple
 *What happens if a tab is throttled/suspended?*
 
 If a tab holds a lock and stops running code it can inhibit work done by other tabs. If this is because tabs are not appropriately breaking up work it's an application problem. But browsers could throttle or even suspend tabs (e.g.
-background background tabs) to reduce power and/or memory consumption. With an API like this &mdash; or with Indexed DB
+background background tabs) to reduce power and/or memory consumption. With an API like this &mdash; or with IndexedDB
 &mdash; this can result the [work in foreground tabs being throttled](https://bugs.chromium.org/p/chromium/issues/detail?id=675372).
 
 To mitigate this, browsers must ensure that apps are notified before being throttled or suspended so that
@@ -182,7 +182,7 @@ around formalizing these states and notifications.
 
 Note that we don't want to _force_ IDBTransactions into this model of waiting for a resource before you can use it: in IDB you can open a transaction and schedule work against it immediately, even though that work will be delayed until the transaction is running.
 
-*Can we _define_ Indexed DB transactions in terms of this primitive?*
+*Can we _define_ IndexedDB transactions in terms of this primitive?*
 
 Roughly:
 
@@ -200,7 +200,7 @@ This doesn't precisely capture the "active" vs "inactive" semantics and several 
 
 This comes from developer expectations about file and database processing; if a write is scheduled
 before a read, the usual expectation is that the read will see the results of the write. When this
-was not enforced by Indexed DB implementations, developers expressed significant confusion. Given
+was not enforced by IndexedDB implementations, developers expressed significant confusion. Given
 demand, we could add an option/mode to allow opting into the more subtle behavior.
 
 
@@ -217,7 +217,7 @@ locks in another session, as if they in a distinct application or on another dev
 
 * [Atomics](https://tc39.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject)
   * Resource coordination within a SharedArrayBuffer, limiting use to a particular [agent cluster](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism).
-* [Indexed DB Transactions](https://w3c.github.io/IndexedDB/#transaction-concept)
+* [IndexedDB Transactions](https://w3c.github.io/IndexedDB/#transaction-concept)
   * No explicit control of transaction lifetimes. Requires use of full API (e.g. schema versioning).
 * [Wake Lock API](https://w3c.github.io/wake-lock/)
   * Acquisition of a single system-provided resource.
