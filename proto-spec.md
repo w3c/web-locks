@@ -105,11 +105,23 @@ To *request a lock* with _origin_, _callback_, _scope_, _mode_, _ifAvailable_, a
 
 1. Let _origin_ be the origin of the global scope.
 2. Let _p_ be a new Promise.
-3. Let _queue_ be _origin_'s **lock request queue**.
-4. Let _held_ be _origin_'s **held lock set**.
-5. Run the following in parallel:
-    1. _TODO: Define producing LockRequest instances from held/queue._
-    2. ...
+3. Run the following in parallel:
+    1. Let _pending_ be a new [list](https://infra.spec.whatwg.org/#list).
+    2. For each _request_ in _origin_'s **lock request queue**, run these steps:
+        1. Let _r_ be a new _LockRequest_ dictionary.
+        2. Set _r_'s `scope` dictionary member to _request_'s **scope**.
+        3. Set _r_'s `mode` dictionary member to _request_'s **mode**.
+        4. [Append](https://infra.spec.whatwg.org/#list-append) _r_ to _pending_.
+    3. Let _held_ be a new [list](https://infra.spec.whatwg.org/#list).
+    4. For each _lock_ in _origin_'s **held lock set**, run these steps:
+        1. Let _r_ be a new _LockRequest_ dictionary.
+        2. Set _r_'s `scope` dictionary member to _lock_'s **scope**.
+        3. Set _r_'s `mode` dictionary member to _lock_'s **mode**.
+        4. [Append](https://infra.spec.whatwg.org/#list-append) _r_ to _held_.
+    5. Let _state_ be a new `LockState` dictionary.
+    6. Set _state_'s `held` dictionary member to _held_.
+    7. Set _state_'s `pending` dictionary member to _pending_.
+    8. Resolve _p_ with _state_.
 6. Return _p_.
 
 
