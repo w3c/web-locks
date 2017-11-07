@@ -58,7 +58,7 @@ The _mode_ property and can be used to model the common [readers-writer lock](ht
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
 The model for granting lock requests is based on the transaction model for
-[Indexed DB](https://w3c.github.io/IndexedDB/) is used, with IDB's "readwrite" transactions
+[Indexed DB](https://w3c.github.io/IndexedDB/), with IDB's "readwrite" transactions
 the equivalent of "shared" locks and "readonly" transactions the equivalent of "exclusive" locks.
 One way to conceptualize this is to consider an ordered list of held locks and requested locks
 within an origin &mdash; here identified with numbers &mdash; with their respective scopes and
