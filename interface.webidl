@@ -26,7 +26,6 @@ dictionary LockOptions {
 interface Lock {
   readonly attribute FrozenArray<DOMString> scope;
   readonly attribute LockMode mode;
-  readonly attribute Promise<void> released;
 };
 
 dictionary LockState {
