@@ -4,23 +4,27 @@ partial interface Navigator {
 
 [SecureContext]
 interface LockManager {
-  Promise<any> acquire((DOMString or sequence<DOMString>) scope,
-                       LockRequestCallback callback,
-                       optional LockOptions options);
+  Promise<any> acquire(LockScope scope,
+                       LockRequestCallback callback);
+  Promise<any> acquire(LockScope scope,
+                       optional LockOptions options,
+                       LockRequestCallback callback);
 
   Promise<LockState> queryState();
   void forceRelease((DOMString or sequence<DOMString>) scope);
 };
 
-callback LockRequestCallback = Promise<any> (Lock lock);
+typedef (DOMString or sequence<DOMString>) LockScope;
 
-enum LockMode { "shared", "exclusive" };
+callback LockRequestCallback = Promise<any> (Lock lock);
 
 dictionary LockOptions {
   LockMode mode = "exclusive";
   boolean ifAvailable = false;
   AbortSignal signal;
 };
+
+enum LockMode { "shared", "exclusive" };
 
 [SecureContext, Exposed=(Window,Worker)]
 interface Lock {

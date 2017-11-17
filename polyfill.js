@@ -5,6 +5,8 @@
 // * Doesn't handle disconnections (i.e. a tab holding a lock closing)
 // * AbortSignal not supported
 //
+// TODO: Update to new API shape (navigator.locks, acquire method, etc)
+//
 // This part would be used in a page or worker, and loads the SharedWorker automatically.
 
 (function(global) {

@@ -90,15 +90,15 @@ granted.
 
 ```js
 async function get_lock_then_write() {
-  await locks.acquire('resource', async lock => {
+  await navigator.locks.acquire('resource', async lock => {
     await async_write_func();
   });
 }
 
 async function get_lock_then_read() {
-  await locks.acquire('resource', async lock => {
+  await navigator.locks.acquire('resource', {mode: 'shared'}, async lock => {
     await async_read_func();
-  }, {mode: 'shared'});
+  });
 }
 ```
 
@@ -112,9 +112,14 @@ The method returns a promise that resolves/rejects with the result of the callba
 
 ## Options
 
-An optional final argument is an options dictionary.
+An options dictionary may be specified as a second argument (bumping the callback to the third argument).
 
 An optional _mode_ member can be one of "exclusive" (the default if not specified) or "shared".
+```js
+await navigator.locks.acquire('resource', {mode: 'shared'}, async lock => {
+  // Use |lock| here.
+});
+```
 
 An optional _signal_ member can be specified which is an [AbortSignal](https://dom.spec.whatwg.org/#interface-AbortSignal). This allows aborting a lock request, for example if the request is not granted in a timely manner:
 ```js
@@ -122,9 +127,9 @@ const controller = new AbortController();
 setTimeout(() => controller.abort(), 200); // wait at most 200ms
 
 try {
-  await locks.acquire('resource', async lock => {
+  await navigator.locks.acquire('resource', {signal: controller.signal}, async lock => {
     // Use |lock| here.
-  }, {signal: controller.signal});
+  });
   // Done with lock here.
 } catch (ex) {
   // |ex| will be a DOMException with error name "AbortError" if timer fired.
@@ -132,7 +137,11 @@ try {
 ```
 
 An optional _ifAvailable_ boolean member can be specified; the default is false. If true, then the lock is only granted if it can be without additional waiting. Note that this is still not _synchronous_; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, `null` is returned. (Since this is expected, the request is not rejected.)
-
+```js
+await navigator.locks.acquire('resource', {ifAvailable: true}, async lock => {
+  // Use |lock| here.
+});
+```
 
 
 ## FAQ
@@ -142,6 +151,30 @@ An optional _ifAvailable_ boolean member can be specified; the default is false.
 The use cases for this API require coordination across multiple
 [agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism);
  whereas Atomics operations operate on [SharedArrayBuffers](https://tc39.github.io/ecmascript_sharedmem/shmem.html#StructuredData.SharedArrayBuffer) which are constrained to a single agent cluster. (Informally: tabs/workers can be multi-process and atomics only work same-process.)
+
+
+*Why is the _options_ argument not the last argument?*
+
+Since both callbacks and options are typically made the last argument, the best ordering is not obvious. Based on trying both, placing the options closer to the call site makes reading/writing the code much clearer, so the options dictionary is placed before the callback. Compare (a) and (b):
+
+```js
+// a
+navigator.locks.acquire('resource', async lock => {
+  //
+  // 100 lines of code...
+  // ...
+  //
+}, {ifAvailable: 'true'});
+
+// b
+navigator.locks.acquire('resource', {ifAvailable: true}, async lock => {
+  //
+  // 100 lines of code...
+  // ...
+  //
+});
+```
+It's much clearer in (b) that the request will not wait if the lock is not available. In (a) you need to read all the way through the lock handling code (artificially short/simple here) before noting the very different behavior of the two requests.
 
 
 *What happens if a tab is throttled/suspended?*
@@ -161,23 +194,23 @@ around formalizing these states and notifications.
  * To wrap a lock around a transaction:
 
 ```js
-    locks.acquire(scope, lock => {
+    navigator.locks.acquire(scope, options, lock => {
       return new Promise((resolve, reject) => {
         const tx = db.transaction(...);
         tx.oncomplete = resolve;
         tx.onabort = e => reject(tx.error);
         // use tx...
       });
-    }, options);
+    });
 ```
 
  * To wrap a transaction around a lock is harder, since you can't keep an IndexedDB transaction alive arbitrarily. If [transactions supported `waitUntil()`](https://github.com/inexorabletash/indexeddb-promises) this would be possible:
 
 ```js
   const tx = db.transaction(...);
-  tx.waitUntil(locks.acquire(scope, async lock => {
+  tx.waitUntil(locks.acquire(scope, options, async lock => {
     // use lock and tx
-  }, options);
+  });
 ```
 
 Note that we don't want to _force_ IDBTransactions into this model of waiting for a resource before you can use it: in IDB you can open a transaction and schedule work against it immediately, even though that work will be delayed until the transaction is running.
