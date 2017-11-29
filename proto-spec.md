@@ -3,6 +3,9 @@ This may not match all the details of the README while we iterate on the API.**
 
 ----
 
+Web IDL is defined in [interface.webidl](interface.webidl)
+
+----
 
 ## Concepts
 
