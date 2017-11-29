@@ -1,5 +1,10 @@
+[SecureContext, Exposed=Window] 
 partial interface Navigator {
-  [SecureContext] readonly attribute LockManager locks;
+  readonly attribute LockManager locks;
+};
+[SecureContext, Exposed=Worker] 
+partial interface WorkerNavigator {
+  readonly attribute LockManager locks;
 };
 
 [SecureContext]
