@@ -61,7 +61,7 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 #### `LockManager.prototype.acquire(scope, options, callback)`
 
 1. If _options_ was not passed, let _options_ be a new _LockOptions_ dictionary with default members.
-1. Let _origin_ be the origin of the global scope.
+1. Let _origin_ be context object’s relevant settings object’s origin.
 1. If _origin_ is an opaque origin, return a Promise rejected with a "`SecurityError`" DOMException and abort these steps.
 1. Let _scope_ be the set of unique DOMStrings in `scope` if a sequence was passed, otherwise a set containing just the string passed as `scope`
 1. If _scope_ is empty, return a new Promise rejected with `TypeError`
@@ -110,7 +110,7 @@ To *request a lock* with _origin_, _callback_, _scope_, _mode_, _ifAvailable_, a
 
 > The intent of this method is for web applications to introspect the locks that are requested/held for debugging purposes. It provides a snapshot of the lock state at an arbitrary point in time.
 
-1. Let _origin_ be the origin of the global scope.
+1. Let _origin_ be context object’s relevant settings object’s origin.
 1. If _origin_ is an opaque origin, return a Promise rejected with a "`SecurityError`" DOMException and abort these steps.
 1. Let _p_ be a new Promise.
 1. Run the following in parallel:
@@ -137,7 +137,7 @@ To *request a lock* with _origin_, _callback_, _scope_, _mode_, _ifAvailable_, a
 
 > The intent of this method is for web applications to accomodate unexpected behavior in the applications themselves or in the user agent. A lock released by this method leaves the previous holder in a potentially untested state.
 
-1. Let _origin_ be the origin of the global scope.
+1. Let _origin_ be context object’s relevant settings object’s origin.
 1. If _origin_ is an opaque origin, return a Promise rejected with a "`SecurityError`" DOMException and abort these steps.
 1. Let _scope_ be the set of unique DOMStrings in `scope` if a sequence was passed, otherwise a set containing just the string passed as `scope`
 1. If _scope_ is empty, return a new Promise rejected with `TypeError`
