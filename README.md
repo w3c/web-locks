@@ -26,63 +26,32 @@ A web-based document editor stores state in memory for fast access and persists 
 
 ## Concepts
 
-A _resource_ is just a name (string) chosen by the web application.
-
-A _scope_ is a set of one or more resources.
+A _name_ is just a string chosen by the web application to represent an abstract resource.
 
 A _mode_ is either "exclusive" or "shared".
 
-A _lock request_ is made by script for a particular _scope_ and _mode_. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a lock request.
+A _lock request_ is made by script for a particular _name_ and _mode_. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a lock request.
 
-A _lock_ is granted request; it has the _scope_ and _mode_ of the lock request. It is represented as an object returned to script.
+A _lock_ is granted request; it has the _name_ of the resource and _mode_ of the lock request. It is represented as an object returned to script.
 
-As long as the lock is _held_ it may prevent other lock requests from being granted (depending on the scope and mode).
+As long as the lock is _held_ it may prevent other lock requests from being granted (depending on the name and mode).
 
 A lock can be _released_ by script, at which point it may allow other lock requests to be granted.
 
-#### Resources and Scopes
+#### Resources Names
 
-The _resource_ strings have no external meaning beyond the scheduling algorithm, but are global
+The resource _name_ strings have no external meaning beyond the scheduling algorithm, but are global
 across browsing contexts within an origin. Web applications are free to use any resource naming
 scheme. For example, to mimic [IndexedDB](https://w3c.github.io/IndexedDB/#transaction-construct)'s transaction locking over named stores within a named
 database, an origin might use `db_name + '/' + store_name` (with appropriate restrictions on
 allowed names).
 
-The _scope_ concept originates with databases, and is present in the web platform in [IndexedDB](https://w3c.github.io/IndexedDB/#transaction-scope). It allows atomic acquisition of multiple
-resources without multiple asynchronous requests and the risk of deadlock from fragile algorithms.
 
 #### Modes and Scheduling
 
-The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If a held "exclusive" lock has a resource in its scope, no other locks with that resource in scope can be granted. If a held "shared" lock has a resource in its scope, other "shared" locks with that resource in scope can be granted - but not any "exclusive" locks. The default mode in the API is "exclusive".
+The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If an "exclusive" lock is held, no other locks with that name can be granted. If "shared" lock is held, other "shared" locks with that name can be granted - but not any "exclusive" locks. The default mode in the API is "exclusive".
 
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
-
-The model for granting lock requests is based on the transaction model for
-[IndexedDB](https://w3c.github.io/IndexedDB/), with IDB's "readwrite" transactions
-the equivalent of "shared" locks and "readonly" transactions the equivalent of "exclusive" locks.
-One way to conceptualize this is to consider an ordered list of held locks and requested locks
-within an origin &mdash; here identified with numbers &mdash; with their respective scopes and
-modes:
-
-* Held:
-  * #1: scope: ['a'], mode: "exclusive"
-  * #2: scope: ['b'], mode: "shared"
-* Requested:
-  * #3: scope: ['b'], mode: "shared"
-  * #4: scope: ['a', 'b'], mode: "exclusive"
-  * #5: scope: ['b'], mode: "shared"
-  * #6: scope: ['c'], mode: "exclusive"
-
-At this point, two locks (#1, #2) are held. Request #3 can be granted immediately since it is
-for a "shared" lock on 'b' and #2 is also a "shared" lock on 'b'. Request #4 is for an exclusive
-lock on both 'a' and 'b'; it must wait for all of locks #1, #2 and #3 to be released before it
-can be granted. Request #5 arrived after request #4 and has overlapping scope, so it is blocked
-until #4 is granted then released. (See Q&A below.) The scope of request #6 doesn't overlap with
-any other held or requested lock, so it can be granted immediately.
-
-New requests get appended to the end of the list. Any lock release, request, or aborted request
-causes the state to be evaluated, with requests considered in order to determine if they can be
-granted.
 
 
 ## API Proposal
@@ -106,7 +75,7 @@ This "scoped release" API model requires callers to pass in an async callback wh
 
 > See [alternate API proposals](alternate-api-proposals.md) for slightly different API styles which were considered.
 
-The _scope_ (required first argument) can be a string or array of strings, e.g. `'thing'` or `['thing1', 'thing2']`.
+The _name_ (required first argument) is a string, e.g. `'thing'.
 
 The method returns a promise that resolves/rejects with the result of the callback, or rejects if the request is aborted.
 
@@ -177,6 +146,22 @@ navigator.locks.acquire('resource', {ifAvailable: true}, async lock => {
 It's much clearer in (b) that the request will not wait if the lock is not available. In (a) you need to read all the way through the lock handling code (artificially short/simple here) before noting the very different behavior of the two requests.
 
 
+*Can you lock over multiple resources at the same time?*
+
+This is present in the [Indexed DB API](https://w3c.github.io/IndexedDB/#transaction-scope) as a _scope_.
+This can be implemented in user-space with the following helper:
+
+```js
+async function acquireMultiple(resources) {
+  const sortedResources = Array.from(resources);
+  sortedResources.sort();
+  for (const resource of sortedResources)
+    await aquireSingle(resource);
+}
+```
+
+See [issue 20](https://github.com/inexorabletash/web-locks/issues/20) for further discussion.
+
 *What happens if a tab is throttled/suspended?*
 
 If a tab holds a lock and stops running code it can inhibit work done by other tabs. If this is because tabs are not appropriately breaking up work it's an application problem. But browsers could throttle or even suspend tabs (e.g.
@@ -194,7 +179,7 @@ around formalizing these states and notifications.
  * To wrap a lock around a transaction:
 
 ```js
-    navigator.locks.acquire(scope, options, lock => {
+    navigator.locks.acquire(name, options, lock => {
       return new Promise((resolve, reject) => {
         const tx = db.transaction(...);
         tx.oncomplete = resolve;
@@ -208,7 +193,7 @@ around formalizing these states and notifications.
 
 ```js
   const tx = db.transaction(...);
-  tx.waitUntil(locks.acquire(scope, options, async lock => {
+  tx.waitUntil(locks.acquire(name, options, async lock => {
     // use lock and tx
   });
 ```
