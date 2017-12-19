@@ -114,13 +114,13 @@ To *request a lock* with _origin_, _callback_, _name_, _mode_, _ifAvailable_, an
 1. Run the following in parallel:
     1. Let _pending_ be a new [list](https://infra.spec.whatwg.org/#list).
     1. For each _request_ in _origin_'s **lock request queue**:
-        1. Let _r_ be a new _LockRequest_ dictionary.
+        1. Let _r_ be a new `LockRequest` dictionary.
         1. Set _r_'s `name` dictionary member to _request_'s **name**.
         1. Set _r_'s `mode` dictionary member to _request_'s **mode**.
         1. [Append](https://infra.spec.whatwg.org/#list-append) _r_ to _pending_.
     1. Let _held_ be a new [list](https://infra.spec.whatwg.org/#list).
     1. For each _lock_ in _origin_'s **held lock set**:
-        1. Let _r_ be a new _LockRequest_ dictionary.
+        1. Let _r_ be a new `LockRequest` dictionary.
         1. Set _r_'s `name` dictionary member to _lock_'s **name**.
         1. Set _r_'s `mode` dictionary member to _lock_'s **mode**.
         1. [Append](https://infra.spec.whatwg.org/#list-append) _r_ to _held_.
