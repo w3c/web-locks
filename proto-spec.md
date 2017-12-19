@@ -201,5 +201,3 @@ To *request a lock* with _origin_, _callback_, _name_, _mode_, _ifAvailable_, an
 1. Return _p_.
 
 > TODO: Define how a lock held in a terminated agent is released.
-
-> TODO: More explicitly define _"in the origin"_
