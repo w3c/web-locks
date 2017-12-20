@@ -19,6 +19,9 @@ When **lock**'s **waiting promise** settles (fulfills or rejects):
 
 1. [Remove](https://infra.spec.whatwg.org/#list-remove) **lock** from the origin's **held lock set**.
 
+> TODO: Define how a lock held in a terminated agent is released.
+
+
 ### Lock Requests
 
 A **lock request** is a tuple of (*name*, *mode*).
@@ -64,7 +67,8 @@ interface LockManager {
                        optional LockOptions options,
                        LockGrantedCallback callback);
 
-  Promise<LockState> query();
+  Promise<LockManagerSnapshot> query();
+  
   void forceRelease(DOMString name);
 };
 
@@ -78,12 +82,12 @@ dictionary LockOptions {
   AbortSignal signal;
 };
 
-dictionary LockState {
-  held sequence<LockRequest>;
-  pending sequence<LockRequest>;
+dictionary LockManagerSnapshot {
+  held sequence<LockInfo>;
+  pending sequence<LockInfo>;
 };
 
-dictionary LockRequest {
+dictionary LockInfo {
   DOMString name;
   LockMode mode;
 };
@@ -107,23 +111,25 @@ dictionary LockRequest {
 1. Run the following in parallel:
     1. Let _pending_ be a new [list](https://infra.spec.whatwg.org/#list).
     1. For each _request_ in _origin_'s **lock request queue**:
-        1. Let _r_ be a new `LockRequest` dictionary.
-        1. Set _r_'s `name` dictionary member to _request_'s **name**.
-        1. Set _r_'s `mode` dictionary member to _request_'s **mode**.
-        1. [Append](https://infra.spec.whatwg.org/#list-append) _r_ to _pending_.
+        1. Let _info_ be a new `LockInfo` dictionary.
+        1. Set _info_'s `name` dictionary member to _request_'s **name**.
+        1. Set _info_'s `mode` dictionary member to _request_'s **mode**.
+        1. [Append](https://infra.spec.whatwg.org/#list-append) _info_ to _pending_.
     1. Let _held_ be a new [list](https://infra.spec.whatwg.org/#list).
     1. For each _lock_ in _origin_'s **held lock set**:
-        1. Let _r_ be a new `LockRequest` dictionary.
-        1. Set _r_'s `name` dictionary member to _lock_'s **name**.
-        1. Set _r_'s `mode` dictionary member to _lock_'s **mode**.
-        1. [Append](https://infra.spec.whatwg.org/#list-append) _r_ to _held_.
-    1. Let _state_ be a new `LockState` dictionary.
-    1. Set _state_'s `held` dictionary member to _held_.
-    1. Set _state_'s `pending` dictionary member to _pending_.
-    1. Resolve _p_ with _state_.
+        1. Let _info_ be a new `LockInfo` dictionary.
+        1. Set _info_'s `name` dictionary member to _lock_'s **name**.
+        1. Set _info_'s `mode` dictionary member to _lock_'s **mode**.
+        1. [Append](https://infra.spec.whatwg.org/#list-append) _info_ to _held_.
+    1. Let _snapshot_ be a new `LockManagerSnapshot` dictionary.
+    1. Set _snapshot_'s `held` dictionary member to _held_.
+    1. Set _snapshot_'s `pending` dictionary member to _pending_.
+    1. Resolve _p_ with _snapshot_.
 1. Return _p_.
 
 #### `LockManager.prototype.forceRelease(name)`
+
+🚧 This method is under very active debate. See https://github.com/inexorabletash/web-locks/issues/23 🚧
 
 > The intent of this method is for web applications to accomodate unexpected behavior in the applications themselves or in the user agent. A lock released by this method leaves the previous holder in a potentially untested state.
 
@@ -192,5 +198,3 @@ To *request a lock* with _origin_, _callback_, _name_, _mode_, _ifAvailable_, an
    1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
    1. Abort these steps.
 1. Return _p_.
-
-> TODO: Define how a lock held in a terminated agent is released.
