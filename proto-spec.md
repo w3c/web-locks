@@ -59,16 +59,16 @@ partial interface WorkerNavigator {
 [SecureContext]
 interface LockManager {
   Promise<any> acquire(DOMString name,
-                       LockRequestCallback callback);
+                       LockGrantedCallback callback);
   Promise<any> acquire(DOMString name,
                        optional LockOptions options,
-                       LockRequestCallback callback);
+                       LockGrantedCallback callback);
 
   Promise<LockState> query();
   void forceRelease(DOMString name);
 };
 
-callback LockRequestCallback = Promise<any> (Lock lock);
+callback LockGrantedCallback = Promise<any> (Lock lock);
 
 enum LockMode { "shared", "exclusive" };
 
