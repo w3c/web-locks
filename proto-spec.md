@@ -64,7 +64,7 @@ interface LockManager {
                        optional LockOptions options,
                        LockRequestCallback callback);
 
-  Promise<LockState> queryState();
+  Promise<LockState> query();
   void forceRelease(DOMString name);
 };
 
@@ -97,31 +97,7 @@ dictionary LockRequest {
 1. If _origin_ is an opaque origin, return a Promise rejected with a "`SecurityError`" DOMException and abort these steps.
 1. Return the result of running the **request a lock** algorithm, passing _origin_, _callback_, _name_, _options_'s _mode_, _options_'s _ifAvailable_, and _options_'s _signal_ (if present).
 
-
-
-### `Lock` class
-
-```webidl
-[SecureContext, Exposed=(Window,Worker)]
-interface Lock {
-  readonly attribute DOMString name;
-  readonly attribute LockMode mode;
-};
-```
-
-A `Lock` object has an associated **lock**.
-
-#### `Lock.prototype.name`
-
-Returns a DOMString with the associated **name** of the **lock**.
-
-#### `Lock.prototype.mode`
-
-Returns a DOMString containing the associated **mode** of the **lock**.
-
-
-
-#### `LockManager.prototype.queryState()`
+#### `LockManager.prototype.query()`
 
 > The intent of this method is for web applications to introspect the locks that are requested/held for debugging purposes. It provides a snapshot of the lock state at an arbitrary point in time.
 
@@ -147,7 +123,6 @@ Returns a DOMString containing the associated **mode** of the **lock**.
     1. Resolve _p_ with _state_.
 1. Return _p_.
 
-
 #### `LockManager.prototype.forceRelease(name)`
 
 > The intent of this method is for web applications to accomodate unexpected behavior in the applications themselves or in the user agent. A lock released by this method leaves the previous holder in a potentially untested state.
@@ -161,7 +136,25 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 
 > TODO: How does the Promise returned by `acquire` get resolved in a force-release case? If `AbortError`, how/where do we spec that?
 
+### `Lock` class
 
+```webidl
+[SecureContext, Exposed=(Window,Worker)]
+interface Lock {
+  readonly attribute DOMString name;
+  readonly attribute LockMode mode;
+};
+```
+
+A `Lock` object has an associated **lock**.
+
+#### `Lock.prototype.name`
+
+Returns a DOMString with the associated **name** of the **lock**.
+
+#### `Lock.prototype.mode`
+
+Returns a DOMString containing the associated **mode** of the **lock**.
 
 ## Algorithms
 
