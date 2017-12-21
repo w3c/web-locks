@@ -177,8 +177,7 @@ To *request a lock* with _origin_, _callback_, _name_, _mode_, _ifAvailable_, an
    1. Let _request_ be a new **lock request** (_name_, _mode_).
    1. If _ifAvailable_ is true and _request_ is not **grantable**, then run these steps:
       1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
-      1. Resolve _p_ with _r_.
-      1. Return _p_. (The remaining steps of this algorithm are not run.)
+      1. Resolve _p_ with _r_ and abort these steps.
    1. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _queue_.
    1. If _signal_ was given, run the following in parallel:
       1. Wait until _signal_'s **aborted lock** is set.
