@@ -5,6 +5,8 @@ This may not match all the details of the README while we iterate on the API.**
 
 ## Concepts
 
+A user agent has an associated **lock task queue** which is the result of [starting a new parallel queue](https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue).
+
 ### Lock
 
 A **lock** has an associated **name** which is a DOMStrings.
@@ -108,7 +110,7 @@ dictionary LockInfo {
 1. Let _origin_ be context object’s relevant settings object’s origin.
 1. If _origin_ is an opaque origin, return a Promise rejected with a "`SecurityError`" DOMException and abort these steps.
 1. Let _p_ be a new Promise.
-1. Run the following in parallel:
+1. [Enqueue the following steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to the **lock task queue**:
     1. Let _pending_ be a new [list](https://infra.spec.whatwg.org/#list).
     1. For each _request_ in _origin_'s **lock request queue**:
         1. Let _info_ be a new `LockInfo` dictionary.
@@ -169,32 +171,35 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 To *request a lock* with _origin_, _callback_, _name_, _mode_, _ifAvailable_, and optional _signal_:
 
 1. Let _p_ be a new Promise.
-1. Let _queue_ be _origin_'s **lock request queue**.
-1. Let _held_ be _origin_'s **held lock set**.
-1. Let _request_ be a new **lock request** (_name_, _mode_).
-1. If _ifAvailable_ is true and _request_ is not **grantable**, then run these steps:
-   1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
-   1. Resolve _p_ with _r_.
-   1. Return _p_. (The remaining steps of this algorithm are not run.)
-1. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _queue_.
-1. If _signal_ was given, run the following in parallel:
-   1. Wait until _signal_'s **aborted lock** is set.
-   1. Abort any other steps running in parallel.
-   1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
-   1. Reject _p_ with a new "`AbortError`" **DOMException**.
-1. Run the following in parallel:
-   1. Wait until _request_ is **grantable**
-   1. Abort any other steps running in parallel.
-   1. Let _waiting_ be a new Promise.
-   1. Let _lock_ be a **lock** with **mode** _mode_, **name** _name_, and **waiting promise** _waiting_.
-   1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_
-   1. [Append](https://infra.spec.whatwg.org/#set-append) _lock_ to _set_
-   1. Let _r_ be the result of invoking _callback_ with a new `Lock` object associated with _lock_ as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
-   1. Resolve _waiting_ with _r_.
-   1. Resolve _p_ with _r_.
-1. Run the following in parallel:
-   1. Wait until the agent from which this algorithm was invoked was terminated.
-   1. Abort any other steps running in parallel.
-   1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
-   1. Abort these steps.
+1. [Enqueue the following steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to the **lock task queue**:
+   1. Let _queue_ be _origin_'s **lock request queue**.
+   1. Let _held_ be _origin_'s **held lock set**.
+   1. Let _request_ be a new **lock request** (_name_, _mode_).
+   1. If _ifAvailable_ is true and _request_ is not **grantable**, then run these steps:
+      1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
+      1. Resolve _p_ with _r_.
+      1. Return _p_. (The remaining steps of this algorithm are not run.)
+   1. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _queue_.
+   1. If _signal_ was given, run the following in parallel:
+      1. Wait until _signal_'s **aborted lock** is set.
+      1. Abort any other steps running in parallel.
+      1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
+      1. Reject _p_ with a new "`AbortError`" **DOMException**.
+   1. Run the following in parallel:
+      1. Wait until _request_ is **grantable**
+      1. Abort any other steps running in parallel.
+      1. Let _waiting_ be a new Promise.
+      1. Let _lock_ be a **lock** with **mode** _mode_, **name** _name_, and **waiting promise** _waiting_.
+      1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_
+      1. [Append](https://infra.spec.whatwg.org/#set-append) _lock_ to _set_
+      1. Let _r_ be the result of invoking _callback_ with a new `Lock` object associated with _lock_ as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
+      1. Resolve _waiting_ with _r_.
+      1. Resolve _p_ with _r_.
+   1. Run the following in parallel:
+      1. Wait until the agent from which this algorithm was invoked was terminated.
+      1. Abort any other steps running in parallel.
+      1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
+      1. Abort these steps.
 1. Return _p_.
+
+> TODO: Rework the "Run the following in parallel" sections above. The intent is "this request waits until one of the following conditions applies", which should be restructured as modifications to the queue state. 
