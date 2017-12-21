@@ -179,8 +179,7 @@ To *request a lock* with _origin_, _callback_, _name_, _mode_, _ifAvailable_, an
       1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
       1. Resolve _p_ with _r_ and abort these steps.
    1. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _queue_.
-   1. If _signal_ was given, run the following in parallel:
-      1. Wait until _signal_'s **aborted lock** is set.
+   1. If _signal_ was given, [add the following abort steps](https://dom.spec.whatwg.org/#abortsignal-add) to _signal_:
       1. Abort any other steps running in parallel.
       1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
       1. Reject _p_ with a new "`AbortError`" **DOMException**.
