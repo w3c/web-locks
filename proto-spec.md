@@ -28,6 +28,12 @@ When **lock** _lock_'s **waiting promise** settles (fulfills or rejects), [enque
 1. **Release the lock** _lock_.
 1. Resolve _lock_'s **released promise** with _lock_'s **waiting promise**.
 
+> Non-Normative section
+>
+> There are two promises associated with a lock's lifecycle:
+> * A promise provided either implicitly or explicitly by the callback when the lock is granted which determines how long the lock is held. When this promise settles, the lock is released. This is known as the lock's _waiting promise_.
+> * A promise returned by the `acquire()` method that settles when the lock is released or the request is aborted. This is known as the lock's _released promise_.
+
 ### Lock Requests
 
 A **lock request** is a tuple of (*agent*, *origin*, *name*, *mode*, *promise*).
