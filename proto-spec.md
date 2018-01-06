@@ -56,10 +56,10 @@ A **lock request** _request_ is said to be **grantable** if the following steps 
 1. Let _name_ be _request_'s associated **name**
 1. If _mode_ is "`exclusive`", return true if all of the following conditions are true, and false otherwise:
     * No **lock** in _held_ has a **name** that equals _name_
-    * No entry in _queue_ earlier than _request_ has a **name** that equals _name_.
+    * No **lock request** in _queue_ earlier than _request_ has a **name** that equals _name_.
 1. Otherwise, mode is "`shared`"; return true if all of the following conditions are true, and false otherwise:
     * No **lock** in _held_ has **mode** "`exclusive`" and has a **name** that equals _name_.
-    * No entry in _queue_ earlier than _request_ has a **mode** "`exclusive`" and **name** that equals _name_.
+    * No **lock request** in _queue_ earlier than _request_ has a **mode** "`exclusive`" and **name** that equals _name_.
 
 ### Agent Integration
 
