@@ -11,9 +11,9 @@ A user agent has an associated **lock task queue** which is the result of [start
 
 A **lock** has an associated **agent** which is an [agent](https://tc39.github.io/ecma262/#agent).
 
-A **lock** has an associated **origin** which is an _origin_.
+A **lock** has an associated **origin** which is an [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
 
-A **lock** has an associated **name** which is DOMString.
+A **lock** has an associated **name** which is a DOMString.
 
 A **lock** has an associated **mode** which is one of "`exclusive`" or "`shared`".
 
@@ -28,11 +28,18 @@ When **lock** _lock_'s **waiting promise** settles (fulfills or rejects), [enque
 1. **Release the lock** _lock_.
 1. Resolve _lock_'s **released promise** with _lock_'s **waiting promise**.
 
-> Non-Normative section
->
-> There are two promises associated with a lock's lifecycle:
+> Note: There are two promises associated with a lock's lifecycle:
 > * A promise provided either implicitly or explicitly by the callback when the lock is granted which determines how long the lock is held. When this promise settles, the lock is released. This is known as the lock's _waiting promise_.
 > * A promise returned by the `acquire()` method that settles when the lock is released or the request is aborted. This is known as the lock's _released promise_.
+>
+> ```js
+> const p1 = navigator.locks.acquire('resource', lock => {
+>   const p2 = new Promise(r => { /* logic to use lock and resolve promise */ });
+>   return p2;
+> });
+> ```
+> In the above example, `p1` is the _released promise_ and `p2` is the _waiting promise_.
+> Note that in most code the callback would be implemented as an `async` function and the returned promise would be implicit.
 
 ### Lock Requests
 
@@ -42,8 +49,9 @@ Each origin has an associated **lock request queue**, which is a [queue](https:/
 
 A **lock request** _request_ is said to be **grantable** if the following steps return true:
 
-1. Let _queue_ be the origin's **lock request queue**
-1. Let _held_ be the origin's **held lock set**
+1. Let _origin_ be _request_'s **origin**.
+1. Let _queue_ be _origin_'s **lock request queue**
+1. Let _held_ be _origin_'s **held lock set**
 1. Let _mode_ be _request_'s associated **mode**
 1. Let _name_ be _request_'s associated **name**
 1. If _mode_ is "`exclusive`", return true if all of the following conditions are true, and false otherwise:
@@ -122,12 +130,20 @@ dictionary LockInfo {
 1. If _options_ was not passed, let _options_ be a new `LockOptions` dictionary with default members.
 1. Let _origin_ be [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
 1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), reject _promise_ with a "`SecurityError`" DOMException.
-1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) for the **request a lock** algorithm to the **lock task queue**, passing _promise_, the current [agent](https://tc39.github.io/ecma262/#agent), _origin_, _callback_, _name_, _options_'s _mode_, _options_'s _ifAvailable_, _option_'s _steal_, and _options_'s _signal_ (if present).
+1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) for the **request a lock** algorithm to the **lock task queue**, passing _promise_, the current [agent](https://tc39.github.io/ecma262/#agent), _origin_, _callback_, _name_, _options_'s _mode_ dictionary member, _options_'s _ifAvailable_ dictionary member, _option_'s _steal_ dictionary member, and _options_'s _signal_ dictionary member (if present).
 1. Return _promise_.
+
+> Note: An overloaded method is provided so that the callback always appears as the last argument.
+> This assures that options, if present, appear near the call site where they are synchronously processed, rather than after the callback which may include a significant amount of code which will execute asynchronously.
+
+> Note: The `steal` option should be used with caution.
+> When used, code previously holding a lock will now be executing without guarantees that it is the sole context with access to the abstract resource.
+> Similarly, the code that used the option has no guarantees that other contexts will not still be executing as if they have access to the abstract resource.
+> It is intended for use by web applications that need to attempt recovery in the face of application and/or user-agent defects, where behavior is already unpredictable.
 
 #### `LockManager.prototype.query()`
 
-> The intent of this method is for web applications to introspect the locks that are requested/held for debugging purposes. It provides a snapshot of the lock state at an arbitrary point in time.
+> Note: The intent of this method is for web applications to introspect the locks that are requested/held for debugging purposes. It provides a snapshot of the lock state at an arbitrary point in time.
 
 1. Let _promise_ be a new promise.
 1. Let _origin_ be [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
