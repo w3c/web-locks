@@ -13,7 +13,7 @@ A **lock** has an associated **agent** which is an [agent](https://tc39.github.i
 
 A **lock** has an associated **origin** which is an _origin_.
 
-A **lock** has an associated **name** which is a DOMStrings.
+A **lock** has an associated **name** which is DOMString.
 
 A **lock** has an associated **mode** which is one of "`exclusive`" or "`shared`".
 
