@@ -43,8 +43,7 @@ A lock can be _released_ by script, at which point it may allow other lock reque
 The resource _name_ strings have no external meaning beyond the scheduling algorithm, but are global
 across browsing contexts within an origin. Web applications are free to use any resource naming
 scheme. For example, to mimic [IndexedDB](https://w3c.github.io/IndexedDB/#transaction-construct)'s transaction locking over named stores within a named
-database, an origin might use `encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)` (with appropriate restrictions on
-allowed names).
+database, an origin might use `encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)`.
 
 
 #### Modes and Scheduling
