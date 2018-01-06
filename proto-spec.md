@@ -119,7 +119,7 @@ dictionary LockInfo {
 #### `LockManager.prototype.acquire(name, options, callback)`
 
 1. Let _promise_ be a new promise.
-1. If _options_ was not passed, let _options_ be a new _LockOptions_ dictionary with default members.
+1. If _options_ was not passed, let _options_ be a new `LockOptions` dictionary with default members.
 1. Let _origin_ be [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
 1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), reject _promise_ with a "`SecurityError`" DOMException.
 1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) for the **request a lock** algorithm to the **lock task queue**, passing _promise_, the current [agent](https://tc39.github.io/ecma262/#agent), _origin_, _callback_, _name_, _options_'s _mode_, _options_'s _ifAvailable_, _option_'s _steal_, and _options_'s _signal_ (if present).
