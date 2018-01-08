@@ -186,7 +186,7 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 
 To **request a lock** with _promise_, _agent_, _origin_, _callback_, _name_, _mode_, _ifAvailable_, _steal_, and optional _signal_:
 
-1. Assert: these steps are running on the **lock task queue**.
+1. [Assert](https://infra.spec.whatwg.org/#assert): these steps are running on the **lock task queue**.
 1. Let _queue_ be _origin_'s **lock request queue**.
 1. Let _held_ be _origin_'s **held lock set**.
 1. Let _request_ be a new **lock request** (_origin_, _agent_, _name_, _mode_, _promise_).
@@ -214,7 +214,7 @@ To **request a lock** with _promise_, _agent_, _origin_, _callback_, _name_, _mo
 
 To **release the lock** _lock_:
 
-1. Assert: these steps are running on the **lock task queue**.
+1. [Assert](https://infra.spec.whatwg.org/#assert): these steps are running on the **lock task queue**.
 1. Let _origin_ be _lock_'s **origin**.
 1. [Remove](https://infra.spec.whatwg.org/#list-remove) **lock** from the _origin_'s **held lock set**.
 1. **Process the lock request queue** for _origin_.
@@ -223,7 +223,7 @@ To **release the lock** _lock_:
 
 To **abort the request** _request_:
 
-1. Assert: these steps are running on the **lock task queue**.
+1. [Assert](https://infra.spec.whatwg.org/#assert): these steps are running on the **lock task queue**.
 1. Let _origin_ be _request_'s **origin**.
 1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _origin_'s **lock request queue**.
 1. **Process the lock request queue** for _origin_.
@@ -232,7 +232,7 @@ To **abort the request** _request_:
 
 To **process the lock request queue** for _origin_:
 
-1. Assert: these steps are running on the **lock task queue**.
+1. [Assert](https://infra.spec.whatwg.org/#assert): these steps are running on the **lock task queue**.
 1. Let _queue_ be _origin_'s **lock request queue**.
 1. [For each](https://infra.spec.whatwg.org/#list-iterate) _request_ of _queue_:
    1. If _request_ is **grantable**, then run these steps:
@@ -251,7 +251,7 @@ To **process the lock request queue** for _origin_:
 
 To **snapshot the lock state** for _origin_ with _promise_:
 
-1. Assert: these steps are running on the **lock task queue**.
+1. [Assert](https://infra.spec.whatwg.org/#assert): these steps are running on the **lock task queue**.
 1. Let _pending_ be a new [list](https://infra.spec.whatwg.org/#list).
 1. [For each](https://infra.spec.whatwg.org/#list-iterate) _request_ of _origin_'s **lock request queue**:
     1. Let _info_ be a new `LockInfo` dictionary.
