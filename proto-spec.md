@@ -121,8 +121,8 @@ dictionary LockOptions {
 };
 
 dictionary LockManagerSnapshot {
-  held sequence<LockInfo>;
-  pending sequence<LockInfo>;
+  sequence<LockInfo> held;
+  sequence<LockInfo> pending;
 };
 
 dictionary LockInfo {
