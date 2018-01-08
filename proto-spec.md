@@ -21,17 +21,9 @@ A **lock** has an associated **waiting promise** which is a Promise.
 
 A **lock** has an associated **released promise** which is a Promise.
 
-Each origin has an associated **held lock set** which is an [ordered set](https://infra.spec.whatwg.org/#ordered-set) of **locks**.
-
-When **lock** _lock_'s **waiting promise** settles (fulfills or rejects), [enqueue the following steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) on the **lock task queue**:
-
-1. **Release the lock** _lock_.
-1. Resolve _lock_'s **released promise** with _lock_'s **waiting promise**.
-
 > Note: There are two promises associated with a lock's lifecycle:
 > * A promise provided either implicitly or explicitly by the callback when the lock is granted which determines how long the lock is held. When this promise settles, the lock is released. This is known as the lock's _waiting promise_.
 > * A promise returned by the `acquire()` method that settles when the lock is released or the request is aborted. This is known as the lock's _released promise_.
->
 > ```js
 > const p1 = navigator.locks.acquire('resource', lock => {
 >   const p2 = new Promise(r => { /* logic to use lock and resolve promise */ });
@@ -39,7 +31,21 @@ When **lock** _lock_'s **waiting promise** settles (fulfills or rejects), [enque
 > });
 > ```
 > In the above example, `p1` is the _released promise_ and `p2` is the _waiting promise_.
-> Note that in most code the callback would be implemented as an `async` function and the returned promise would be implicit.
+> Note that in most code the callback would be implemented as an `async` function and the returned promise would be implicit, as in the following example:
+> ```js
+> const p1 = navigator.locks.acquire('resource', async lock => {
+>   /* logic to use lock */
+> });
+> ```
+> The _waiting promise_ is not named in the above code, but is still present as the return value from the `async` callback.
+> Further note that if the callback is not `async` and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; so the lock will be released in an upcoming microtask, and the _released promise_ will also resolve in a subsequent microtask.
+
+Each origin has an associated **held lock set** which is an [ordered set](https://infra.spec.whatwg.org/#ordered-set) of **locks**.
+
+When **lock** _lock_'s **waiting promise** settles (fulfills or rejects), [enqueue the following steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) on the **lock task queue**:
+
+1. **Release the lock** _lock_.
+1. Resolve _lock_'s **released promise** with _lock_'s **waiting promise**.
 
 ### Lock Requests
 
