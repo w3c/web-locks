@@ -1,7 +1,4 @@
-**This is an early iteration focused on defining the algorithms for lock acquisition/release.
-This may not match all the details of the README while we iterate on the API.**
-
-----
+<img src="https://cdn.rawgit.com/inexorabletash/web-locks/master/logo-lock.svg" height="100" align=right>
 
 ## Concepts
 
