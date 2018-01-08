@@ -1,5 +1,23 @@
 <img src="https://cdn.rawgit.com/inexorabletash/web-locks/master/logo-lock.svg" height="100" align=right>
 
+## Contents
+
+- [Concepts](#concepts)
+  - [Lock](#lock)
+  - [Lock Requests](#lock-requests)
+  - [Agent Integration](#agent-integration)
+- [API](#api)
+  - [Navigator Mixins](#navigator-mixins)
+  - [LockManager Class](#lockmanager-class)
+  - [Lock Class](#lock-class)
+- [Algorithms](#algorithms)
+  - [Request a lock](#request-a-lock)
+  - [Release a lock](#release-a-lock)
+  - [Abort a request](#abort-a-request)
+  - [Process a lock request queue](#process-a-lock-request-queue)
+  - [Snapshot the lock state](#snapshot-the-lock-state)
+
+
 ## Concepts
 
 A user agent has an associated **lock task queue** which is the result of [starting a new parallel queue](https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue).
@@ -179,7 +197,7 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 
 ## Algorithms
 
-### Algorithm: Request a lock
+### Request a lock
 
 To **request a lock** with _promise_, _agent_, _origin_, _callback_, _name_, _mode_, _ifAvailable_, _steal_, and optional _signal_:
 
@@ -207,7 +225,7 @@ To **request a lock** with _promise_, _agent_, _origin_, _callback_, _name_, _mo
    1. **Process the lock request queue** for _origin_.
 1. **Process the lock request queue** for _origin_.
 
-### Algorithm: Release a lock
+### Release a lock
 
 To **release the lock** _lock_:
 
@@ -216,7 +234,7 @@ To **release the lock** _lock_:
 1. [Remove](https://infra.spec.whatwg.org/#list-remove) **lock** from the _origin_'s **held lock set**.
 1. **Process the lock request queue** for _origin_.
 
-### Algorithm: Abort a request
+### Abort a request
 
 To **abort the request** _request_:
 
@@ -225,7 +243,7 @@ To **abort the request** _request_:
 1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _origin_'s **lock request queue**.
 1. **Process the lock request queue** for _origin_.
 
-### Algorithm: Process a lock request queue
+### Process a lock request queue
 
 To **process the lock request queue** for _origin_:
 
@@ -244,7 +262,7 @@ To **process the lock request queue** for _origin_:
       1. Let _r_ be the result of invoking _callback_ with a new `Lock` object associated with _lock_ as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
       1. Resolve _waiting_ with _r_.
 
-### Algorithm: Snapshot the lock state
+### Snapshot the lock state
 
 To **snapshot the lock state** for _origin_ with _promise_:
 
