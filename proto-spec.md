@@ -152,7 +152,8 @@ dictionary LockInfo {
 1. Let _promise_ be a new promise.
 1. If _options_ was not passed, let _options_ be a new `LockOptions` dictionary with default members.
 1. Let _origin_ be [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
-1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), reject _promise_ with a "`SecurityError`" DOMException.
+1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), reject _promise_ with a "`SecurityError`" `DOMException`.
+1. Otherwise, if _options_'s _signal_ dictionary member is present and its [aborted flag](https://dom.spec.whatwg.org/#abortsignal-aborted-flag) is set, reject _promise_ with an "`AbortError`" `DOMException`.
 1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to **request a lock** with _promise_, the current [agent](https://tc39.github.io/ecma262/#agent), _origin_, _callback_, _name_, _options_'s _mode_ dictionary member, _options_'s _ifAvailable_ dictionary member, _option_'s _steal_ dictionary member, and _options_'s _signal_ dictionary member (if present) to the **lock task queue**.
 1. Return _promise_.
 
@@ -170,7 +171,7 @@ dictionary LockInfo {
 
 1. Let _promise_ be a new promise.
 1. Let _origin_ be [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
-1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), reject _promise_ with a "`SecurityError`" DOMException and abort these steps.
+1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), reject _promise_ with a "`SecurityError`" `DOMException` and abort these steps.
 1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) for to **snapshot the lock state** for _origin_ with _promise_ to the **lock task queue**.
 1. Return _promise_.
 
@@ -209,11 +210,11 @@ To **request a lock** with _promise_, _agent_, _origin_, _callback_, _name_, _mo
    1. [For each](https://infra.spec.whatwg.org/#list-iterate) _lock_ of _held_:
       1. If _lock_'s **name** is _name_:
          1. [Remove](https://infra.spec.whatwg.org/#list-remove) **lock** from _held_.
-         1. Reject _lock_'s **released promise** with a new "`AbortError`" **DOMException**.
+         1. Reject _lock_'s **released promise** with an "`AbortError`" `DOMException`.
    1. [For each](https://infra.spec.whatwg.org/#list-iterate) _rq_ of _queue_:
       1. If _rq_'s **name** is _name_:
          1. [Remove](https://infra.spec.whatwg.org/#list-remove) _rq_ from _queue_.
-         1. Reject _rq_'s **promise** with a new "`AbortError`" **DOMException**.
+         1. Reject _rq_'s **promise** with an "`AbortError`" `DOMException`.
    1. Assert: _request_ is **grantable**.
 1. If _ifAvailable_ is true and _request_ is not **grantable**, then run these steps:
    1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
@@ -221,7 +222,7 @@ To **request a lock** with _promise_, _agent_, _origin_, _callback_, _name_, _mo
 1. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _origin_'s **lock request queue**.
 1. If _signal_ was given, [add the following abort steps](https://dom.spec.whatwg.org/#abortsignal-add) to _signal_:
    1. [Enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to **abort the request** _request_ to the **lock task queue**.
-   1. Reject _promise_ with a new "`AbortError`" **DOMException**.
+   1. Reject _promise_ with an "`AbortError`" `DOMException`.
 1. **Process the lock request queue** for _origin_.
 
 ### Release a lock
@@ -249,17 +250,17 @@ To **process the lock request queue** for _origin_:
 1. [Assert](https://infra.spec.whatwg.org/#assert): these steps are running on the **lock task queue**.
 1. Let _queue_ be _origin_'s **lock request queue**.
 1. [For each](https://infra.spec.whatwg.org/#list-iterate) _request_ of _queue_:
-   1. If _request_ is **grantable**, then run these steps:
-      1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
-      1. Let _agent_ be _request_'s **agent**
-      1. Let _name_ be _request_'s **name**.
-      1. Let _mode_ be _request_'s **mode**.
-      1. Let _p_ be _request_'s **promise**.
-      1. Let _waiting_ be a new Promise.
-      1. Let _lock_ be a new **lock** with **agent** _agent_, **origin** _origin_, **mode** _mode_, **name** _name_, **released promise** _p_, and **waiting promise** _waiting_.
-      1. [Append](https://infra.spec.whatwg.org/#set-append) _lock_ to _origin_'s **held lock set**.
-      1. Let _r_ be the result of invoking _callback_ with a new `Lock` object associated with _lock_ as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
-      1. Resolve _waiting_ with _r_.
+    1. If _request_ is **grantable**, then run these steps:
+        1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
+        1. Let _agent_ be _request_'s **agent**
+        1. Let _name_ be _request_'s **name**.
+        1. Let _mode_ be _request_'s **mode**.
+        1. Let _p_ be _request_'s **promise**.
+        1. Let _waiting_ be a new Promise.
+        1. Let _lock_ be a new **lock** with **agent** _agent_, **origin** _origin_, **mode** _mode_, **name** _name_, **released promise** _p_, and **waiting promise** _waiting_.
+        1. [Append](https://infra.spec.whatwg.org/#set-append) _lock_ to _origin_'s **held lock set**.
+        1. Let _r_ be the result of invoking _callback_ with a new `Lock` object associated with _lock_ as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
+        1. Resolve _waiting_ with _r_.
 
 ### Snapshot the lock state
 
