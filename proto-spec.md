@@ -81,15 +81,17 @@ When an [agent](https://tc39.github.io/ecma262/#agent) _terminates_ [TBD], [enqu
 ### Navigator Mixins
 
 ```webidl
-[SecureContext, Exposed=Window]
-partial interface Navigator {
+[SecureContext]
+interface mixin NavigatorLocks {
   readonly attribute LockManager locks;
 };
-[SecureContext, Exposed=Worker]
-partial interface WorkerNavigator {
-  readonly attribute LockManager locks;
-};
+Navigator includes NavigatorLocks;
+WorkerNavigator includes NavigatorLocks;
 ```
+
+Each [environment settings object](https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object) has an associated `LockManager` object.
+
+The `storage` attribute’s getter must return [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s `LockManager` object.
 
 ### `LockManager` class
 
