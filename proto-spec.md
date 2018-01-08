@@ -138,7 +138,7 @@ dictionary LockInfo {
 1. If _options_ was not passed, let _options_ be a new `LockOptions` dictionary with default members.
 1. Let _origin_ be [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
 1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), reject _promise_ with a "`SecurityError`" DOMException.
-1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) for the **request a lock** algorithm to the **lock task queue**, passing _promise_, the current [agent](https://tc39.github.io/ecma262/#agent), _origin_, _callback_, _name_, _options_'s _mode_ dictionary member, _options_'s _ifAvailable_ dictionary member, _option_'s _steal_ dictionary member, and _options_'s _signal_ dictionary member (if present).
+1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to **request a lock** with _promise_, the current [agent](https://tc39.github.io/ecma262/#agent), _origin_, _callback_, _name_, _options_'s _mode_ dictionary member, _options_'s _ifAvailable_ dictionary member, _option_'s _steal_ dictionary member, and _options_'s _signal_ dictionary member (if present) to the **lock task queue**.
 1. Return _promise_.
 
 > Note: An overloaded method is provided so that the callback always appears as the last argument.
@@ -156,23 +156,7 @@ dictionary LockInfo {
 1. Let _promise_ be a new promise.
 1. Let _origin_ be [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
 1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), reject _promise_ with a "`SecurityError`" DOMException and abort these steps.
-1. Otherwise, [enqueue the following steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to the **lock task queue**:
-    1. Let _pending_ be a new [list](https://infra.spec.whatwg.org/#list).
-    1. [For each](https://infra.spec.whatwg.org/#list-iterate) _request_ of _origin_'s **lock request queue**:
-        1. Let _info_ be a new `LockInfo` dictionary.
-        1. Set _info_'s `name` dictionary member to _request_'s **name**.
-        1. Set _info_'s `mode` dictionary member to _request_'s **mode**.
-        1. [Append](https://infra.spec.whatwg.org/#list-append) _info_ to _pending_.
-    1. Let _held_ be a new [list](https://infra.spec.whatwg.org/#list).
-    1. [For each](https://infra.spec.whatwg.org/#list-iterate) _lock_ of _origin_'s **held lock set**:
-        1. Let _info_ be a new `LockInfo` dictionary.
-        1. Set _info_'s `name` dictionary member to _lock_'s **name**.
-        1. Set _info_'s `mode` dictionary member to _lock_'s **mode**.
-        1. [Append](https://infra.spec.whatwg.org/#list-append) _info_ to _held_.
-    1. Let _snapshot_ be a new `LockManagerSnapshot` dictionary.
-    1. Set _snapshot_'s `held` dictionary member to _held_.
-    1. Set _snapshot_'s `pending` dictionary member to _pending_.
-    1. Resolve _promise_ with _snapshot_.
+1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) for to **snapshot the lock state** for _origin_ with _promise_ to the **lock task queue**.
 1. Return _promise_.
 
 
@@ -198,7 +182,7 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 
 ## Algorithms
 
-### Algorithm: request a lock
+### Algorithm: Request a lock
 
 To **request a lock** with _promise_, _agent_, _origin_, _callback_, _name_, _mode_, _ifAvailable_, _steal_, and optional _signal_:
 
@@ -225,17 +209,23 @@ To **request a lock** with _promise_, _agent_, _origin_, _callback_, _name_, _mo
    1. **Process the lock request queue** for _origin_.
 1. **Process the lock request queue** for _origin_.
 
+### Algorithm: Release a lock
+
 To **release the lock** _lock_:
 
 1. Let _origin_ be _lock_'s **origin**.
 1. [Remove](https://infra.spec.whatwg.org/#list-remove) **lock** from the _origin_'s **held lock set**.
 1. **Process the lock request queue** for _origin_.
 
+### Algorithm: Abort a request
+
 To **abort the request** _request_:
 
 1. Let _origin_ be _request_'s **origin**.
 1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _origin_'s **lock request queue**.
 1. **Process the lock request queue** for _origin_.
+
+### Algorithm: Process a lock request queue
 
 To **process the lock request queue** for _origin_:
 
@@ -252,3 +242,24 @@ To **process the lock request queue** for _origin_:
       1. [Append](https://infra.spec.whatwg.org/#set-append) _lock_ to _origin_'s **held lock set**.
       1. Let _r_ be the result of invoking _callback_ with a new `Lock` object associated with _lock_ as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
       1. Resolve _waiting_ with _r_.
+
+### Algorithm: Snapshot the lock state
+
+To **snapshot the lock state** for _origin_ with _promise_:
+
+1. Let _pending_ be a new [list](https://infra.spec.whatwg.org/#list).
+1. [For each](https://infra.spec.whatwg.org/#list-iterate) _request_ of _origin_'s **lock request queue**:
+    1. Let _info_ be a new `LockInfo` dictionary.
+    1. Set _info_'s `name` dictionary member to _request_'s **name**.
+    1. Set _info_'s `mode` dictionary member to _request_'s **mode**.
+    1. [Append](https://infra.spec.whatwg.org/#list-append) _info_ to _pending_.
+1. Let _held_ be a new [list](https://infra.spec.whatwg.org/#list).
+1. [For each](https://infra.spec.whatwg.org/#list-iterate) _lock_ of _origin_'s **held lock set**:
+    1. Let _info_ be a new `LockInfo` dictionary.
+    1. Set _info_'s `name` dictionary member to _lock_'s **name**.
+    1. Set _info_'s `mode` dictionary member to _lock_'s **mode**.
+    1. [Append](https://infra.spec.whatwg.org/#list-append) _info_ to _held_.
+1. Let _snapshot_ be a new `LockManagerSnapshot` dictionary.
+1. Set _snapshot_'s `held` dictionary member to _held_.
+1. Set _snapshot_'s `pending` dictionary member to _pending_.
+1. Resolve _promise_ with _snapshot_.
