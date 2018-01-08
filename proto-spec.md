@@ -3,7 +3,7 @@
 ## Contents
 
 - [Concepts](#concepts)
-  - [Lock](#lock)
+  - [Locks](#locks)
   - [Lock Requests](#lock-requests)
   - [Agent Integration](#agent-integration)
 - [API](#api)
@@ -22,7 +22,7 @@
 
 A user agent has an associated **lock task queue** which is the result of [starting a new parallel queue](https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue).
 
-### Lock
+### Locks
 
 A **lock** has an associated **agent** which is an [agent](https://tc39.github.io/ecma262/#agent).
 
@@ -220,9 +220,8 @@ To **request a lock** with _promise_, _agent_, _origin_, _callback_, _name_, _mo
    1. Resolve _promise_ with _r_ and abort these steps.
 1. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _origin_'s **lock request queue**.
 1. If _signal_ was given, [add the following abort steps](https://dom.spec.whatwg.org/#abortsignal-add) to _signal_:
-   1. [Remove](https://infra.spec.whatwg.org/#list-remove) _request_ from _queue_.
+   1. [Enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to **abort the request** _request_ to the **lock task queue**.
    1. Reject _promise_ with a new "`AbortError`" **DOMException**.
-   1. **Process the lock request queue** for _origin_.
 1. **Process the lock request queue** for _origin_.
 
 ### Release a lock
