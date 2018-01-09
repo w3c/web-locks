@@ -38,6 +38,8 @@ As long as the lock is _held_ it may prevent other lock requests from being gran
 
 A lock can be _released_ by script, at which point it may allow other lock requests to be granted.
 
+A user agent has a _lock manager_ for each origin, which encapsulates the state of all locks and requests for that origin.
+
 #### Resources Names
 
 The resource _name_ strings have no external meaning beyond the scheduling algorithm, but are global
@@ -55,7 +57,6 @@ Additional properties may influence scheduling, such as timeouts, fairness, and 
 
 ## API Proposal
 
-
 ```js
 async function get_lock_then_write() {
   await navigator.locks.acquire('resource', async lock => {
@@ -70,17 +71,19 @@ async function get_lock_then_read() {
 }
 ```
 
-This "scoped release" API model requires callers to pass in an async callback which will be invoked with the lock. The callback implicitly returns a promise and the lock is released when that promise resolves. If a non-async callback function is passed in, it is wrapped into a Promise that would resolve immediately, so the lock would only be held for the duration of the synchronous callback.
+The _name_ (required first argument) is a string, e.g. `'thing'.
+
+The _callback_ (required final argument) is a callback invoked with the lock when granted. This "scoped release" API model encourages callers to pass in an async callback; the callback implicitly returns a promise and the lock is released when that promise resolves. In other words, the lock is held until the async callback completes. (If a non-async callback function is passed in, it is wrapped into a Promise that would resolve immediately, so the lock would only be held for the duration of the synchronous callback.)
 
 > See [alternate API proposals](alternate-api-proposals.md) for slightly different API styles which were considered.
 
-The _name_ (required first argument) is a string, e.g. `'thing'.
-
-The method returns a promise that resolves/rejects with the result of the callback, or rejects if the request is aborted.
+The method returns a promise that resolves/rejects with the result of the callback (so, after the lock is released), or rejects if the request is aborted. 
 
 ## Options
 
 An options dictionary may be specified as a second argument (bumping the callback to the third argument).
+
+### mode
 
 An optional _mode_ member can be one of "exclusive" (the default if not specified) or "shared".
 ```js
@@ -88,6 +91,8 @@ await navigator.locks.acquire('resource', {mode: 'shared'}, async lock => {
   // Use |lock| here.
 });
 ```
+
+### signal
 
 An optional _signal_ member can be specified which is an [AbortSignal](https://dom.spec.whatwg.org/#interface-AbortSignal). This allows aborting a lock request, for example if the request is not granted in a timely manner:
 ```js
@@ -104,6 +109,8 @@ try {
 }
 ```
 
+### ifAvailable
+
 An optional _ifAvailable_ boolean member can be specified; the default is false. If true, then the lock is only granted if it can be without additional waiting. Note that this is still not _synchronous_; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, `null` is returned. (Since this is expected, the request is not rejected.)
 ```js
 await navigator.locks.acquire('resource', {ifAvailable: true}, async lock => {
@@ -111,6 +118,33 @@ await navigator.locks.acquire('resource', {ifAvailable: true}, async lock => {
 });
 ```
 
+## Management / Debugging 
+
+One of the things we've learned from APIs with lots of hidden state like Indexed DB is that it makes diagnosing problems difficult. Developer tools can help locally, but not when a web application has been deployed and mysterious bug reports are coming in. The ability for a web app to introspect the state of such APIs is critical.
+
+To address this, a method called `query()` can be used which provides a snapshot of the lock manager state for an origin:
+
+```js
+const state = await navigator.locks.query();
+```
+
+This resolves to a plain-old-data structure (i.e. JSON-like) with this form:
+```js
+{
+  held: [
+    { name: "resource1", mode: "exclusive", clientId: "8b1e730c-7405-47db-9265-6ee7c73ac153" },
+    { name: "resource2", mode: "shared", clientId: "8b1e730c-7405-47db-9265-6ee7c73ac153" },
+    { name: "resource2", mode: "shared", clientId: "fad203a5-1f31-472b-a7f7-a3236a1f6d3b" },
+  ],
+  pending: [
+    { name: "resource1", mode: "exclusive", clientId: "fad203a5-1f31-472b-a7f7-a3236a1f6d3b" },
+    { name: "resource1", mode: "exclusive", clientId: "d341a5d0-1d8d-4224-be10-704d1ef92a15" },
+  ]
+}
+```
+The `clientId` field corresponds to a unique context (frame/worker), and is the same value used in [Service Workers](https://w3c.github.io/ServiceWorker/#dom-client-id).
+
+This data is just a _snapshot_ of the lock manager state at some point in time. Once the data is returned to script, the lock state may have changed. It should therefore not usually be used by applications to make decisions about what locks are currently held or available. 
 
 ## FAQ
 
@@ -159,7 +193,7 @@ async function acquireMultiple(resources) {
 }
 ```
 
-See [issue 20](https://github.com/inexorabletash/web-locks/issues/20) for further discussion.
+Note the use of `sort()` which ensures that locks are always acquired in the same order, to avoid deadlocks. See [issue 20](https://github.com/inexorabletash/web-locks/issues/20) for further discussion.
 
 *What happens if a tab is throttled/suspended?*
 
@@ -226,7 +260,7 @@ demand, we could add an option/mode to allow opting into the more subtle behavio
 No - like storage APIs, browsers treat such anonymous sessions as if they were a completely separate
 user agent from the point of view of specs; the data is in a separate partition. This is similar
 to how some browsers support multiple user profiles; cookies, databases, certificates, etc.
-are all separated. Locks held in one user profile (or anonymous) session have no relationship to
+are all separated. Locks held in one user profile or anonymous session have no relationship to
 locks in another session, as if they in a distinct application or on another device.
 
 
