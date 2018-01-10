@@ -272,3 +272,18 @@ locks in another session, as if they in a distinct application or on another dev
   * No explicit control of transaction lifetimes. Requires use of full API (e.g. schema versioning).
 * [Wake Lock API](https://w3c.github.io/wake-lock/)
   * Acquisition of a single system-provided resource.
+
+## Acknowledgements
+
+Many thanks to
+Alex Russell,
+Anne van Kesteren,
+Darin Fisher,
+Domenic Denicola,
+Harald Alvestrand,
+Jake Archibald,
+Ralph Chelala, 
+Ryan Fioravanti,
+and
+Victor Costan
+for helping craft this proposal.
