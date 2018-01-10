@@ -153,6 +153,58 @@ If a web application detects an unrecoverable state - for example, some coordina
 Discussion about this controversial option is at: https://github.com/inexorabletash/web-locks/issues/23
 
 
+## Deadlocks
+
+[Deadlocks](https://en.wikipedia.org/wiki/Deadlock) are a concept in concurrent computing. Here's a simple example of how they can be encountered through the use of this API:
+
+```js
+// Code 2
+navigator.locks.acquire('A', async a => {
+  await navigator.locks.acquire('B', async b => {
+    // do stuff with A and B
+  });
+});
+
+// Elsewhere...
+
+// Code 2
+navigator.locks.acquire('B', async b => {
+  await navigator.locks.acquire('A', async a => {
+    // do stuff with A and B
+  });
+});
+```
+If code 1 and code 2 run close to the same time (and note they are not awaiting completion), there is a good chance that code 1 will hold lock A and code 2 will hold lock B and neither can make further progress - a deadlock. This will not affect the user agent as a whole, pause the tab, or affect other code in the origin, but this particular functionality will be blocked. 
+
+Preventing deadlocks requires care. One approach is to always acquire multiple locks in a strict order, e.g.:
+
+```js
+async function acquireMultiple(resources, callback) {
+  const sortedResources = Array.from(resources);
+  sortedResources.sort(); // always acquire in the same order
+  
+  async function acquireNext() {
+    return await navigator.locks.acquire(sortedResources.shift(), async lock => {
+      if (sortedResources.length > 0) {
+        return await acquireNext();       
+      } else {
+        return await callback();
+      }
+    });
+  }
+  return await acquireNext();
+}
+```
+
+In practice, the use of multiple locks is rarely as straightforward - libraries and other utilities may conceal their use. 
+
+See issues for further discussion:
+
+* [Single vs multi-resource locks](https://github.com/inexorabletash/web-locks/issues/20)
+* [Deadlock detection and resolution?](https://github.com/inexorabletash/web-locks/issues/26)
+* [Avoid deadlocks entirely via crafty API design?](https://github.com/inexorabletash/web-locks/issues/28)
+
+
 ## FAQ
 
 *Why can't [Atomics](https://tc39.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject) be used for this?*
@@ -185,22 +237,6 @@ navigator.locks.acquire('resource', {ifAvailable: true}, async lock => {
 ```
 It's much clearer in (b) that the request will not wait if the lock is not available. In (a) you need to read all the way through the lock handling code (artificially short/simple here) before noting the very different behavior of the two requests.
 
-
-*Can you lock over multiple resources at the same time?*
-
-This is present in the [Indexed DB API](https://w3c.github.io/IndexedDB/#transaction-scope) as a _scope_.
-This can be implemented in user-space with the following helper:
-
-```js
-async function acquireMultiple(resources) {
-  const sortedResources = Array.from(resources);
-  sortedResources.sort();
-  for (const resource of sortedResources)
-    await aquireSingle(resource);
-}
-```
-
-Note the use of `sort()` which ensures that locks are always acquired in the same order, to avoid deadlocks. See [issue 20](https://github.com/inexorabletash/web-locks/issues/20) for further discussion.
 
 *What happens if a tab is throttled/suspended?*
 
