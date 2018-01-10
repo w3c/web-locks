@@ -83,7 +83,7 @@ The method returns a promise that resolves/rejects with the result of the callba
 
 An options dictionary may be specified as a second argument (bumping the callback to the third argument).
 
-### mode
+### `mode` option to `acquire()`
 
 An optional _mode_ member can be one of "exclusive" (the default if not specified) or "shared".
 ```js
@@ -92,7 +92,7 @@ await navigator.locks.acquire('resource', {mode: 'shared'}, async lock => {
 });
 ```
 
-### signal
+### `signal` option to `acquire()`
 
 An optional _signal_ member can be specified which is an [AbortSignal](https://dom.spec.whatwg.org/#interface-AbortSignal). This allows aborting a lock request, for example if the request is not granted in a timely manner:
 ```js
@@ -109,7 +109,7 @@ try {
 }
 ```
 
-### ifAvailable
+### `ifAvailable` option to `acquire()`
 
 An optional _ifAvailable_ boolean member can be specified; the default is false. If true, then the lock is only granted if it can be without additional waiting. Note that this is still not _synchronous_; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, `null` is returned. (Since this is expected, the request is not rejected.)
 ```js
@@ -145,6 +145,13 @@ This resolves to a plain-old-data structure (i.e. JSON-like) with this form:
 The `clientId` field corresponds to a unique context (frame/worker), and is the same value used in [Service Workers](https://w3c.github.io/ServiceWorker/#dom-client-id).
 
 This data is just a _snapshot_ of the lock manager state at some point in time. Once the data is returned to script, the lock state may have changed. It should therefore not usually be used by applications to make decisions about what locks are currently held or available. 
+
+### `steal` option to `acquire()`
+
+If a web application detects an unrecoverable state - for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding - it can "steal" a lock by passing this option to `acquire()`. When specified, all previous requests for the named resource are aborted and any held locks for the resource will be released; in both cases, the _released promise_ will resolve with `AbortError`, and the request will be granted. This should only be used in exceptional cases; any code running in tabs that assume they hold the lock will continue to execute, violating any guarantee of exclusive access to the resource.
+
+Discussion about this controversial option is at: https://github.com/inexorabletash/web-locks/issues/23
+
 
 ## FAQ
 
