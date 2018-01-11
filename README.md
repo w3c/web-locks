@@ -158,7 +158,7 @@ Discussion about this controversial option is at: https://github.com/inexorablet
 [Deadlocks](https://en.wikipedia.org/wiki/Deadlock) are a concept in concurrent computing. Here's a simple example of how they can be encountered through the use of this API:
 
 ```js
-// Code 2
+// Program 1
 navigator.locks.acquire('A', async a => {
   await navigator.locks.acquire('B', async b => {
     // do stuff with A and B
@@ -167,14 +167,14 @@ navigator.locks.acquire('A', async a => {
 
 // Elsewhere...
 
-// Code 2
+// Program 2
 navigator.locks.acquire('B', async b => {
   await navigator.locks.acquire('A', async a => {
     // do stuff with A and B
   });
 });
 ```
-If code 1 and code 2 run close to the same time (and note they are not awaiting completion), there is a good chance that code 1 will hold lock A and code 2 will hold lock B and neither can make further progress - a deadlock. This will not affect the user agent as a whole, pause the tab, or affect other code in the origin, but this particular functionality will be blocked. 
+If program 1 and program 2 run close to the same time, there is a chance that code 1 will hold lock A and code 2 will hold lock B and neither can make further progress - a deadlock. This will not affect the user agent as a whole, pause the tab, or affect other code in the origin, but this particular functionality will be blocked. 
 
 Preventing deadlocks requires care. One approach is to always acquire multiple locks in a strict order, e.g.:
 
