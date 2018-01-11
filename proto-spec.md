@@ -133,7 +133,7 @@ enum LockMode { "shared", "exclusive" };
 dictionary LockOptions {
   LockMode mode = "exclusive";
   boolean ifAvailable = false;
-  boolean steal = true;
+  boolean steal = false;
   AbortSignal signal;
 };
 
