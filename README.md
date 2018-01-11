@@ -23,6 +23,7 @@ This document proposes an API for allow contexts (windows, workers) within a web
 
 A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as IndexedDB for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronize the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active.
 
+In a data synchronization service, a "master tab" is designated. This tab is the only one that should be performing some operations (e.g. network sync, cleaning up old data, etc). It holds a lock and never releases it. Other tabs can attempt to acquire the lock, and such attempts will be queued. If the "master tab" crashes or is closed then one of the other tabs will get the lock and become the new master.
 
 ## Concepts
 
@@ -305,6 +306,16 @@ user agent from the point of view of specs; the data is in a separate partition.
 to how some browsers support multiple user profiles; cookies, databases, certificates, etc.
 are all separated. Locks held in one user profile or anonymous session have no relationship to
 locks in another session, as if they in a distinct application or on another device.
+
+
+*Can you hold a lock for the lifetime of a tab?*
+
+Yes. Using the API, just pass in a promise that never resolves:
+```js
+navigator.locks.acquire(name, lock => new Promise(r => {}));
+```
+In practice, you may want to reserve some ability to resolve the promise, e.g. in response to a "sign out" event or indication that the tab has become inactive. But in some scenarios (e.g. master election) then never releasing the lock until the page is terminated is entirely reasonable.
+
 
 
 ## Related APIs
