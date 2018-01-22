@@ -51,7 +51,7 @@ database, an origin might use `encodeURIComponent(db_name) + '/' + encodeURIComp
 
 #### Modes and Scheduling
 
-The _mode_ property and can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If an "exclusive" lock is held, no other locks with that name can be granted. If "shared" lock is held, other "shared" locks with that name can be granted - but not any "exclusive" locks. The default mode in the API is "exclusive".
+The _mode_ property can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If an "exclusive" lock is held, no other locks with that name can be granted. If "shared" lock is held, other "shared" locks with that name can be granted - but not any "exclusive" locks. The default mode in the API is "exclusive".
 
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
