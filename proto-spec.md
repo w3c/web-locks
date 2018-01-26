@@ -211,14 +211,14 @@ To **request a lock** with _promise_, _agent_, _clientId_, _origin_, _callback_,
 1. Let _held_ be _origin_'s **held lock set**.
 1. Let _request_ be a new **lock request** (_agent_, _clientId_, _origin_, _name_, _mode_, _promise_).
 1. If _steal_ is true, then run these steps:
-   1. [For each](https://infra.spec.whatwg.org/#list-iterate) _lock_ of _held_:
-      1. If _lock_'s **name** is _name_:
-         1. [Remove](https://infra.spec.whatwg.org/#list-remove) **lock** from _held_.
-         1. Reject _lock_'s **released promise** with an "`AbortError`" `DOMException`.
    1. [For each](https://infra.spec.whatwg.org/#list-iterate) _rq_ of _queue_:
       1. If _rq_'s **name** is _name_:
          1. [Remove](https://infra.spec.whatwg.org/#list-remove) _rq_ from _queue_.
          1. Reject _rq_'s **promise** with an "`AbortError`" `DOMException`.
+   1. [For each](https://infra.spec.whatwg.org/#list-iterate) _lock_ of _held_:
+      1. If _lock_'s **name** is _name_:
+         1. [Remove](https://infra.spec.whatwg.org/#list-remove) **lock** from _held_.
+         1. Reject _lock_'s **released promise** with an "`AbortError`" `DOMException`.
    1. Assert: _request_ is **grantable**.
 1. If _ifAvailable_ is true and _request_ is not **grantable**, then run these steps:
    1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
