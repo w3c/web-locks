@@ -33,7 +33,7 @@ A _mode_ is either "exclusive" or "shared".
 
 A _lock request_ is made by script for a particular _name_ and _mode_. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a lock request.
 
-A _lock_ is granted request; it has the _name_ of the resource and _mode_ of the lock request. It is represented as an object returned to script.
+A _lock_ is a granted request; it has the _name_ of the resource and _mode_ of the lock request. It is represented as an object returned to script.
 
 As long as the lock is _held_ it may prevent other lock requests from being granted (depending on the name and mode).
 
@@ -316,6 +316,15 @@ navigator.locks.acquire(name, lock => new Promise(r => {}));
 ```
 In practice, you may want to reserve some ability to resolve the promise, e.g. in response to a "sign out" event or indication that the tab has become inactive. But in some scenarios (e.g. master election) then never releasing the lock until the page is terminated is entirely reasonable.
 
+
+*If a tab is holding an exclusive lock, what happens if another lock request for the same resource is made?*
+
+The second request will block. A lock corresponds to a granted request, and each request is considered regardless of context. This allows libraries running in the same page to coordinate the use of a shared resource. As a consequence, nested requests for the same resource will deadlock:
+```js
+await navigator.locks.acquire('mylock', async lock => {
+  await navigator.locks.acquire('mylock', async lock => {});
+});
+```
 
 
 ## Related APIs
