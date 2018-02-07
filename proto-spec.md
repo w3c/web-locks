@@ -161,7 +161,11 @@ dictionary LockInfo {
 1. Otherwise, if _options_' _steal_ dictionary member is true and _option_'s _mode_ dictionary member is not "`exclusive`", then reject _promise_ with an "`NotSupportedError`" `DOMException`.
 1. Otherwise, if _option_'s _signal_ dictionary member is present, and either of _options_' _steal_ dictionary member or _options_' _ifAvailable_ dictionary member is true, then reject _promise_ with an "`NotSupportedError`" `DOMException`.
 1. Otherwise, if _options_' _signal_ dictionary member is present and its [aborted flag](https://dom.spec.whatwg.org/#abortsignal-aborted-flag) is set, then reject _promise_ with an "`AbortError`" `DOMException`.
-1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to **request a lock** with _promise_, the current [agent](https://tc39.github.io/ecma262/#agent), _environment_'s [id](https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id), _origin_, _callback_, _name_, _options_' _mode_ dictionary member, _options_' _ifAvailable_ dictionary member, _options_' _steal_ dictionary member, and _options_' _signal_ dictionary member (if present) to the **lock task queue**.
+1. Otherwise, run these steps:
+   1. Let _request_ be the result of running the steps to **request a lock** with _promise_, the current [agent](https://tc39.github.io/ecma262/#agent), _environment_'s [id](https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id), _origin_, _callback_, _name_, _options_' _mode_ dictionary member, _options_' _ifAvailable_ dictionary member, and _options_' _steal_ dictionary member.
+   1. If _options_' _signal_ dictionary member is present, then [add the following abort steps](https://dom.spec.whatwg.org/#abortsignal-add) to _options_' _signal_ dictionary member:
+      1. [Enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to **abort the request** _request_ to the **lock task queue**.
+      1. Reject _promise_ with an "`AbortError`" `DOMException`.
 1. Return _promise_.
 
 > Note: An overloaded method is provided so that the callback always appears as the last argument.
@@ -209,26 +213,24 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 
 To **request a lock** with _promise_, _agent_, _clientId_, _origin_, _callback_, _name_, _mode_, _ifAvailable_, _steal_, and optional _signal_:
 
-1. [Assert](https://infra.spec.whatwg.org/#assert): these steps are running on the **lock task queue**.
-1. Let _queue_ be _origin_'s **lock request queue**.
-1. Let _held_ be _origin_'s **held lock set**.
 1. Let _request_ be a new **lock request** (_agent_, _clientId_, _origin_, _name_, _mode_, _promise_).
-1. If _steal_ is true, then run these steps:
-   1. [For each](https://infra.spec.whatwg.org/#list-iterate) _lock_ of _held_:
-      1. If _lock_'s **name** is _name_, then run these steps:
-         1. [Remove](https://infra.spec.whatwg.org/#list-remove) **lock** from _held_.
-         1. Reject _lock_'s **released promise** with an "`AbortError`" `DOMException`.
-   1. [Prepend](https://infra.spec.whatwg.org/#list-prepend) _request_ in _origin_'s **lock request queue**.
-1. Otherwise, run these steps:
-   1. If _ifAvailable_ is true and _request_ is not **grantable**, then run these steps:
-      1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
-      1. Resolve _promise_ with _r_ and abort these steps.
-   1. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _origin_'s **lock request queue**.
-1. If _signal_ was given, then [add the following abort steps](https://dom.spec.whatwg.org/#abortsignal-add) to _signal_:
-   1. If _queue_ does not [contain](https://infra.spec.whatwg.org/#list-contain) _request_, return.
-   1. [Enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to **abort the request** _request_ to the **lock task queue**.
-   1. Reject _promise_ with an "`AbortError`" `DOMException`.
-1. **Process the lock request queue** for _origin_.
+1. [Enqueue the following steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to 
+ to the **lock task queue**:
+   1. Let _queue_ be _origin_'s **lock request queue**.
+   1. Let _held_ be _origin_'s **held lock set**.
+   1. If _steal_ is true, then run these steps:
+      1. [For each](https://infra.spec.whatwg.org/#list-iterate) _lock_ of _held_:
+         1. If _lock_'s **name** is _name_, then run these steps:
+            1. [Remove](https://infra.spec.whatwg.org/#list-remove) **lock** from _held_.
+            1. Reject _lock_'s **released promise** with an "`AbortError`" `DOMException`.
+      1. [Prepend](https://infra.spec.whatwg.org/#list-prepend) _request_ in _origin_'s **lock request queue**.
+   1. Otherwise, run these steps:
+      1. If _ifAvailable_ is true and _request_ is not **grantable**, then run these steps:
+         1. Let _r_ be the result of invoking _callback_ with `null` as the only argument. (Note that _r_ may be a regular completion, an abrupt completion, or an unresolved Promise.)
+         1. Resolve _promise_ with _r_ and abort these steps.
+      1. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _origin_'s **lock request queue**.
+   1. **Process the lock request queue** for _origin_.
+1. Return _request_.
 
 ### Release a lock
 
