@@ -225,6 +225,7 @@ To **request a lock** with _promise_, _agent_, _clientId_, _origin_, _callback_,
       1. Resolve _promise_ with _r_ and abort these steps.
    1. [Enqueue](https://infra.spec.whatwg.org/#queue-enqueue) _request_ in _origin_'s **lock request queue**.
 1. If _signal_ was given, then [add the following abort steps](https://dom.spec.whatwg.org/#abortsignal-add) to _signal_:
+   1. If _queue_ does not [contain](https://infra.spec.whatwg.org/#list-contain) _request_, return.
    1. [Enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to **abort the request** _request_ to the **lock task queue**.
    1. Reject _promise_ with an "`AbortError`" `DOMException`.
 1. **Process the lock request queue** for _origin_.
