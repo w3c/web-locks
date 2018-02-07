@@ -48,6 +48,7 @@ across browsing contexts within an origin. Web applications are free to use any 
 scheme. For example, to mimic [IndexedDB](https://w3c.github.io/IndexedDB/#transaction-construct)'s transaction locking over named stores within a named
 database, an origin might use `encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)`.
 
+Names starting with `-` are reserved; requesting these will throw. 
 
 #### Modes and Scheduling
 
