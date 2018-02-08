@@ -40,9 +40,9 @@ A **lock** has an associated **released promise** which is a Promise.
 
 > Note: There are two promises associated with a lock's lifecycle:
 > * A promise provided either implicitly or explicitly by the callback when the lock is granted which determines how long the lock is held. When this promise settles, the lock is released. This is known as the lock's _waiting promise_.
-> * A promise returned by the `acquire()` method that settles when the lock is released or the request is aborted. This is known as the lock's _released promise_.
+> * A promise returned by the `request()` method that settles when the lock is released or the request is aborted. This is known as the lock's _released promise_.
 > ```js
-> const p1 = navigator.locks.acquire('resource', lock => {
+> const p1 = navigator.locks.request('resource', lock => {
 >   const p2 = new Promise(r => { /* logic to use lock and resolve promise */ });
 >   return p2;
 > });
@@ -50,7 +50,7 @@ A **lock** has an associated **released promise** which is a Promise.
 > In the above example, `p1` is the _released promise_ and `p2` is the _waiting promise_.
 > Note that in most code the callback would be implemented as an `async` function and the returned promise would be implicit, as in the following example:
 > ```js
-> const p1 = navigator.locks.acquire('resource', async lock => {
+> const p1 = navigator.locks.request('resource', async lock => {
 >   /* logic to use lock */
 > });
 > ```
@@ -115,9 +115,9 @@ The `storage` attribute’s getter must return [context object](https://dom.spec
 ```webidl
 [SecureContext]
 interface LockManager {
-  Promise<any> acquire(DOMString name,
+  Promise<any> request(DOMString name,
                        LockGrantedCallback callback);
-  Promise<any> acquire(DOMString name,
+  Promise<any> request(DOMString name,
                        optional LockOptions options,
                        LockGrantedCallback callback);
 
@@ -149,8 +149,8 @@ dictionary LockInfo {
 };
 ```
 
-#### `LockManager.prototype.acquire(name, callback)`
-#### `LockManager.prototype.acquire(name, options, callback)`
+#### `LockManager.prototype.request(name, callback)`
+#### `LockManager.prototype.request(name, options, callback)`
 
 1. Let _promise_ be a new promise.
 1. If _options_ was not passed, then let _options_ be a new `LockOptions` dictionary with default members.
