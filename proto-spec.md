@@ -157,9 +157,10 @@ dictionary LockInfo {
 1. Let _environment_ be [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object).
 1. Let _origin_ be _environment_’s [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
 1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), then reject _promise_ with a "`SecurityError`" `DOMException`.
-1. Otherwise, if both _options_' _steal_ dictionary member and _option_'s _ifAvailable_ dictionary member are true, then reject _promise_ with an "`NotSupportedError`" `DOMException`.
-1. Otherwise, if _options_' _steal_ dictionary member is true and _option_'s _mode_ dictionary member is not "`exclusive`", then reject _promise_ with an "`NotSupportedError`" `DOMException`.
-1. Otherwise, if _option_'s _signal_ dictionary member is present, and either of _options_' _steal_ dictionary member or _options_' _ifAvailable_ dictionary member is true, then reject _promise_ with an "`NotSupportedError`" `DOMException`.
+1. Otherwise, if _name_ starts with U+002D HYPHEN-MINUS (-), then reject _promise_ with a "`NotSupportedError`" `DOMException`.
+1. Otherwise, if both _options_' _steal_ dictionary member and _option_'s _ifAvailable_ dictionary member are true, then reject _promise_ with a "`NotSupportedError`" `DOMException`.
+1. Otherwise, if _options_' _steal_ dictionary member is true and _option_'s _mode_ dictionary member is not "`exclusive`", then reject _promise_ with a "`NotSupportedError`" `DOMException`.
+1. Otherwise, if _option_'s _signal_ dictionary member is present, and either of _options_' _steal_ dictionary member or _options_' _ifAvailable_ dictionary member is true, then reject _promise_ with a "`NotSupportedError`" `DOMException`.
 1. Otherwise, if _options_' _signal_ dictionary member is present and its [aborted flag](https://dom.spec.whatwg.org/#abortsignal-aborted-flag) is set, then reject _promise_ with an "`AbortError`" `DOMException`.
 1. Otherwise, run these steps:
    1. Let _request_ be the result of running the steps to **request a lock** with _promise_, the current [agent](https://tc39.github.io/ecma262/#agent), _environment_'s [id](https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id), _origin_, _callback_, _name_, _options_' _mode_ dictionary member, _options_' _ifAvailable_ dictionary member, and _options_' _steal_ dictionary member.
