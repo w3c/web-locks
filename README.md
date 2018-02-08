@@ -334,8 +334,18 @@ await navigator.locks.acquire('mylock', async lock => {
   * Resource coordination within a SharedArrayBuffer, limiting use to a particular [agent cluster](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism).
 * [IndexedDB Transactions](https://w3c.github.io/IndexedDB/#transaction-concept)
   * No explicit control of transaction lifetimes. Requires use of full API (e.g. schema versioning).
+* [Screen Orientation API](https://w3c.github.io/screen-orientation/)
+  * Acquisition of a single system-provided resource.
+  * `screen.orientation.lock('portrait').then(...)`
+* [Pointer Lock](https://w3c.github.io/pointerlock/)
+  * Acquisition of a single system-provided resource.
+  * `element.requestPointerLock() `
 * [Wake Lock API](https://w3c.github.io/wake-lock/)
   * Acquisition of a single system-provided resource.
+  * `navigator.getWakeLock('screen').then(wakeLock => wakeLock.createRequest())`
+* [Keyboard Lock](https://w3c.github.io/keyboard-lock/)
+  * Acquisition of a single system-provided resource.
+  * `navigator.requestKeyboardLock().then(...)` (proposed)
 
 ## Acknowledgements
 
