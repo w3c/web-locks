@@ -61,13 +61,13 @@ Additional properties may influence scheduling, such as timeouts, fairness, and 
 
 ```js
 async function get_lock_then_write() {
-  await navigator.locks.acquire('resource', async lock => {
+  await navigator.locks.request('resource', async lock => {
     await async_write_func();
   });
 }
 
 async function get_lock_then_read() {
-  await navigator.locks.acquire('resource', {mode: 'shared'}, async lock => {
+  await navigator.locks.request('resource', {mode: 'shared'}, async lock => {
     await async_read_func();
   });
 }
@@ -85,16 +85,16 @@ The method returns a promise that resolves/rejects with the result of the callba
 
 An options dictionary may be specified as a second argument (bumping the callback to the third argument).
 
-### `mode` option to `acquire()`
+### `mode` option to `request()`
 
 An optional _mode_ member can be one of "exclusive" (the default if not specified) or "shared".
 ```js
-await navigator.locks.acquire('resource', {mode: 'shared'}, async lock => {
+await navigator.locks.request('resource', {mode: 'shared'}, async lock => {
   // Use |lock| here.
 });
 ```
 
-### `signal` option to `acquire()`
+### `signal` option to `request()`
 
 An optional _signal_ member can be specified which is an [AbortSignal](https://dom.spec.whatwg.org/#interface-AbortSignal). This allows aborting a lock request, for example if the request is not granted in a timely manner:
 ```js
@@ -102,7 +102,7 @@ const controller = new AbortController();
 setTimeout(() => controller.abort(), 200); // wait at most 200ms
 
 try {
-  await navigator.locks.acquire('resource', {signal: controller.signal}, async lock => {
+  await navigator.locks.request('resource', {signal: controller.signal}, async lock => {
     // Use |lock| here.
   });
   // Done with lock here.
@@ -111,11 +111,11 @@ try {
 }
 ```
 
-### `ifAvailable` option to `acquire()`
+### `ifAvailable` option to `request()`
 
 An optional _ifAvailable_ boolean member can be specified; the default is false. If true, then the lock is only granted if it can be without additional waiting. Note that this is still not _synchronous_; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, `null` is returned. (Since this is expected, the request is not rejected.)
 ```js
-await navigator.locks.acquire('resource', {ifAvailable: true}, async lock => {
+await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
   // Use |lock| here.
 });
 ```
@@ -148,9 +148,9 @@ The `clientId` field corresponds to a unique context (frame/worker), and is the 
 
 This data is just a _snapshot_ of the lock manager state at some point in time. Once the data is returned to script, the lock state may have changed. It should therefore not usually be used by applications to make decisions about what locks are currently held or available. 
 
-### `steal` option to `acquire()`
+### `steal` option to `request()`
 
-If a web application detects an unrecoverable state - for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding - it can "steal" a lock by passing this option to `acquire()`. When specified, and any held locks for the resource will be released (and the _released promise_ of such locks will resolve with `AbortError`), and the request will be granted, preempting any queued requests for it. This should only be used in exceptional cases; any code running in tabs that assume they hold the lock will continue to execute, violating any guarantee of exclusive access to the resource.
+If a web application detects an unrecoverable state - for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding - it can "steal" a lock by passing this option to `request()`. When specified, and any held locks for the resource will be released (and the _released promise_ of such locks will resolve with `AbortError`), and the request will be granted, preempting any queued requests for it. This should only be used in exceptional cases; any code running in tabs that assume they hold the lock will continue to execute, violating any guarantee of exclusive access to the resource.
 
 Discussion about this controversial option is at: https://github.com/inexorabletash/web-locks/issues/23
 
@@ -161,8 +161,8 @@ Discussion about this controversial option is at: https://github.com/inexorablet
 
 ```js
 // Program 1
-navigator.locks.acquire('A', async a => {
-  await navigator.locks.acquire('B', async b => {
+navigator.locks.request('A', async a => {
+  await navigator.locks.request('B', async b => {
     // do stuff with A and B
   });
 });
@@ -170,8 +170,8 @@ navigator.locks.acquire('A', async a => {
 // Elsewhere...
 
 // Program 2
-navigator.locks.acquire('B', async b => {
-  await navigator.locks.acquire('A', async a => {
+navigator.locks.request('B', async b => {
+  await navigator.locks.request('A', async a => {
     // do stuff with A and B
   });
 });
@@ -181,20 +181,20 @@ If program 1 and program 2 run close to the same time, there is a chance that co
 Preventing deadlocks requires care. One approach is to always acquire multiple locks in a strict order, e.g.:
 
 ```js
-async function acquireMultiple(resources, callback) {
+async function requestMultiple(resources, callback) {
   const sortedResources = Array.from(resources);
-  sortedResources.sort(); // always acquire in the same order
+  sortedResources.sort(); // always request in the same order
   
-  async function acquireNext() {
-    return await navigator.locks.acquire(sortedResources.shift(), async lock => {
+  async function requestNext() {
+    return await navigator.locks.request(sortedResources.shift(), async lock => {
       if (sortedResources.length > 0) {
-        return await acquireNext();       
+        return await requestNext();       
       } else {
         return await callback();
       }
     });
   }
-  return await acquireNext();
+  return await requestNext();
 }
 ```
 
@@ -222,7 +222,7 @@ Since both callbacks and options are typically made the last argument, the best 
 
 ```js
 // a
-navigator.locks.acquire('resource', async lock => {
+navigator.locks.request('resource', async lock => {
   //
   // 100 lines of code...
   // ...
@@ -230,7 +230,7 @@ navigator.locks.acquire('resource', async lock => {
 }, {ifAvailable: 'true'});
 
 // b
-navigator.locks.acquire('resource', {ifAvailable: true}, async lock => {
+navigator.locks.request('resource', {ifAvailable: true}, async lock => {
   //
   // 100 lines of code...
   // ...
@@ -257,7 +257,7 @@ around formalizing these states and notifications.
  * To wrap a lock around a transaction:
 
 ```js
-    navigator.locks.acquire(name, options, lock => {
+    navigator.locks.request(name, options, lock => {
       return new Promise((resolve, reject) => {
         const tx = db.transaction(...);
         tx.oncomplete = resolve;
@@ -271,7 +271,7 @@ around formalizing these states and notifications.
 
 ```js
   const tx = db.transaction(...);
-  tx.waitUntil(locks.acquire(name, options, async lock => {
+  tx.waitUntil(locks.request(name, options, async lock => {
     // use lock and tx
   });
 ```
@@ -313,7 +313,7 @@ locks in another session, as if they in a distinct application or on another dev
 
 Yes. Using the API, just pass in a promise that never resolves:
 ```js
-navigator.locks.acquire(name, lock => new Promise(r => {}));
+navigator.locks.request(name, lock => new Promise(r => {}));
 ```
 In practice, you may want to reserve some ability to resolve the promise, e.g. in response to a "sign out" event or indication that the tab has become inactive. But in some scenarios (e.g. master election) then never releasing the lock until the page is terminated is entirely reasonable.
 
@@ -322,8 +322,8 @@ In practice, you may want to reserve some ability to resolve the promise, e.g. i
 
 The second request will block. A lock corresponds to a granted request, and each request is considered regardless of context. This allows libraries running in the same page to coordinate the use of a shared resource. As a consequence, nested requests for the same resource will deadlock:
 ```js
-await navigator.locks.acquire('mylock', async lock => {
-  await navigator.locks.acquire('mylock', async lock => {});
+await navigator.locks.request('mylock', async lock => {
+  await navigator.locks.request('mylock', async lock => {});
 });
 ```
 
