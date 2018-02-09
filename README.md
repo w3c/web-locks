@@ -116,9 +116,15 @@ try {
 An optional _ifAvailable_ boolean member can be specified; the default is false. If true, then the lock is only granted if it can be without additional waiting. Note that this is still not _synchronous_; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, `null` is returned. (Since this is expected, the request is not rejected.)
 ```js
 await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
+  if (!lock) {
+    // Didn't get it. Maybe take appropriate action.
+    return;
+  }
   // Use |lock| here.
 });
 ```
+See [issue #13](https://github.com/inexorabletash/web-locks/issues/13) for discussion of this option.
+
 
 ## Management / Debugging 
 
