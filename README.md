@@ -73,7 +73,7 @@ async function get_lock_then_read() {
 }
 ```
 
-The _name_ (required first argument) is a string, e.g. `'thing'.
+The _name_ (required first argument) is a string, e.g. `'thing'`.
 
 The _callback_ (required final argument) is a callback invoked with the lock when granted. This "scoped release" API model encourages callers to pass in an async callback; the callback implicitly returns a promise and the lock is released when that promise resolves. In other words, the lock is held until the async callback completes. (If a non-async callback function is passed in, it is wrapped into a Promise that would resolve immediately, so the lock would only be held for the duration of the synchronous callback.)
 
