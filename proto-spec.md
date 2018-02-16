@@ -118,7 +118,7 @@ interface LockManager {
   Promise<any> request(DOMString name,
                        LockGrantedCallback callback);
   Promise<any> request(DOMString name,
-                       optional LockOptions options,
+                       LockOptions options,
                        LockGrantedCallback callback);
 
   Promise<LockManagerSnapshot> query();
