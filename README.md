@@ -81,6 +81,19 @@ The _callback_ (required final argument) is a callback invoked with the lock whe
 
 The method returns a promise that resolves/rejects with the result of the callback (so, after the lock is released), or rejects if the request is aborted. 
 
+Example:
+```js
+const result = await navigator.locks.request('resource', async lock => {
+  // The lock is held here.
+  await do_something();
+  await do_something_else();
+  return "ok";
+  // The lock will be released now.
+});
+// |result| has the return value of the callback.
+```
+This guarantees that the lock will be released when the async callback exits for any reason - either when the code returns, or if it throws.
+
 ## Options
 
 An options dictionary may be specified as a second argument (bumping the callback to the third argument).
