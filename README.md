@@ -2,28 +2,52 @@
 
 # Web Locks API
 
-## TL;DR
+Participate: [GitHub issues](https://github.com/inexorabletash/web-locks/issues) or [WICG Discourse](https://discourse.wicg.io/t/application-defined-locks/2581) &mdash;
+Tests: [chromium](https://chromium.googlesource.com/chromium/src/+/fcde2906f4890b7f2d68a9a81d04ecc20de57fe5/third_party/WebKit/LayoutTests/http/tests/locks)
 
-A new web platform API that allows script running in one tab to asynchronously acquire a lock, hold it while work is performed, then release it. While held, no other script in the origin can aquire the same lock.
+## Abstract
 
-## Background
+This document proposes a new web platform API that allows script to asynchronously acquire a lock over a resource, hold it while work is performed, then release it. While held, no other script in the origin can aquire a lock over the same resource. This allows contexts (windows, workers) within a web application to coordinate the usage of resources.
 
-The [Indexed Database API](https://w3c.github.io/IndexedDB/) defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. We'd like to generalize this model to allow any Web Platform activity to be scheduled based on resource availability. This would allow transactions to be composed for other storage types (such as Cache Storage), across storage types, even across non-storage APIs (e.g. network fetches).
+## Introduction
+
+The API is used as follows:
+1. The lock is requested.
+2. Work is done while holding the lock in an asynchronous task.
+3. The lock is automatically released when the task completes.
+
+```js
+navigator.locks.request('my_resource', async lock => {
+   // The lock has been acquired.
+   await do_something();
+   await do_somethng_else();
+   // Now the lock will be released.
+});
+```
+The API provides optional functionality that may be used as needed, including:
+* returning values from the asynchronous task
+* shared and exclusive lock modes
+* conditional acquisition
+* diagnostics to query the state of locks in an origin
+* an escape hatch to protect against deadlocks
 
 Cooperative coordination takes place within the scope of same-origin [agents](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-formalism) (informally: frames/windows/tabs and workers); this may span multiple
 [agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism) (informally: process boundaries).
 
+In conjunction with this informal explainer, a [proto-spec](proto-spec.md) attempts to cover the precise behavior of the API.
+
 Previous discussions:
 * [Application defined "locks" [whatwg]](https://lists.w3.org/Archives/Public/public-whatwg-archive/2009Sep/0266.html)
-
-This document proposes an API for allow contexts (windows, workers) within a web application to coordinate the usage of resources.
 
 
 ## Use Case Examples
 
 A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as IndexedDB for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronize the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active.
 
-In a data synchronization service, a "master tab" is designated. This tab is the only one that should be performing some operations (e.g. network sync, cleaning up old data, etc). It holds a lock and never releases it. Other tabs can attempt to acquire the lock, and such attempts will be queued. If the "master tab" crashes or is closed then one of the other tabs will get the lock and become the new master.
+In a data synchronization service, a "master tab" is designated. This tab is the only one that should be performing some operations (e.g. network sync, cleaning up queued data, etc). It holds a lock and never releases it. Other tabs can attempt to acquire the lock, and such attempts will be queued. If the "master tab" crashes or is closed then one of the other tabs will get the lock and become the new master.
+
+The [Indexed Database API](https://w3c.github.io/IndexedDB/) defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. Exposing this concept as a primitive allows any Web Platform activity to be scheduled based on resource availability, for example allowing transactions to be composed for other storage types (such as Cache Storage), across storage types, even across non-storage APIs (e.g. network fetches).
+
 
 ## Concepts
 
@@ -48,7 +72,7 @@ across browsing contexts within an origin. Web applications are free to use any 
 scheme. For example, to mimic [IndexedDB](https://w3c.github.io/IndexedDB/#transaction-construct)'s transaction locking over named stores within a named
 database, an origin might use `encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)`.
 
-Names starting with `-` are reserved; requesting these will throw. 
+Names starting with `-` (dash) are reserved; requesting these will throw. 
 
 #### Modes and Scheduling
 
@@ -83,14 +107,18 @@ The method returns a promise that resolves/rejects with the result of the callba
 
 Example:
 ```js
-const result = await navigator.locks.request('resource', async lock => {
-  // The lock is held here.
-  await do_something();
-  await do_something_else();
-  return "ok";
-  // The lock will be released now.
-});
-// |result| has the return value of the callback.
+try {
+  const result = await navigator.locks.request('resource', async lock => {
+    // The lock is held here.
+    await do_something();
+    await do_something_else();
+    return "ok";
+    // The lock will be released now.
+  });
+  // |result| has the return value of the callback.
+} catch (ex) {
+  // if the callback threw, it will be caught here.
+}
 ```
 This guarantees that the lock will be released when the async callback exits for any reason - either when the code returns, or if it throws.
 
@@ -376,6 +404,7 @@ Domenic Denicola,
 Harald Alvestrand,
 Jake Archibald,
 Luciano Pacheco,
+Marcos Caceres,
 Ralph Chelala, 
 Ryan Fioravanti,
 and
