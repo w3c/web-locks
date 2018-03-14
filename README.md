@@ -65,6 +65,27 @@ A lock can be _released_ by script, at which point it may allow other lock reque
 
 A user agent has a _lock manager_ for each origin, which encapsulates the state of all locks and requests for that origin.
 
+#### Lock Manager Scope
+
+For the purposes of this proposal:
+
+ * Separate user profiles within a browser are considered separate user agents.
+ * A [private browsing](https://en.wikipedia.org/wiki/Privacy_mode) session is considered a separate user agent.
+
+Pages and workers (agents) on a single [origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin) opened in the same user agent share a lock manager even if they are in unrelated [browsing contexts](https://html.spec.whatwg.org/multipage/browsers.html#browsing-context).
+
+There is an equivalence between the following:
+
+* Agents that can communicate via [BroadcastChannel](https://html.spec.whatwg.org/multipage/web-messaging.html#broadcasting-to-other-browsing-contexts)
+* Agents that share [storage](https://storage.spec.whatwg.org/); e.g. a per-origin [local storage area](https://html.spec.whatwg.org/multipage/webstorage.html#the-localstorage-attribute), set of [Indexed DB](https://w3c.github.io/IndexedDB/) [https://w3c.github.io/IndexedDB/#database-construct](databases), or [Service Worker](https://w3c.github.io/ServiceWorker/) [caches](https://w3c.github.io/ServiceWorker/#cache-objects).
+* Agents that share a lock manager.
+
+This is important as it defines a privacy boundary. Locks can be used as a communication channel, and must be no more privileged than BroadcastChannel. Locks can be used as a state retention mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page and a cross-origin iframe in the same origin for privacy reasons must similarly partition broadcasting and locking.
+
+This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, or a broadcast is made signalling that updated data has been stored, all same-origin browsing contexts should observe the same state.
+
+> TODO: Migrate this definition to [HTML](https://html.spec.whatwg.org/multipage/) or [Storage](https://storage.spec.whatwg.org/) so it can be referenced by other standards.
+
 #### Resources Names
 
 The resource _name_ strings have no external meaning beyond the scheduling algorithm, but are global
