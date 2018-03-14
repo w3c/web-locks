@@ -399,10 +399,12 @@ await navigator.locks.request('mylock', async lock => {
 Many thanks to
 Alex Russell,
 Anne van Kesteren,
+Boris Zbarsky,
 Darin Fisher,
 Domenic Denicola,
 Harald Alvestrand,
 Jake Archibald,
+L. David Baron,
 Luciano Pacheco,
 Marcos Caceres,
 Ralph Chelala, 
