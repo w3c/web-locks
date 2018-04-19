@@ -41,12 +41,14 @@ A **lock** has an associated **released promise** which is a Promise.
 > Note: There are two promises associated with a lock's lifecycle:
 > * A promise provided either implicitly or explicitly by the callback when the lock is granted which determines how long the lock is held. When this promise settles, the lock is released. This is known as the lock's _waiting promise_.
 > * A promise returned by the `request()` method that settles when the lock is released or the request is aborted. This is known as the lock's _released promise_.
+>
 > ```js
 > const p1 = navigator.locks.request('resource', lock => {
 >   const p2 = new Promise(r => { /* logic to use lock and resolve promise */ });
 >   return p2;
 > });
 > ```
+>
 > In the above example, `p1` is the _released promise_ and `p2` is the _waiting promise_.
 > Note that in most code the callback would be implemented as an `async` function and the returned promise would be implicit, as in the following example:
 > ```js
@@ -92,7 +94,7 @@ When an [agent](https://tc39.github.io/ecma262/#agent) _terminates_ [TBD], [enqu
     1. **Abort the request** _request_.
 1. For each **lock** _lock_ with **agent** equal to the terminating agent:
     1. **Release the lock** _lock_.
-    
+
 ## API
 
 ### Navigator Mixins
@@ -108,7 +110,7 @@ WorkerNavigator includes NavigatorLocks;
 
 Each [environment settings object](https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object) has an associated `LockManager` object.
 
-The `storage` attribute’s getter must return [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s `LockManager` object.
+The `locks` attribute’s getter must return [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s `LockManager` object.
 
 ### `LockManager` class
 
@@ -122,7 +124,7 @@ interface LockManager {
                        LockGrantedCallback callback);
 
   Promise<LockManagerSnapshot> query();
-  
+
   void forceRelease(DOMString name);
 };
 
@@ -170,9 +172,9 @@ dictionary LockInfo {
 1. Return _promise_.
 
 > Note: An overloaded method is provided so that the callback always appears as the last argument.
-> This assures that options, if present, appear near the call site where they are synchronously processed, rather than after the callback which may include a significant amount of code which will execute asynchronously.
+> This assures that options, if present, appear near the call site where they are synchronously processed, rather than after the callback which can include a significant amount of code which will execute asynchronously.
 
-> Note: The `steal` option should be used with caution.
+> Note: Use the `steal` option with caution.
 > When used, code previously holding a lock will now be executing without guarantees that it is the sole context with access to the abstract resource.
 > Similarly, the code that used the option has no guarantees that other contexts will not still be executing as if they have access to the abstract resource.
 > It is intended for use by web applications that need to attempt recovery in the face of application and/or user-agent defects, where behavior is already unpredictable.
@@ -184,7 +186,7 @@ dictionary LockInfo {
 1. Let _promise_ be a new promise.
 1. Let _origin_ be [context object](https://dom.spec.whatwg.org/#context-object)’s [relevant settings object](https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object)’s [origin](https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin).
 1. If _origin_ is an [opaque origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque), then reject _promise_ with a "`SecurityError`" `DOMException` and abort these steps.
-1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) for to **snapshot the lock state** for _origin_ with _promise_ to the **lock task queue**.
+1. Otherwise, [enqueue the steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to **snapshot the lock state** for _origin_ with _promise_ to the **lock task queue**.
 1. Return _promise_.
 
 
@@ -215,8 +217,7 @@ Returns a DOMString containing the associated **mode** of the **lock**.
 To **request a lock** with _promise_, _agent_, _clientId_, _origin_, _callback_, _name_, _mode_, _ifAvailable_, _steal_, and optional _signal_:
 
 1. Let _request_ be a new **lock request** (_agent_, _clientId_, _origin_, _name_, _mode_, _promise_).
-1. [Enqueue the following steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to 
- to the **lock task queue**:
+1. [Enqueue the following steps](https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps) to the **lock task queue**:
    1. Let _queue_ be _origin_'s **lock request queue**.
    1. Let _held_ be _origin_'s **held lock set**.
    1. If _steal_ is true, then run these steps:

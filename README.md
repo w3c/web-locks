@@ -93,7 +93,7 @@ across browsing contexts within an origin. Web applications are free to use any 
 scheme. For example, to mimic [IndexedDB](https://w3c.github.io/IndexedDB/#transaction-construct)'s transaction locking over named stores within a named
 database, an origin might use `encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)`.
 
-Names starting with `-` (dash) are reserved; requesting these will throw. 
+Names starting with `-` (dash) are reserved; requesting these will throw.
 
 #### Modes and Scheduling
 
@@ -124,7 +124,7 @@ The _callback_ (required final argument) is a callback invoked with the lock whe
 
 > See [alternate API proposals](alternate-api-proposals.md) for slightly different API styles which were considered.
 
-The method returns a promise that resolves/rejects with the result of the callback (so, after the lock is released), or rejects if the request is aborted. 
+The method returns a promise that resolves/rejects with the result of the callback (so, after the lock is released), or rejects if the request is aborted.
 
 Example:
 ```js
@@ -188,7 +188,7 @@ await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
 See [issue #13](https://github.com/inexorabletash/web-locks/issues/13) for discussion of this option.
 
 
-## Management / Debugging 
+## Management / Debugging
 
 One of the things we've learned from APIs with lots of hidden state like Indexed DB is that it makes diagnosing problems difficult. Developer tools can help locally, but not when a web application has been deployed and mysterious bug reports are coming in. The ability for a web app to introspect the state of such APIs is critical.
 
@@ -214,11 +214,11 @@ This resolves to a plain-old-data structure (i.e. JSON-like) with this form:
 ```
 The `clientId` field corresponds to a unique context (frame/worker), and is the same value used in [Service Workers](https://w3c.github.io/ServiceWorker/#dom-client-id).
 
-This data is just a _snapshot_ of the lock manager state at some point in time. Once the data is returned to script, the lock state may have changed. It should therefore not usually be used by applications to make decisions about what locks are currently held or available. 
+This data is just a _snapshot_ of the lock manager state at some point in time. Once the data is returned to script, the lock state may have changed. It should therefore not usually be used by applications to make decisions about what locks are currently held or available.
 
 ### `steal` option to `request()`
 
-If a web application detects an unrecoverable state - for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding - it can "steal" a lock by passing this option to `request()`. When specified, and any held locks for the resource will be released (and the _released promise_ of such locks will resolve with `AbortError`), and the request will be granted, preempting any queued requests for it. This should only be used in exceptional cases; any code running in tabs that assume they hold the lock will continue to execute, violating any guarantee of exclusive access to the resource.
+If a web application detects an unrecoverable state - for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding - it can "steal" a lock by passing this option to `request()`. When specified, any held locks for the resource will be released (and the _released promise_ of such locks will resolve with `AbortError`), and the request will be granted, preempting any queued requests for it. This should only be used in exceptional cases; any code running in tabs that assume they hold the lock will continue to execute, violating any guarantee of exclusive access to the resource.
 
 Discussion about this controversial option is at: https://github.com/inexorabletash/web-locks/issues/23
 
@@ -244,7 +244,7 @@ navigator.locks.request('B', async b => {
   });
 });
 ```
-If program 1 and program 2 run close to the same time, there is a chance that code 1 will hold lock A and code 2 will hold lock B and neither can make further progress - a deadlock. This will not affect the user agent as a whole, pause the tab, or affect other code in the origin, but this particular functionality will be blocked. 
+If program 1 and program 2 run close to the same time, there is a chance that code 1 will hold lock A and code 2 will hold lock B and neither can make further progress - a deadlock. This will not affect the user agent as a whole, pause the tab, or affect other code in the origin, but this particular functionality will be blocked.
 
 Preventing deadlocks requires care. One approach is to always acquire multiple locks in a strict order, e.g.:
 
@@ -252,11 +252,11 @@ Preventing deadlocks requires care. One approach is to always acquire multiple l
 async function requestMultiple(resources, callback) {
   const sortedResources = Array.from(resources);
   sortedResources.sort(); // always request in the same order
-  
+
   async function requestNext() {
     return await navigator.locks.request(sortedResources.shift(), async lock => {
       if (sortedResources.length > 0) {
-        return await requestNext();       
+        return await requestNext();
       } else {
         return await callback();
       }
@@ -266,7 +266,7 @@ async function requestMultiple(resources, callback) {
 }
 ```
 
-In practice, the use of multiple locks is rarely as straightforward - libraries and other utilities may conceal their use. 
+In practice, the use of multiple locks is rarely as straightforward - libraries and other utilities may conceal their use.
 
 See issues for further discussion:
 
@@ -428,7 +428,7 @@ Jake Archibald,
 L. David Baron,
 Luciano Pacheco,
 Marcos Caceres,
-Ralph Chelala, 
+Ralph Chelala,
 Ryan Fioravanti,
 and
 Victor Costan
