@@ -34,7 +34,7 @@ The API provides optional functionality that may be used as needed, including:
 Cooperative coordination takes place within the scope of same-origin [agents](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-formalism) (informally: frames/windows/tabs and workers); this may span multiple
 [agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism) (informally: process boundaries).
 
-In conjunction with this informal explainer, a [proto-spec](proto-spec.md) attempts to cover the precise behavior of the API.
+In conjunction with this informal explainer, a [work-in-progress specification](https://inexorabletash.github.io/web-locks/) defines the precise behavior of the proposed API.
 
 Previous discussions:
 * [Application defined "locks" [whatwg]](https://lists.w3.org/Archives/Public/public-whatwg-archive/2009Sep/0266.html)
