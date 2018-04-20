@@ -1178,7 +1178,7 @@ Possible extra rowspan handling
 </style>
   <meta content="Bikeshed version 80294e12a0320826cbf4ded0dfff03de21c3a3d7" name="generator">
   <link href="https://inexorabletash.github.io/web-locks/" rel="canonical">
-  <meta content="cdd7c030924660479ce19a6207580db9fcc97e45" name="document-revision">
+  <meta content="cd7bb2c2452162c1957ba9d827a7181c4945201d" name="document-revision">
   <link href="logo-lock.png" rel="icon">
 <style>
 dl.domintro dt {
@@ -1478,7 +1478,11 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
   <nav data-fill-with="table-of-contents" id="toc">
    <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
    <ol class="toc" role="directory">
-    <li><a href="#introduction"><span class="secno">1</span> <span class="content">Introduction</span></a>
+    <li>
+     <a href="#introduction"><span class="secno">1</span> <span class="content">Introduction</span></a>
+     <ol class="toc">
+      <li><a href="#motivations"><span class="secno">1.1</span> <span class="content">Motivating Use Cases</span></a>
+     </ol>
     <li>
      <a href="#concepts"><span class="secno">2</span> <span class="content">Concepts</span></a>
      <ol class="toc">
@@ -1505,8 +1509,13 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#algorithm-process-request"><span class="secno">4.4</span> <span class="content">Process a lock request queue</span></a>
       <li><a href="#algorithm-snapshot-state"><span class="secno">4.5</span> <span class="content">Snapshot the lock state</span></a>
      </ol>
-    <li><a href="#privacy"><span class="secno">5</span> <span class="content">Privacy Considerations</span></a>
-    <li><a href="#acknowledgements"><span class="secno">6</span> <span class="content">Acknowledgements</span></a>
+    <li>
+     <a href="#usage"><span class="secno">5</span> <span class="content">Usage Considerations</span></a>
+     <ol class="toc">
+      <li><a href="#deadlocks"><span class="secno">5.1</span> <span class="content">Deadlocks</span></a>
+     </ol>
+    <li><a href="#privacy"><span class="secno">6</span> <span class="content">Privacy Considerations</span></a>
+    <li><a href="#acknowledgements"><span class="secno">7</span> <span class="content">Acknowledgements</span></a>
     <li><a href="#conformance"><span class="secno"></span> <span class="content"> Conformance</span></a>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
@@ -1573,6 +1582,10 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
 <span class="c1">// After the lock has been released</span>
 </pre>
    </aside>
+   <h3 class="heading settled" data-level="1.1" id="motivations"><span class="secno">1.1. </span><span class="content">Motivating Use Cases</span><a class="self-link" href="#motivations"></a></h3>
+   <p>A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as IndexedDB for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronize the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active.</p>
+   <p>In a data synchronization service, a "master tab" is designated. This tab is the only one that should be performing some operations (e.g. network sync, cleaning up queued data, etc). It holds a lock and never releases it. Other tabs can attempt to acquire the lock, and such attempts will be queued. If the "master tab" crashes or is closed then one of the other tabs will get the lock and become the new master.</p>
+   <p>The <a href="https://w3c.github.io/IndexedDB/">Indexed Database API</a> defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. Exposing this concept as a primitive allows any Web Platform activity to be scheduled based on resource availability, for example allowing transactions to be composed for other storage types (such as Cache Storage), across storage types, even across non-storage APIs (e.g. network fetches).</p>
    <h2 class="heading settled" data-level="2" id="concepts"><span class="secno">2. </span><span class="content">Concepts</span><a class="self-link" href="#concepts"></a></h2>
    <p>A user agent has an associated <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="lock-task-queue">lock task queue</dfn> which is the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue" id="ref-for-starting-a-new-parallel-queue">starting a new parallel queue</a>.</p>
    <h3 class="heading settled" data-level="2.1" id="resource-names"><span class="secno">2.1. </span><span class="content">Resources Names</span><a class="self-link" href="#resource-names"></a></h3>
@@ -1630,18 +1643,20 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]<
        <p>A promise returned by <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager">LockManager</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request">request()</a></code> method that settles when the lock is released or the request is aborted. This is known as the lock’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise">released promise</a>.</p>
      </ul>
 <pre class="lang-javascript highlight"><span class="kr">const</span> p1 <span class="o">=</span> navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'resource'</span><span class="p">,</span> lock <span class="p">=></span> <span class="p">{</span>
-  <span class="kr">const</span> p2 <span class="o">=</span> <span class="k">new</span> Promise<span class="p">(</span>r <span class="p">=></span> <span class="p">{</span> <span class="cm">/* logic to use lock and resolve promise */</span> <span class="p">});</span>
+  <span class="kr">const</span> p2 <span class="o">=</span> <span class="k">new</span> Promise<span class="p">(</span>r <span class="p">=></span> <span class="p">{</span>
+    <span class="c1">// Logic to use lock and resolve promise...</span>
+<span class="c1"></span>  <span class="p">});</span>
   <span class="k">return</span> p2<span class="p">;</span>
 <span class="p">});</span>
 </pre>
      <p>In the above example, <code>p1</code> is the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise①">released promise</a> and <code>p2</code> is the <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise①">waiting promise</a>.
 Note that in most code the callback would be implemented as an <code>async</code> function and the returned promise would be implicit, as in the following example:</p>
 <pre class="lang-javascript highlight"><span class="kr">const</span> p1 <span class="o">=</span> navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'resource'</span><span class="p">,</span> async lock <span class="p">=></span> <span class="p">{</span>
-  <span class="cm">/* logic to use lock */</span>
-<span class="p">});</span>
+  <span class="c1">// Logic to use lock...</span>
+<span class="c1"></span><span class="p">});</span>
 </pre>
-     <p>The <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise②">waiting promise</a> is not named in the above code, but is still present as the return value from the <code>async</code> callback.
-Further note that if the callback is not <code>async</code> and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; so the lock will be released in an upcoming microtask, and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise②">released promise</a> will also resolve in a subsequent microtask.</p>
+     <p>The <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise②">waiting promise</a> is not named in the above code, but is still present as the return value from the anonymous <code>async</code> callback.
+Further note that if the callback is not <code>async</code> and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; the lock will be released in an upcoming microtask, and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise②">released promise</a> will also resolve in a subsequent microtask.</p>
     </aside>
     <p>Each origin has an associated <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport="" id="lock-concept-held-lock-set">held lock set</dfn> which is an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">ordered set</a> of <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑨">locks</a>.</p>
     <p>When <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⓪">lock</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise③">waiting promise</a> settles (fulfills or rejects), <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue">lock task queue</a>:</p>
@@ -1780,29 +1795,15 @@ the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref
       <p>An <var>options</var> dictionary can be specified as a second argument; the <var>callback</var> argument is always last.</p>
      <dt><var>options</var> . mode
      <dd>
-      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-mode" id="ref-for-dom-lockoptions-mode">mode</a></code> option can be "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive④">exclusive</a></code>" (the default if not specified) or "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared②">shared</a></code>".</p>
+      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-mode" id="ref-for-dom-lockoptions-mode">mode</a></code> option can be "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive④">exclusive</a></code>" (the default if not specified) or "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared②">shared</a></code>".
+    Multiple tabs/workers can hold a lock for the same resource in "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared③">shared</a></code>" mode, but only one tab/worker can hold a lock for the resource in "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑤">exclusive</a></code>" mode.</p>
+      <p>The most common use for this is to allow multiple readers to access a resource simultaneously but prevent changes.
+    Once reader locks are released a single exclusive writer can acquire the lock to make changes, followed by another exclusive writer or more shared readers.</p>
 <pre class="lang-javascript highlight">await navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'resource'</span><span class="p">,</span> <span class="p">{</span>mode<span class="o">:</span> <span class="s1">'shared'</span><span class="p">},</span> async lock <span class="p">=></span> <span class="p">{</span>
   <span class="c1">// Lock is held here. Other contexts might also hold the lock in shared mode,</span>
 <span class="c1"></span>  <span class="c1">// but no other contexts will hold the lock in exclusive mode.</span>
 <span class="c1"></span><span class="p">});</span>
 </pre>
-     <dt><var>options</var> . signal
-     <dd>
-      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-signal" id="ref-for-dom-lockoptions-signal">signal</a></code> option can be set to an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#abortsignal" id="ref-for-abortsignal①">AbortSignal</a></code>. This allows aborting a lock request, for example if the request is not granted in a timely manner:</p>
-<pre class="lang-javascript highlight"><span class="kr">const</span> controller <span class="o">=</span> <span class="k">new</span> AbortController<span class="p">();</span>
-setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span class="p">.</span>abort<span class="p">(),</span> <span class="mi">200</span><span class="p">);</span> <span class="c1">// wait at most 200ms</span>
-<span class="c1"></span>
-<span class="k">try</span> <span class="p">{</span>
-  await navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'resource'</span><span class="p">,</span> <span class="p">{</span>signal<span class="o">:</span> controller<span class="p">.</span>signal<span class="p">},</span> async lock <span class="p">=></span> <span class="p">{</span>
-    <span class="c1">// Lock is held here.</span>
-<span class="c1"></span>  <span class="p">});</span>
-  <span class="c1">// Done with lock here.</span>
-<span class="c1"></span><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span>ex<span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// |ex| will be a DOMException with error name "AbortError" if timer fired.</span>
-<span class="c1"></span><span class="p">}</span>
-</pre>
-      <p>If an abort is signalled before the lock is granted, then the request promise will reject with an <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror">AbortError</a></code>.
-    Once the lock has been granted, the signal is ignored.</p>
      <dt><var>options</var> . ifAvailable
      <dd>
       <p>If the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-ifavailable" id="ref-for-dom-lockoptions-ifavailable">ifAvailable</a></code> option is <code>true</code>, then the lock is only granted if it can be without additional waiting. Note that this is still not <em>synchronous</em>; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, the callback is invoked with <code>null</code>. (Since this is expected, the request is <em>not</em> rejected.)</p>
@@ -1814,6 +1815,24 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
   <span class="c1">// Lock is held here.</span>
 <span class="c1"></span><span class="p">});</span>
 </pre>
+     <dt><var>options</var> . signal
+     <dd>
+      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-signal" id="ref-for-dom-lockoptions-signal">signal</a></code> option can be set to an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#abortsignal" id="ref-for-abortsignal①">AbortSignal</a></code>. This allows aborting a lock request, for example if the request is not granted in a timely manner:</p>
+<pre class="lang-javascript highlight"><span class="kr">const</span> controller <span class="o">=</span> <span class="k">new</span> AbortController<span class="p">();</span>
+setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span class="p">.</span>abort<span class="p">(),</span> <span class="mi">200</span><span class="p">);</span> <span class="c1">// Wait at most 200ms.</span>
+<span class="c1"></span>
+<span class="k">try</span> <span class="p">{</span>
+  await navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span>
+    <span class="s1">'resource'</span><span class="p">,</span> <span class="p">{</span>signal<span class="o">:</span> controller<span class="p">.</span>signal<span class="p">},</span> async lock <span class="p">=></span> <span class="p">{</span>
+      <span class="c1">// Lock is held here.</span>
+<span class="c1"></span>  <span class="p">});</span>
+  <span class="c1">// Done with lock here.</span>
+<span class="c1"></span><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span>ex<span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// |ex| will be a DOMException with error name "AbortError" if timer fired.</span>
+<span class="c1"></span><span class="p">}</span>
+</pre>
+      <p>If an abort is signalled before the lock is granted, then the request promise will reject with an <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror">AbortError</a></code>.
+    Once the lock has been granted, the signal is ignored.</p>
      <dt><var>options</var> . steal
      <dd>
        If the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal">steal</a></code> option is <code>true</code>, then any held locks for the resource will be released (and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise④">released promise</a> of such locks will resolve with <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror①">AbortError</a></code>), and the request will be granted, preempting any queued requests for it. 
@@ -1842,7 +1861,7 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
      <li data-md="">
       <p>Otherwise, if both <var>options</var>’ <var>steal</var> dictionary member and <var>option</var>’s <var>ifAvailable</var> dictionary member are true, then reject <var>promise</var> with a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notsupportederror" id="ref-for-notsupportederror①">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
      <li data-md="">
-      <p>Otherwise, if <var>options</var>’ <var>steal</var> dictionary member is true and <var>option</var>’s <var>mode</var> dictionary member is not "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑤">exclusive</a></code>", then reject <var>promise</var> with a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notsupportederror" id="ref-for-notsupportederror②">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code>.</p>
+      <p>Otherwise, if <var>options</var>’ <var>steal</var> dictionary member is true and <var>option</var>’s <var>mode</var> dictionary member is not "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑥">exclusive</a></code>", then reject <var>promise</var> with a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notsupportederror" id="ref-for-notsupportederror②">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code>.</p>
      <li data-md="">
       <p>Otherwise, if <var>option</var>’s <var>signal</var> dictionary member is present, and either of <var>options</var>’ <var>steal</var> dictionary member or <var>options</var>’ <var>ifAvailable</var> dictionary member is true, then reject <var>promise</var> with a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notsupportederror" id="ref-for-notsupportederror③">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
      <li data-md="">
@@ -1873,13 +1892,18 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
       <p>The returned promise resolves to <var>state</var>, a plain-old-data structure (i.e. JSON-like data) with this form:</p>
 <pre class="lang-javascript highlight"><span class="p">{</span>
   held<span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource1"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"exclusive"</span><span class="p">,</span> clientId<span class="o">:</span> <span class="s2">"8b1e730c-7405-47db-9265-6ee7c73ac153"</span> <span class="p">},</span>
-    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource2"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"shared"</span><span class="p">,</span> clientId<span class="o">:</span> <span class="s2">"8b1e730c-7405-47db-9265-6ee7c73ac153"</span> <span class="p">},</span>
-    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource2"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"shared"</span><span class="p">,</span> clientId<span class="o">:</span> <span class="s2">"fad203a5-1f31-472b-a7f7-a3236a1f6d3b"</span> <span class="p">},</span>
+    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource1"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"exclusive"</span><span class="p">,</span>
+      clientId<span class="o">:</span> <span class="s2">"8b1e730c-7405-47db-9265-6ee7c73ac153"</span> <span class="p">},</span>
+    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource2"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"shared"</span><span class="p">,</span>
+      clientId<span class="o">:</span> <span class="s2">"8b1e730c-7405-47db-9265-6ee7c73ac153"</span> <span class="p">},</span>
+    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource2"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"shared"</span><span class="p">,</span>
+      clientId<span class="o">:</span> <span class="s2">"fad203a5-1f31-472b-a7f7-a3236a1f6d3b"</span> <span class="p">},</span>
   <span class="p">],</span>
   pending<span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource1"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"exclusive"</span><span class="p">,</span> clientId<span class="o">:</span> <span class="s2">"fad203a5-1f31-472b-a7f7-a3236a1f6d3b"</span> <span class="p">},</span>
-    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource1"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"exclusive"</span><span class="p">,</span> clientId<span class="o">:</span> <span class="s2">"d341a5d0-1d8d-4224-be10-704d1ef92a15"</span> <span class="p">},</span>
+    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource1"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"exclusive"</span><span class="p">,</span>
+      clientId<span class="o">:</span> <span class="s2">"fad203a5-1f31-472b-a7f7-a3236a1f6d3b"</span> <span class="p">},</span>
+    <span class="p">{</span> name<span class="o">:</span> <span class="s2">"resource1"</span><span class="p">,</span> mode<span class="o">:</span> <span class="s2">"exclusive"</span><span class="p">,</span>
+      clientId<span class="o">:</span> <span class="s2">"d341a5d0-1d8d-4224-be10-704d1ef92a15"</span> <span class="p">},</span>
   <span class="p">]</span>
 <span class="p">}</span>
 </pre>
@@ -2081,10 +2105,60 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
       <p>Resolve <var>promise</var> with <var>snapshot</var>.</p>
     </ol>
    </div>
-   <h2 class="heading settled" data-level="5" id="privacy"><span class="secno">5. </span><span class="content">Privacy Considerations</span><a class="self-link" href="#privacy"></a></h2>
-   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager③">lock manager</a>'s scope is important as it defines a privacy boundary. Locks can be used as a communication channel, and must be no more privileged than other communication channels. Locks can be used as a state retention mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page and a cross-origin iframe in the same origin for privacy reasons must similarly partition broadcasting and locking.</p>
+   <h2 class="heading settled" data-level="5" id="usage"><span class="secno">5. </span><span class="content">Usage Considerations</span><a class="self-link" href="#usage"></a></h2>
+   <p><em>This section is non-normative.</em></p>
+   <h3 class="heading settled" data-level="5.1" id="deadlocks"><span class="secno">5.1. </span><span class="content">Deadlocks</span><a class="self-link" href="#deadlocks"></a></h3>
+   <p><a href="https://en.wikipedia.org/wiki/Deadlock">Deadlocks</a> are a concept in concurrent computing, and deadlocks scoped to a particular <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager③">lock manager</a> can be introduced by this API.</p>
+   <aside class="example" id="example-efa411db">
+    <a class="self-link" href="#example-efa411db"></a> An example of how deadlocks can be encountered through the use of this API is as follows. 
+    <p>Script 1:</p>
+<pre class="lang-javascript highlight">navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'A'</span><span class="p">,</span> async a <span class="p">=></span> <span class="p">{</span>
+  await navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'B'</span><span class="p">,</span> async b <span class="p">=></span> <span class="p">{</span>
+    <span class="c1">// do stuff with A and B</span>
+<span class="c1"></span>  <span class="p">});</span>
+<span class="p">});</span>
+</pre>
+    <p>Script 2:</p>
+<pre class="lang-javascript highlight">navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'B'</span><span class="p">,</span> async b <span class="p">=></span> <span class="p">{</span>
+  await navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'A'</span><span class="p">,</span> async a <span class="p">=></span> <span class="p">{</span>
+    <span class="c1">// do stuff with A and B</span>
+<span class="c1"></span>  <span class="p">});</span>
+<span class="p">});</span>
+</pre>
+    <p>If script 1 and script 2 run close to the same time, there is a chance that script 1 will hold lock A and script 2 will hold lock B and neither can make further progress - a deadlock. This will not affect the user agent as a whole, pause the tab, or affect other script in the origin, but this particular functionality will be blocked.</p>
+   </aside>
+   <p>Preventing deadlocks requires care. One approach is to always acquire multiple locks in a strict order.</p>
+   <aside class="example" id="example-cebd65df">
+    <a class="self-link" href="#example-cebd65df"></a> 
+    <p>A helper function such as the following could be used to request multiple locks in a consistent order.</p>
+<pre class="lang-javascript highlight">async <span class="kd">function</span> requestMultiple<span class="p">(</span>resources<span class="p">,</span> callback<span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> sortedResources <span class="o">=</span> <span class="p">[...</span>resources<span class="p">];</span>
+  sortedResources<span class="p">.</span>sort<span class="p">();</span> <span class="c1">// Always request in the same order.</span>
+<span class="c1"></span>
+  async <span class="kd">function</span> requestNext<span class="p">(</span>locks<span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> await navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span>sortedResources<span class="p">.</span>shift<span class="p">(),</span> async lock <span class="p">=></span> <span class="p">{</span>
+      <span class="c1">// Now holding this lock, plus all previously requested locks.</span>
+<span class="c1"></span>      locks<span class="p">.</span>push<span class="p">(</span>lock<span class="p">);</span>
+
+      <span class="c1">// Recursively request the next lock in order if needed.</span>
+<span class="c1"></span>      <span class="k">if</span> <span class="p">(</span>sortedResources<span class="p">.</span>length <span class="o">></span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> await requestNext<span class="p">(</span>locks<span class="p">);</span>
+
+      <span class="c1">// Otherwise, run the callback.</span>
+<span class="c1"></span>      <span class="k">return</span> await callback<span class="p">(</span>locks<span class="p">);</span>
+
+      <span class="c1">// All locks will be released when the callback returns (or throws).</span>
+<span class="c1"></span>    <span class="p">});</span>
+  <span class="p">}</span>
+  <span class="k">return</span> await requestNext<span class="p">([]);</span>
+<span class="p">}</span>
+</pre>
+    <p>In practice, the use of multiple locks is rarely as straightforward — libraries and other utilities can often unintentionally obfuscate thier use.</p>
+   </aside>
+   <h2 class="heading settled" data-level="6" id="privacy"><span class="secno">6. </span><span class="content">Privacy Considerations</span><a class="self-link" href="#privacy"></a></h2>
+   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager④">lock manager</a>'s scope is important as it defines a privacy boundary. Locks can be used as a communication channel, and must be no more privileged than other communication channels. Locks can be used as a state retention mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page and a cross-origin iframe in the same origin for privacy reasons must similarly partition broadcasting and locking.</p>
    <p>This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, or a broadcast is made signalling that updated data has been stored, all same-origin browsing contexts must observe the same state.</p>
-   <h2 class="heading settled" data-level="6" id="acknowledgements"><span class="secno">6. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
+   <h2 class="heading settled" data-level="7" id="acknowledgements"><span class="secno">7. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
    <p>Many thanks to
 Alex Russell,
 Anne van Kesteren,
@@ -2101,9 +2175,9 @@ Ryan Fioravanti,
 and
 Victor Costan
 for helping craft this proposal.</p>
-   <p>Thanks to Tab Atkins, Jr. for creating and maintaining <a href="https://github.com/tabatkins/bikeshed">Bikeshed</a>, the
-specification authoring tool used to create this document, and
-for his general authoring advice.</p>
+   <p>Special thanks to Tab Atkins, Jr. for creating and maintaining <a href="https://github.com/tabatkins/bikeshed">Bikeshed</a>, the specification
+authoring tool used to create this document, and for his general
+authoring advice.</p>
   </main>
   <div data-fill-with="conformance">
    <h2 class="no-ref no-num heading settled" id="conformance"><span class="content"> Conformance</span><a class="self-link" href="#conformance"></a></h2>
@@ -2499,7 +2573,8 @@ for his general authoring advice.</p>
    <b><a href="#lock-manager">#lock-manager</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-lock-manager">3.2. LockManager class</a> <a href="#ref-for-lock-manager①">(2)</a> <a href="#ref-for-lock-manager②">(3)</a>
-    <li><a href="#ref-for-lock-manager③">5. Privacy Considerations</a>
+    <li><a href="#ref-for-lock-manager③">5.1. Deadlocks</a>
+    <li><a href="#ref-for-lock-manager④">6. Privacy Considerations</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="mode">
@@ -2690,7 +2765,7 @@ for his general authoring advice.</p>
    <ul>
     <li><a href="#ref-for-dom-lockmode-shared">2.4. Locks</a>
     <li><a href="#ref-for-dom-lockmode-shared①">2.5. Lock Requests</a>
-    <li><a href="#ref-for-dom-lockmode-shared②">3.2. LockManager class</a>
+    <li><a href="#ref-for-dom-lockmode-shared②">3.2. LockManager class</a> <a href="#ref-for-dom-lockmode-shared③">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-lockmode-exclusive">
@@ -2698,7 +2773,7 @@ for his general authoring advice.</p>
    <ul>
     <li><a href="#ref-for-dom-lockmode-exclusive">2.4. Locks</a>
     <li><a href="#ref-for-dom-lockmode-exclusive①">2.5. Lock Requests</a> <a href="#ref-for-dom-lockmode-exclusive②">(2)</a> <a href="#ref-for-dom-lockmode-exclusive③">(3)</a>
-    <li><a href="#ref-for-dom-lockmode-exclusive④">3.2. LockManager class</a> <a href="#ref-for-dom-lockmode-exclusive⑤">(2)</a>
+    <li><a href="#ref-for-dom-lockmode-exclusive④">3.2. LockManager class</a> <a href="#ref-for-dom-lockmode-exclusive⑤">(2)</a> <a href="#ref-for-dom-lockmode-exclusive⑥">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-lockoptions">
