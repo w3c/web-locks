@@ -163,7 +163,7 @@ TODO: Migrate this definition to [[HTML]] or [[Storage]] so it can be referenced
 
 ## Modes and Scheduling ## {#modes-scheduling}
 
-A <dfn>mode</dfn> is either "exclusive" or "shared". Modes can be used to model the common <a href="http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock">readers-writer lock</a> pattern. If an "exclusive" lock is held, no other locks with that name can be granted. If "shared" lock is held, other "shared" locks with that name can be granted &mdash; but not any "exclusive" locks. The default mode in the API is "exclusive".
+A <dfn>mode</dfn> is either "exclusive" or "shared". Modes can be used to model the common <a href="http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock">readers-writer lock</a> pattern. If an "exclusive" lock is held, then no other locks with that name can be granted. If "shared" lock is held, other "shared" locks with that name can be granted &mdash; but not any "exclusive" locks. The default mode in the API is "exclusive".
 
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
@@ -184,7 +184,7 @@ A [=lock-concept|lock=] has an associated <dfn>origin</dfn> which is an [=/origi
 
 A [=lock-concept|lock=] has an associated <dfn>name</dfn> which is a [=resource name=].
 
-A [=lock-concept|lock=] has an associated <dfn>mode</dfn> which is one of "<code>exclusive</code>" or "<code>shared</code>".
+A [=lock-concept|lock=] has an associated <dfn>mode</dfn> which is one of "{{exclusive}}" or "{{shared}}".
 
 A [=lock-concept|lock=] has an associated <dfn>waiting promise</dfn> which is a Promise.
 
@@ -244,12 +244,12 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 1. Let |held| be |origin|'s [=held lock set=]
 1. Let |mode| be |request|'s associated [=lock request/mode=]
 1. Let |name| be |request|'s associated [=lock request/name=]
-1. If |mode| is "<code>exclusive</code>", then return true if all of the following conditions are true, and false otherwise:
+1. If |mode| is "{{exclusive}}", then return true if all of the following conditions are true, and false otherwise:
     * No [=lock-concept|lock=] in |held| has a [=lock-concept/name=] that equals |name|
     * No [=lock request=] in |queue| earlier than |request| has a [=lock request/name=] that equals |name|.
-1. Otherwise, mode is "<code>shared</code>"; return true if all of the following conditions are true, and false otherwise:
-    * No [=lock-concept|lock=] in |held| has [=lock-concept/mode=] "<code>exclusive</code>" and has a [=lock-concept/name=] that equals |name|.
-    * No [=lock request=] in |queue| earlier than |request| has a [=lock request/mode=] "<code>exclusive</code>" and [=lock request/name=] that equals |name|.
+1. Otherwise, mode is "{{shared}}"; return true if all of the following conditions are true, and false otherwise:
+    * No [=lock-concept|lock=] in |held| has [=lock-concept/mode=] "{{exclusive}}" and has a [=lock-concept/name=] that equals |name|.
+    * No [=lock request=] in |queue| earlier than |request| has a [=lock request/mode=] "{{exclusive}}" and [=lock request/name=] that equals |name|.
 
 </div>
 
@@ -332,6 +332,9 @@ dictionary LockInfo {
 };
 </pre>
 
+A {{LockManager}} instance allows script to make [=lock requests=] and query
+the state of the origin's [=lock manager=].
+
 <!-- ====================================================================== -->
 
 <div class=note>
@@ -346,7 +349,7 @@ dictionary LockInfo {
 
     The |name| (initial argument) is a [=resource name=] string.
 
-    The |callback| (final argument) is a [=callback function=] invoked with the {{Lock}} when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a non-<code>async</code> callback function is passed in, it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.
+    The |callback| (final argument) is a [=callback function=] invoked with the {{Lock}} when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a non-<code>async</code> callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.
 
     The returned |promise| resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
 
@@ -375,7 +378,7 @@ try {
     <dt><var>options</var> . mode</dt>
     <dd>
 
-    The {{LockOptions/mode}} option can be "<code>exclusive</code>" (the default if not specified) or "<code>shared</code>".
+    The {{LockOptions/mode}} option can be "{{exclusive}}" (the default if not specified) or "{{shared}}".
     <pre class=lang-javascript>
 await navigator.locks.request('resource', {mode: 'shared'}, async lock => {
   // Lock is held here. Other contexts might also hold the lock in shared mode,
@@ -403,7 +406,7 @@ try {
 }
     </pre>
 
-    If an abort is signalled before the lock is granted, the request promise will reject with an {{AbortError}}.
+    If an abort is signalled before the lock is granted, then the request promise will reject with an {{AbortError}}.
     Once the lock has been granted, the signal is ignored.
 
     </dd>
@@ -425,9 +428,9 @@ await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
     </dd>
     <dt><var>options</var> . steal</dt>
     <dd>
-    If the {{LockOptions/steal}} option is <code>true</code>, any held locks for the resource will be released (and the [=released promise=] of such locks will resolve with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
+    If the {{LockOptions/steal}} option is <code>true</code>, then any held locks for the resource will be released (and the [=released promise=] of such locks will resolve with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
 
-    If a web application detects an unrecoverable state &mdash; for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding &mdash; it can "steal" a lock using this option.
+    If a web application detects an unrecoverable state &mdash; for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding &mdash; then it can "steal" a lock using this option.
 
     Use the {{LockOptions/steal}} option with caution.
     When used, code previously holding a lock will now be executing without guarantees that it is the sole context with access to the resource.
@@ -450,7 +453,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 1. If |origin| is an [=opaque origin=], then reject |promise| with a "{{SecurityError}}" {{DOMException}}.
 1. Otherwise, if |name| starts with U+002D HYPHEN-MINUS (-), then reject |promise| with a "{{NotSupportedError}}" {{DOMException}}.
 1. Otherwise, if both |options|' |steal| dictionary member and |option|'s |ifAvailable| dictionary member are true, then reject |promise| with a "{{NotSupportedError}}" {{DOMException}}.
-1. Otherwise, if |options|' |steal| dictionary member is true and |option|'s |mode| dictionary member is not "<code>exclusive</code>", then reject |promise| with a "{{NotSupportedError}}" {{DOMException}}.
+1. Otherwise, if |options|' |steal| dictionary member is true and |option|'s |mode| dictionary member is not "{{exclusive}}", then reject |promise| with a "{{NotSupportedError}}" {{DOMException}}.
 1. Otherwise, if |option|'s |signal| dictionary member is present, and either of |options|' |steal| dictionary member or |options|' |ifAvailable| dictionary member is true, then reject |promise| with a "{{NotSupportedError}}" {{DOMException}}.
 1. Otherwise, if |options|' |signal| dictionary member is present and its [=AbortSignal/aborted flag=] is set, then reject |promise| with an "{{AbortError}}" {{DOMException}.
 1. Otherwise, run these steps:

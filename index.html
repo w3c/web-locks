@@ -1178,7 +1178,7 @@ Possible extra rowspan handling
 </style>
   <meta content="Bikeshed version 80294e12a0320826cbf4ded0dfff03de21c3a3d7" name="generator">
   <link href="https://inexorabletash.github.io/web-locks/" rel="canonical">
-  <meta content="85df57ad67e8013ac3b89ce2a25906dbe025b5db" name="document-revision">
+  <meta content="e1d32551b5159f84df811b1939393f21eb57203c" name="document-revision">
   <link href="logo-lock.png" rel="icon">
 <style>
 dl.domintro dt {
@@ -1604,7 +1604,7 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]<
    </aside>
    <aside class="issue" id="issue-72953b78"><a class="self-link" href="#issue-72953b78"></a> TODO: Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. </aside>
    <h3 class="heading settled" data-level="2.3" id="modes-scheduling"><span class="secno">2.3. </span><span class="content">Modes and Scheduling</span><a class="self-link" href="#modes-scheduling"></a></h3>
-   <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="mode">mode</dfn> is either "exclusive" or "shared". Modes can be used to model the common <a href="http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock">readers-writer lock</a> pattern. If an "exclusive" lock is held, no other locks with that name can be granted. If "shared" lock is held, other "shared" locks with that name can be granted — but not any "exclusive" locks. The default mode in the API is "exclusive".</p>
+   <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="mode">mode</dfn> is either "exclusive" or "shared". Modes can be used to model the common <a href="http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock">readers-writer lock</a> pattern. If an "exclusive" lock is held, then no other locks with that name can be granted. If "shared" lock is held, other "shared" locks with that name can be granted — but not any "exclusive" locks. The default mode in the API is "exclusive".</p>
    <p>Additional properties may influence scheduling, such as timeouts, fairness, and so on.</p>
    <h3 class="heading settled" data-level="2.4" id="concept-lock"><span class="secno">2.4. </span><span class="content">Locks</span><a class="self-link" href="#concept-lock"></a></h3>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="lock-concept" data-noexport="" id="lock-concept">lock</dfn> represents exclusive access to a shared resource.</p>
@@ -1613,7 +1613,7 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]<
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept③">lock</a> has an associated <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport="" id="lock-concept-clientid">clientId</dfn> which is an opaque string.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept④">lock</a> has an associated <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport="" id="lock-concept-origin">origin</dfn> which is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin③">origin</a>.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑤">lock</a> has an associated <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport="" id="lock-concept-name">name</dfn> which is a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name②">resource name</a>.</p>
-    <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑥">lock</a> has an associated <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport="" id="lock-concept-mode">mode</dfn> which is one of "<code>exclusive</code>" or "<code>shared</code>".</p>
+    <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑥">lock</a> has an associated <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport="" id="lock-concept-mode">mode</dfn> which is one of "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive">exclusive</a></code>" or "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared">shared</a></code>".</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑦">lock</a> has an associated <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport="" id="lock-concept-waiting-promise">waiting promise</dfn> which is a Promise.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑧">lock</a> has an associated <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport="" id="lock-concept-released-promise">released promise</dfn> which is a Promise.</p>
     <aside class="note">
@@ -1665,7 +1665,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
      <li data-md="">
       <p>Let <var>name</var> be <var>request</var>’s associated <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name">name</a></p>
      <li data-md="">
-      <p>If <var>mode</var> is "<code>exclusive</code>", then return true if all of the following conditions are true, and false otherwise:</p>
+      <p>If <var>mode</var> is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive①">exclusive</a></code>", then return true if all of the following conditions are true, and false otherwise:</p>
       <ul>
        <li data-md="">
         <p>No <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①②">lock</a> in <var>held</var> has a <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name">name</a> that equals <var>name</var></p>
@@ -1673,12 +1673,12 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
         <p>No <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑤">lock request</a> in <var>queue</var> earlier than <var>request</var> has a <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name①">name</a> that equals <var>name</var>.</p>
       </ul>
      <li data-md="">
-      <p>Otherwise, mode is "<code>shared</code>"; return true if all of the following conditions are true, and false otherwise:</p>
+      <p>Otherwise, mode is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared①">shared</a></code>"; return true if all of the following conditions are true, and false otherwise:</p>
       <ul>
        <li data-md="">
-        <p>No <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①③">lock</a> in <var>held</var> has <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode">mode</a> "<code>exclusive</code>" and has a <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name①">name</a> that equals <var>name</var>.</p>
+        <p>No <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①③">lock</a> in <var>held</var> has <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode">mode</a> "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive②">exclusive</a></code>" and has a <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name①">name</a> that equals <var>name</var>.</p>
        <li data-md="">
-        <p>No <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑥">lock request</a> in <var>queue</var> earlier than <var>request</var> has a <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode①">mode</a> "<code>exclusive</code>" and <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name②">name</a> that equals <var>name</var>.</p>
+        <p>No <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑥">lock request</a> in <var>queue</var> earlier than <var>request</var> has a <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode①">mode</a> "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive③">exclusive</a></code>" and <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name②">name</a> that equals <var>name</var>.</p>
       </ul>
     </ol>
    </div>
@@ -1726,7 +1726,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
 
 <span class="kt">callback</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="callback" data-export="" id="callbackdef-lockgrantedcallback"><code>LockGrantedCallback</code></dfn> = <span class="kt">Promise</span>&lt;<span class="kt">any</span>> (<a class="n" data-link-type="idl-name" href="#lock" id="ref-for-lock">Lock</a> <dfn class="nv idl-code" data-dfn-for="LockGrantedCallback" data-dfn-type="argument" data-export="" id="dom-lockgrantedcallback-lock"><code>lock</code><a class="self-link" href="#dom-lockgrantedcallback-lock"></a></dfn>);
 
-<span class="kt">enum</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="enum" data-export="" id="enumdef-lockmode"><code>LockMode</code></dfn> { <dfn class="s idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;shared&quot;|shared" id="dom-lockmode-shared"><code>"shared"</code><a class="self-link" href="#dom-lockmode-shared"></a></dfn>, <dfn class="s idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;exclusive&quot;|exclusive" id="dom-lockmode-exclusive"><code>"exclusive"</code><a class="self-link" href="#dom-lockmode-exclusive"></a></dfn> };
+<span class="kt">enum</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="enum" data-export="" id="enumdef-lockmode"><code>LockMode</code></dfn> { <dfn class="s dfn-paneled idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;shared&quot;|shared" id="dom-lockmode-shared"><code>"shared"</code></dfn>, <dfn class="s dfn-paneled idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;exclusive&quot;|exclusive" id="dom-lockmode-exclusive"><code>"exclusive"</code></dfn> };
 
 <span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-lockoptions"><code>LockOptions</code></dfn> {
   <a class="n" data-link-type="idl-name" href="#enumdef-lockmode" id="ref-for-enumdef-lockmode">LockMode</a> <dfn class="nv dfn-paneled idl-code" data-default="&quot;exclusive&quot;" data-dfn-for="LockOptions" data-dfn-type="dict-member" data-export="" data-type="LockMode " id="dom-lockoptions-mode"><code>mode</code></dfn> = "exclusive";
@@ -1746,6 +1746,8 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
   <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③"><span class="kt">DOMString</span></a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="LockInfo" data-dfn-type="dict-member" data-export="" data-type="DOMString " id="dom-lockinfo-clientid"><code>clientId</code></dfn>;
 };
 </pre>
+   <p>A <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager⑤">LockManager</a></code> instance allows script to make <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑧">lock requests</a> and query
+the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager">lock manager</a>.</p>
    <div class="note" role="note">
     <dl class="domintro">
      <dt><var>promise</var> = navigator . locks . <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request②">request</a></code>(<var>name</var>, <var>callback</var>)
@@ -1753,7 +1755,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
      <dd>
       <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request③">request()</a></code> method is called to request a lock.</p>
       <p>The <var>name</var> (initial argument) is a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource name</a> string.</p>
-      <p>The <var>callback</var> (final argument) is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-callback-function" id="ref-for-dfn-callback-function">callback function</a> invoked with the <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock①">Lock</a></code> when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a non-<code>async</code> callback function is passed in, it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.</p>
+      <p>The <var>callback</var> (final argument) is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-callback-function" id="ref-for-dfn-callback-function">callback function</a> invoked with the <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock①">Lock</a></code> when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a non-<code>async</code> callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.</p>
       <p>The returned <var>promise</var> resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.</p>
       <p>Example:</p>
 <pre class="lang-javascript highlight"><span class="k">try</span> <span class="p">{</span>
@@ -1773,7 +1775,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
       <p>An <var>options</var> dictionary can be specified as a second argument; the <var>callback</var> argument is always last.</p>
      <dt><var>options</var> . mode
      <dd>
-      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-mode" id="ref-for-dom-lockoptions-mode">mode</a></code> option can be "<code>exclusive</code>" (the default if not specified) or "<code>shared</code>".</p>
+      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-mode" id="ref-for-dom-lockoptions-mode">mode</a></code> option can be "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive④">exclusive</a></code>" (the default if not specified) or "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared②">shared</a></code>".</p>
 <pre class="lang-javascript highlight">await navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'resource'</span><span class="p">,</span> <span class="p">{</span>mode<span class="o">:</span> <span class="s1">'shared'</span><span class="p">},</span> async lock <span class="p">=></span> <span class="p">{</span>
   <span class="c1">// Lock is held here. Other contexts might also hold the lock in shared mode,</span>
 <span class="c1"></span>  <span class="c1">// but no other contexts will hold the lock in exclusive mode.</span>
@@ -1794,7 +1796,7 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
   <span class="c1">// |ex| will be a DOMException with error name "AbortError" if timer fired.</span>
 <span class="c1"></span><span class="p">}</span>
 </pre>
-      <p>If an abort is signalled before the lock is granted, the request promise will reject with an <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror">AbortError</a></code>.
+      <p>If an abort is signalled before the lock is granted, then the request promise will reject with an <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror">AbortError</a></code>.
     Once the lock has been granted, the signal is ignored.</p>
      <dt><var>options</var> . ifAvailable
      <dd>
@@ -1809,8 +1811,8 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
 </pre>
      <dt><var>options</var> . steal
      <dd>
-       If the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal">steal</a></code> option is <code>true</code>, any held locks for the resource will be released (and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise④">released promise</a> of such locks will resolve with <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror①">AbortError</a></code>), and the request will be granted, preempting any queued requests for it. 
-      <p>If a web application detects an unrecoverable state — for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding — it can "steal" a lock using this option.</p>
+       If the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal">steal</a></code> option is <code>true</code>, then any held locks for the resource will be released (and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise④">released promise</a> of such locks will resolve with <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror①">AbortError</a></code>), and the request will be granted, preempting any queued requests for it. 
+      <p>If a web application detects an unrecoverable state — for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding — then it can "steal" a lock using this option.</p>
       <p>Use the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal①">steal</a></code> option with caution.
     When used, code previously holding a lock will now be executing without guarantees that it is the sole context with access to the resource.
     Similarly, the code that used the option has no guarantees that other contexts will not still be executing as if they have access to the abstract resource.
@@ -1835,7 +1837,7 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
      <li data-md="">
       <p>Otherwise, if both <var>options</var>’ <var>steal</var> dictionary member and <var>option</var>’s <var>ifAvailable</var> dictionary member are true, then reject <var>promise</var> with a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notsupportederror" id="ref-for-notsupportederror①">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
      <li data-md="">
-      <p>Otherwise, if <var>options</var>’ <var>steal</var> dictionary member is true and <var>option</var>’s <var>mode</var> dictionary member is not "<code>exclusive</code>", then reject <var>promise</var> with a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notsupportederror" id="ref-for-notsupportederror②">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code>.</p>
+      <p>Otherwise, if <var>options</var>’ <var>steal</var> dictionary member is true and <var>option</var>’s <var>mode</var> dictionary member is not "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑤">exclusive</a></code>", then reject <var>promise</var> with a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notsupportederror" id="ref-for-notsupportederror②">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code>.</p>
      <li data-md="">
       <p>Otherwise, if <var>option</var>’s <var>signal</var> dictionary member is present, and either of <var>options</var>’ <var>steal</var> dictionary member or <var>options</var>’ <var>ifAvailable</var> dictionary member is true, then reject <var>promise</var> with a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notsupportederror" id="ref-for-notsupportederror③">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
      <li data-md="">
@@ -1860,7 +1862,7 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
     <dl class="domintro">
      <dt><var>state</var> = await navigator . locks . <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query①">query</a></code>()
      <dd>
-      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query②">query()</a></code> method can be used to produce a snapshot of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager">lock manager</a> state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.</p>
+      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query②">query()</a></code> method can be used to produce a snapshot of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a> state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.</p>
       <p>The returned promise resolves to <var>state</var>, a plain-old-data structure (i.e. JSON-like data) with this form:</p>
 <pre class="lang-javascript highlight"><span class="p">{</span>
   held<span class="o">:</span> <span class="p">[</span>
@@ -1875,7 +1877,7 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
 <span class="p">}</span>
 </pre>
       <p>The <code>clientId</code> field corresponds to a unique context (frame or worker), and is the same value returned by <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#client" id="ref-for-client">Client</a></code>'s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#dom-client-id" id="ref-for-dom-client-id">id</a></code> attribute.</p>
-      <p>This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a> state at some point in time. Once the data is returned to script, the lock state might have changed.</p>
+      <p>This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> state at some point in time. Once the data is returned to script, the lock state might have changed.</p>
     </dl>
    </div>
    <div class="algorithm">
@@ -1909,7 +1911,7 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="request-a-lock">request a lock</dfn> with <var>promise</var>, <var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>callback</var>, <var>name</var>, <var>mode</var>, <var>ifAvailable</var>, <var>steal</var>, and optional <var>signal</var>: 
     <ol>
      <li data-md="">
-      <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑧">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>name</var>, <var>mode</var>, <var>promise</var>).</p>
+      <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑨">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>name</var>, <var>mode</var>, <var>promise</var>).</p>
      <li data-md="">
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps④">Enqueue the following steps</a> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue④">lock task queue</a>:</p>
      <li data-md="">
@@ -2073,7 +2075,7 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
     </ol>
    </div>
    <h2 class="heading settled" data-level="5" id="privacy"><span class="secno">5. </span><span class="content">Privacy Considerations</span><a class="self-link" href="#privacy"></a></h2>
-   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a>'s scope is important as it defines a privacy boundary. Locks can be used as a communication channel, and must be no more privileged than other communication channels. Locks can be used as a state retention mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page and a cross-origin iframe in the same origin for privacy reasons must similarly partition broadcasting and locking.</p>
+   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager③">lock manager</a>'s scope is important as it defines a privacy boundary. Locks can be used as a communication channel, and must be no more privileged than other communication channels. Locks can be used as a state retention mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page and a cross-origin iframe in the same origin for privacy reasons must similarly partition broadcasting and locking.</p>
    <p>This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, or a broadcast is made signalling that updated data has been stored, all same-origin browsing contexts must observe the same state.</p>
    <h2 class="heading settled" data-level="6" id="acknowledgements"><span class="secno">6. </span><span class="content">Acknowledgements</span><a class="self-link" href="#acknowledgements"></a></h2>
    <p>Many thanks to
@@ -2489,8 +2491,8 @@ for his general authoring advice.</p>
   <aside class="dfn-panel" data-for="lock-manager">
    <b><a href="#lock-manager">#lock-manager</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-lock-manager">3.2. LockManager class</a> <a href="#ref-for-lock-manager①">(2)</a>
-    <li><a href="#ref-for-lock-manager②">5. Privacy Considerations</a>
+    <li><a href="#ref-for-lock-manager">3.2. LockManager class</a> <a href="#ref-for-lock-manager①">(2)</a> <a href="#ref-for-lock-manager②">(3)</a>
+    <li><a href="#ref-for-lock-manager③">5. Privacy Considerations</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="mode">
@@ -2586,7 +2588,8 @@ for his general authoring advice.</p>
     <li><a href="#ref-for-lock-request①">2.2. Lock Managers</a>
     <li><a href="#ref-for-lock-request②">2.5. Lock Requests</a> <a href="#ref-for-lock-request③">(2)</a> <a href="#ref-for-lock-request④">(3)</a> <a href="#ref-for-lock-request⑤">(4)</a> <a href="#ref-for-lock-request⑥">(5)</a>
     <li><a href="#ref-for-lock-request⑦">2.6. Agent Integration</a>
-    <li><a href="#ref-for-lock-request⑧">4.1. Request a lock</a>
+    <li><a href="#ref-for-lock-request⑧">3.2. LockManager class</a>
+    <li><a href="#ref-for-lock-request⑨">4.1. Request a lock</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock-request-clientid">
@@ -2659,7 +2662,7 @@ for his general authoring advice.</p>
    <ul>
     <li><a href="#ref-for-lockmanager">2.4. Locks</a>
     <li><a href="#ref-for-lockmanager①">3.1. Navigator Mixins</a> <a href="#ref-for-lockmanager②">(2)</a> <a href="#ref-for-lockmanager③">(3)</a>
-    <li><a href="#ref-for-lockmanager④">3.2. LockManager class</a>
+    <li><a href="#ref-for-lockmanager④">3.2. LockManager class</a> <a href="#ref-for-lockmanager⑤">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="callbackdef-lockgrantedcallback">
@@ -2673,6 +2676,22 @@ for his general authoring advice.</p>
    <ul>
     <li><a href="#ref-for-enumdef-lockmode">3.2. LockManager class</a> <a href="#ref-for-enumdef-lockmode①">(2)</a>
     <li><a href="#ref-for-enumdef-lockmode②">3.3. Lock class</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-lockmode-shared">
+   <b><a href="#dom-lockmode-shared">#dom-lockmode-shared</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-lockmode-shared">2.4. Locks</a>
+    <li><a href="#ref-for-dom-lockmode-shared①">2.5. Lock Requests</a>
+    <li><a href="#ref-for-dom-lockmode-shared②">3.2. LockManager class</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-lockmode-exclusive">
+   <b><a href="#dom-lockmode-exclusive">#dom-lockmode-exclusive</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-lockmode-exclusive">2.4. Locks</a>
+    <li><a href="#ref-for-dom-lockmode-exclusive①">2.5. Lock Requests</a> <a href="#ref-for-dom-lockmode-exclusive②">(2)</a> <a href="#ref-for-dom-lockmode-exclusive③">(3)</a>
+    <li><a href="#ref-for-dom-lockmode-exclusive④">3.2. LockManager class</a> <a href="#ref-for-dom-lockmode-exclusive⑤">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-lockoptions">
