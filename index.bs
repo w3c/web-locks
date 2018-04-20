@@ -64,7 +64,7 @@ The API provides optional functionality that may be used as needed, including:
 * diagnostics to query the state of locks in an origin, and
 * an escape hatch to protect against deadlocks.
 
-Cooperative coordination takes place within the scope of same-origin [=/agents=] ; this may span multiple [=/agent clusters=].
+Cooperative coordination takes place within the scope of same-origin [=/agents=]; this may span multiple [=/agent clusters=].
 
 <aside class=note>
 [=/Agents=] roughly correspond to windows (tabs), iframes, and workers. [=/Agent clusters=] correspond to independent processes in some user agent implementations.
@@ -155,7 +155,7 @@ Pages and workers ([=/agents=]) on a single [=/origin=] opened in the same user 
 </aside>
 
 <aside class=issue>
-TODO: Migrate this definition to [[HTML]] or [[Storage]] so it can be referenced by other standards.
+Migrate this definition to [[HTML]] or [[Storage]] so it can be referenced by other standards.
 </aside>
 
 
@@ -432,14 +432,16 @@ await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
 
     If a web application detects an unrecoverable state &mdash; for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding &mdash; then it can "steal" a lock using this option.
 
+    </dd>
+  </dl>
+</div>
+
+<aside class=advisement>
     Use the {{LockOptions/steal}} option with caution.
     When used, code previously holding a lock will now be executing without guarantees that it is the sole context with access to the resource.
     Similarly, the code that used the option has no guarantees that other contexts will not still be executing as if they have access to the abstract resource.
     It is intended for use by web applications that need to attempt recovery in the face of application and/or user-agent defects, where behavior is already unpredictable.
-
-    </dd>
-  </dl>
-</div>
+</aside>
 
 <div class=algorithm>
 
@@ -493,10 +495,13 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 
     The <code>clientId</code> field corresponds to a unique context (frame or worker), and is the same value returned by {{Client}}'s {{Client/id}} attribute.
 
-    This data is just a <em>snapshot</em> of the [=lock manager=] state at some point in time. Once the data is returned to script, the lock state might have changed.
     </dd>
   </dl>
 </div>
+
+<aside class=advisement>
+    This data is just a <em>snapshot</em> of the [=lock manager=] state at some point in time. Once the data is returned to script, the lock state might have changed.
+</aside>
 
 
 <div class=algorithm>

@@ -1178,7 +1178,7 @@ Possible extra rowspan handling
 </style>
   <meta content="Bikeshed version 80294e12a0320826cbf4ded0dfff03de21c3a3d7" name="generator">
   <link href="https://inexorabletash.github.io/web-locks/" rel="canonical">
-  <meta content="bc3ac54ee9fb425997bb65d857d21da4dfef7c88" name="document-revision">
+  <meta content="ebd7e4859f634f94f96ffc71f948401d0e0492e6" name="document-revision">
   <link href="logo-lock.png" rel="icon">
 <style>
 dl.domintro dt {
@@ -1541,7 +1541,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li data-md="">
      <p>an escape hatch to protect against deadlocks.</p>
    </ul>
-   <p>Cooperative coordination takes place within the scope of same-origin <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent">agents</a> ; this may span multiple <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism" id="ref-for-integration-with-the-javascript-agent-cluster-formalism">agent clusters</a>.</p>
+   <p>Cooperative coordination takes place within the scope of same-origin <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent">agents</a>; this may span multiple <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism" id="ref-for-integration-with-the-javascript-agent-cluster-formalism">agent clusters</a>.</p>
    <aside class="note"> <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent①">Agents</a> roughly correspond to windows (tabs), iframes, and workers. <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism" id="ref-for-integration-with-the-javascript-agent-cluster-formalism①">Agent clusters</a> correspond to independent processes in some user agent implementations. </aside>
    <p>The API is used as follows:</p>
    <ol>
@@ -1602,7 +1602,7 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]<
       <p>Agents that share a lock manager.</p>
     </ul>
    </aside>
-   <aside class="issue" id="issue-72953b78"><a class="self-link" href="#issue-72953b78"></a> TODO: Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. </aside>
+   <aside class="issue" id="issue-53ff2e23"><a class="self-link" href="#issue-53ff2e23"></a> Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. </aside>
    <h3 class="heading settled" data-level="2.3" id="modes-scheduling"><span class="secno">2.3. </span><span class="content">Modes and Scheduling</span><a class="self-link" href="#modes-scheduling"></a></h3>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="mode">mode</dfn> is either "exclusive" or "shared". Modes can be used to model the common <a href="http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock">readers-writer lock</a> pattern. If an "exclusive" lock is held, then no other locks with that name can be granted. If "shared" lock is held, other "shared" locks with that name can be granted — but not any "exclusive" locks. The default mode in the API is "exclusive".</p>
    <p>Additional properties may influence scheduling, such as timeouts, fairness, and so on.</p>
@@ -1813,12 +1813,12 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
      <dd>
        If the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal">steal</a></code> option is <code>true</code>, then any held locks for the resource will be released (and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise④">released promise</a> of such locks will resolve with <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror①">AbortError</a></code>), and the request will be granted, preempting any queued requests for it. 
       <p>If a web application detects an unrecoverable state — for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding — then it can "steal" a lock using this option.</p>
-      <p>Use the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal①">steal</a></code> option with caution.
-    When used, code previously holding a lock will now be executing without guarantees that it is the sole context with access to the resource.
-    Similarly, the code that used the option has no guarantees that other contexts will not still be executing as if they have access to the abstract resource.
-    It is intended for use by web applications that need to attempt recovery in the face of application and/or user-agent defects, where behavior is already unpredictable.</p>
     </dl>
    </div>
+   <aside class="advisement"> Use the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal①">steal</a></code> option with caution.
+    When used, code previously holding a lock will now be executing without guarantees that it is the sole context with access to the resource.
+    Similarly, the code that used the option has no guarantees that other contexts will not still be executing as if they have access to the abstract resource.
+    It is intended for use by web applications that need to attempt recovery in the face of application and/or user-agent defects, where behavior is already unpredictable. </aside>
    <div class="algorithm">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export="" id="dom-lockmanager-request"><code>request(<var>name</var>, <var>callback</var>)</code></dfn> and <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export="" id="dom-lockmanager-request-name-options-callback"><code>request(<var>name</var>, <var>options</var>, <var>callback</var>)</code></dfn> methods, when invoked, must run these steps:</p>
     <ol>
@@ -1879,9 +1879,9 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
 <span class="p">}</span>
 </pre>
       <p>The <code>clientId</code> field corresponds to a unique context (frame or worker), and is the same value returned by <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#client" id="ref-for-client">Client</a></code>'s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#dom-client-id" id="ref-for-dom-client-id">id</a></code> attribute.</p>
-      <p>This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> state at some point in time. Once the data is returned to script, the lock state might have changed.</p>
     </dl>
    </div>
+   <aside class="advisement"> This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> state at some point in time. Once the data is returned to script, the lock state might have changed. </aside>
    <div class="algorithm">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export="" id="dom-lockmanager-query"><code>query()</code></dfn> method, when invoked, must run these steps:</p>
     <ol>
@@ -2466,7 +2466,7 @@ for his general authoring advice.</p>
 </pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
-   <div class="issue"> TODO: Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. <a href="#issue-72953b78"> ↵ </a></div>
+   <div class="issue"> Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. <a href="#issue-53ff2e23"> ↵ </a></div>
    <div class="issue"> Normative reference for <i>terminates</i>. <a href="#issue-7c4846d1"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="lock-task-queue">
