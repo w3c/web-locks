@@ -457,10 +457,10 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 1. Otherwise, if |option|'s |signal| dictionary member is present, and either of |options|' |steal| dictionary member or |options|' |ifAvailable| dictionary member is true, then reject |promise| with a "{{NotSupportedError}}" {{DOMException}}.
 1. Otherwise, if |options|' |signal| dictionary member is present and its [=AbortSignal/aborted flag=] is set, then reject |promise| with an "{{AbortError}}" {{DOMException}.
 1. Otherwise, run these steps:
-   1. Let |request| be the result of running the steps to [=request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|' |mode| dictionary member, |options|' |ifAvailable| dictionary member, and |options|' |steal| dictionary member.
-   1. If |options|' |signal| dictionary member is present, then <a for=AbortSignal lt=add>add the following abort steps</a> to |options|' |signal| dictionary member:
-      1. [=enqueue the following steps|Enqueue the steps=] to [=abort the request=] |request| to the [=lock task queue=].
-      1. Reject |promise| with an "{{AbortError}}" {{DOMException}}.
+    1. Let |request| be the result of running the steps to [=request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|' |mode| dictionary member, |options|' |ifAvailable| dictionary member, and |options|' |steal| dictionary member.
+    1. If |options|' |signal| dictionary member is present, then <a for=AbortSignal lt=add>add the following abort steps</a> to |options|' |signal| dictionary member:
+        1. [=enqueue the following steps|Enqueue the steps=] to [=abort the request=] |request| to the [=lock task queue=].
+        1. Reject |promise| with an "{{AbortError}}" {{DOMException}}.
 1. Return |promise|.
 
 </div>
