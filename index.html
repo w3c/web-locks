@@ -1178,7 +1178,7 @@ Possible extra rowspan handling
 </style>
   <meta content="Bikeshed version 80294e12a0320826cbf4ded0dfff03de21c3a3d7" name="generator">
   <link href="https://inexorabletash.github.io/web-locks/" rel="canonical">
-  <meta content="3292ec7f20b014c2a9d5bb2aea73d81224d27573" name="document-revision">
+  <meta content="85df57ad67e8013ac3b89ce2a25906dbe025b5db" name="document-revision">
   <link href="logo-lock.png" rel="icon">
 <style>
 dl.domintro dt {
@@ -1440,7 +1440,7 @@ pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-04-18">18 April 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-04-20">20 April 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1525,7 +1525,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    </ol>
   </nav>
   <main>
-   <p><img src="https://cdn.rawgit.com/inexorabletash/web-locks/master/logo-lock.svg" style="height: 100px; width: 100px; position: absolute; right: 20px; top: 30px;"></p>
+   <p><img alt="logo" src="https://inexorabletash.github.io/web-locks/logo-lock.svg" style="height: 100px; width: 100px; position: absolute; right: 20px; top: 30px;"></p>
    <h2 class="heading settled" data-level="1" id="introduction"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#introduction"></a></h2>
    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request">lock request</a> is made by script for a particular <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name">resource name</a> and <a data-link-type="dfn" href="#mode" id="ref-for-mode">mode</a>. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a lock request. A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept">lock</a> is a granted request; it has a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name①">resource name</a> and <a data-link-type="dfn" href="#mode" id="ref-for-mode①">mode</a>. It is represented as an object returned to script. As long as the lock is held it may prevent other lock requests from being granted (depending on the name and mode). A lock can be released by script, at which point it may allow other lock requests to be granted.</p>
    <p>The API provides optional functionality that may be used as needed, including:</p>
@@ -1722,8 +1722,6 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
                        <a class="n" data-link-type="idl-name" href="#callbackdef-lockgrantedcallback" id="ref-for-callbackdef-lockgrantedcallback①">LockGrantedCallback</a> <dfn class="nv idl-code" data-dfn-for="LockManager/request(name, options, callback)" data-dfn-type="argument" data-export="" id="dom-lockmanager-request-name-options-callback-callback"><code>callback</code><a class="self-link" href="#dom-lockmanager-request-name-options-callback-callback"></a></dfn>);
 
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#dictdef-lockmanagersnapshot" id="ref-for-dictdef-lockmanagersnapshot">LockManagerSnapshot</a>> <a class="nv idl-code" data-link-type="method" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query">query</a>();
-
-  <span class="kt">void</span> <dfn class="nv idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export="" data-lt="forceRelease(name)" id="dom-lockmanager-forcerelease"><code>forceRelease</code><a class="self-link" href="#dom-lockmanager-forcerelease"></a></dfn>(<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②"><span class="kt">DOMString</span></a> <dfn class="nv idl-code" data-dfn-for="LockManager/forceRelease(name)" data-dfn-type="argument" data-export="" id="dom-lockmanager-forcerelease-name-name"><code>name</code><a class="self-link" href="#dom-lockmanager-forcerelease-name-name"></a></dfn>);
 };
 
 <span class="kt">callback</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="callback" data-export="" id="callbackdef-lockgrantedcallback"><code>LockGrantedCallback</code></dfn> = <span class="kt">Promise</span>&lt;<span class="kt">any</span>> (<a class="n" data-link-type="idl-name" href="#lock" id="ref-for-lock">Lock</a> <dfn class="nv idl-code" data-dfn-for="LockGrantedCallback" data-dfn-type="argument" data-export="" id="dom-lockgrantedcallback-lock"><code>lock</code><a class="self-link" href="#dom-lockgrantedcallback-lock"></a></dfn>);
@@ -1743,9 +1741,9 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
 };
 
 <span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-lockinfo"><code>LockInfo</code></dfn> {
-  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③"><span class="kt">DOMString</span></a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="LockInfo" data-dfn-type="dict-member" data-export="" data-type="DOMString " id="dom-lockinfo-name"><code>name</code></dfn>;
+  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②"><span class="kt">DOMString</span></a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="LockInfo" data-dfn-type="dict-member" data-export="" data-type="DOMString " id="dom-lockinfo-name"><code>name</code></dfn>;
   <a class="n" data-link-type="idl-name" href="#enumdef-lockmode" id="ref-for-enumdef-lockmode①">LockMode</a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="LockInfo" data-dfn-type="dict-member" data-export="" data-type="LockMode " id="dom-lockinfo-mode"><code>mode</code></dfn>;
-  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString④"><span class="kt">DOMString</span></a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="LockInfo" data-dfn-type="dict-member" data-export="" data-type="DOMString " id="dom-lockinfo-clientid"><code>clientId</code></dfn>;
+  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③"><span class="kt">DOMString</span></a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="LockInfo" data-dfn-type="dict-member" data-export="" data-type="DOMString " id="dom-lockinfo-clientid"><code>clientId</code></dfn>;
 };
 </pre>
    <div class="note" role="note">
@@ -1754,7 +1752,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
      <dt><var>promise</var> = navigator . locks . <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request-name-options-callback" id="ref-for-dom-lockmanager-request-name-options-callback①">request</a></code>(<var>name</var>, <var>options</var>, <var>callback</var>)
      <dd>
       <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request③">request()</a></code> method is called to request a lock.</p>
-      <p>The <var>name</var> (first argument) is a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource name</a> string.</p>
+      <p>The <var>name</var> (initial argument) is a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource name</a> string.</p>
       <p>The <var>callback</var> (final argument) is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-callback-function" id="ref-for-dfn-callback-function">callback function</a> invoked with the <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock①">Lock</a></code> when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a non-<code>async</code> callback function is passed in, it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.</p>
       <p>The returned <var>promise</var> resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.</p>
       <p>Example:</p>
@@ -1898,7 +1896,7 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
    <h3 class="heading settled" data-level="3.3" id="api-lock"><span class="secno">3.3. </span><span class="content"><code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock②">Lock</a></code> class</span><a class="self-link" href="#api-lock"></a></h3>
 <pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext②">SecureContext</a>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed">Exposed</a>=(<span class="n">Window</span>,<span class="n">Worker</span>)]
 <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="lock"><code>Lock</code></dfn> {
-  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑤"><span class="kt">DOMString</span></a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="Lock" data-dfn-type="attribute" data-export="" data-readonly="" data-type="DOMString" id="dom-lock-name"><code>name</code></dfn>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString④"><span class="kt">DOMString</span></a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="Lock" data-dfn-type="attribute" data-export="" data-readonly="" data-type="DOMString" id="dom-lock-name"><code>name</code></dfn>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#enumdef-lockmode" id="ref-for-enumdef-lockmode②">LockMode</a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="Lock" data-dfn-type="attribute" data-export="" data-readonly="" data-type="LockMode" id="dom-lock-mode"><code>mode</code></dfn>;
 };
 </pre>
@@ -2263,7 +2261,6 @@ for his general authoring advice.</p>
     </ul>
    <li><a href="#dom-lockmode-exclusive">exclusive</a><span>, in §3.2</span>
    <li><a href="#dom-lockmode-exclusive">"exclusive"</a><span>, in §3.2</span>
-   <li><a href="#dom-lockmanager-forcerelease">forceRelease(name)</a><span>, in §3.2</span>
    <li><a href="#lock-request-grantable">grantable</a><span>, in §2.5</span>
    <li><a href="#dom-lockmanagersnapshot-held">held</a><span>, in §3.2</span>
    <li><a href="#lock-concept-held-lock-set">held lock set</a><span>, in §2.4</span>
@@ -2425,15 +2422,13 @@ for his general authoring advice.</p>
 
 [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext①①">SecureContext</a>]
 <span class="kt">interface</span> <a class="nv" href="#lockmanager"><code>LockManager</code></a> {
-  <span class="kt">Promise</span>&lt;<span class="kt">any</span>> <a class="nv idl-code" data-link-type="method" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request①①">request</a>(<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑥"><span class="kt">DOMString</span></a> <a class="nv" href="#dom-lockmanager-request-name-callback-name"><code>name</code></a>,
+  <span class="kt">Promise</span>&lt;<span class="kt">any</span>> <a class="nv idl-code" data-link-type="method" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request①①">request</a>(<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑤"><span class="kt">DOMString</span></a> <a class="nv" href="#dom-lockmanager-request-name-callback-name"><code>name</code></a>,
                        <a class="n" data-link-type="idl-name" href="#callbackdef-lockgrantedcallback" id="ref-for-callbackdef-lockgrantedcallback②">LockGrantedCallback</a> <a class="nv" href="#dom-lockmanager-request-name-callback-callback"><code>callback</code></a>);
   <span class="kt">Promise</span>&lt;<span class="kt">any</span>> <a class="nv idl-code" data-link-type="method" href="#dom-lockmanager-request-name-options-callback" id="ref-for-dom-lockmanager-request-name-options-callback②">request</a>(<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString①①"><span class="kt">DOMString</span></a> <a class="nv" href="#dom-lockmanager-request-name-options-callback-name"><code>name</code></a>,
                        <a class="n" data-link-type="idl-name" href="#dictdef-lockoptions" id="ref-for-dictdef-lockoptions②">LockOptions</a> <a class="nv" href="#dom-lockmanager-request-name-options-callback-options"><code>options</code></a>,
                        <a class="n" data-link-type="idl-name" href="#callbackdef-lockgrantedcallback" id="ref-for-callbackdef-lockgrantedcallback①①">LockGrantedCallback</a> <a class="nv" href="#dom-lockmanager-request-name-options-callback-callback"><code>callback</code></a>);
 
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#dictdef-lockmanagersnapshot" id="ref-for-dictdef-lockmanagersnapshot②">LockManagerSnapshot</a>> <a class="nv idl-code" data-link-type="method" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query③">query</a>();
-
-  <span class="kt">void</span> <a class="nv" href="#dom-lockmanager-forcerelease"><code>forceRelease</code></a>(<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②①"><span class="kt">DOMString</span></a> <a class="nv" href="#dom-lockmanager-forcerelease-name-name"><code>name</code></a>);
 };
 
 <span class="kt">callback</span> <a class="nv" href="#callbackdef-lockgrantedcallback"><code>LockGrantedCallback</code></a> = <span class="kt">Promise</span>&lt;<span class="kt">any</span>> (<a class="n" data-link-type="idl-name" href="#lock" id="ref-for-lock⑤">Lock</a> <a class="nv" href="#dom-lockgrantedcallback-lock"><code>lock</code></a>);
@@ -2453,14 +2448,14 @@ for his general authoring advice.</p>
 };
 
 <span class="kt">dictionary</span> <a class="nv" href="#dictdef-lockinfo"><code>LockInfo</code></a> {
-  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③①"><span class="kt">DOMString</span></a> <a class="nv" data-type="DOMString " href="#dom-lockinfo-name"><code>name</code></a>;
+  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②①"><span class="kt">DOMString</span></a> <a class="nv" data-type="DOMString " href="#dom-lockinfo-name"><code>name</code></a>;
   <a class="n" data-link-type="idl-name" href="#enumdef-lockmode" id="ref-for-enumdef-lockmode①①">LockMode</a> <a class="nv" data-type="LockMode " href="#dom-lockinfo-mode"><code>mode</code></a>;
-  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString④①"><span class="kt">DOMString</span></a> <a class="nv" data-type="DOMString " href="#dom-lockinfo-clientid"><code>clientId</code></a>;
+  <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③①"><span class="kt">DOMString</span></a> <a class="nv" data-type="DOMString " href="#dom-lockinfo-clientid"><code>clientId</code></a>;
 };
 
 [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext②①">SecureContext</a>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①">Exposed</a>=(<span class="n">Window</span>,<span class="n">Worker</span>)]
 <span class="kt">interface</span> <a class="nv" href="#lock"><code>Lock</code></a> {
-  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑤①"><span class="kt">DOMString</span></a> <a class="nv" data-readonly="" data-type="DOMString" href="#dom-lock-name"><code>name</code></a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString④①"><span class="kt">DOMString</span></a> <a class="nv" data-readonly="" data-type="DOMString" href="#dom-lock-name"><code>name</code></a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#enumdef-lockmode" id="ref-for-enumdef-lockmode②①">LockMode</a> <a class="nv" data-readonly="" data-type="LockMode" href="#dom-lock-mode"><code>mode</code></a>;
 };
 

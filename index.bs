@@ -46,7 +46,7 @@ dl.domintro dt code {
 }
 </style>
 
-<img src="https://cdn.rawgit.com/inexorabletash/web-locks/master/logo-lock.svg"
+<img src="https://inexorabletash.github.io/web-locks/logo-lock.svg" alt="logo"
     style="height: 100px; width: 100px; position: absolute; right: 20px; top: 30px;">
 
 
@@ -307,8 +307,6 @@ interface LockManager {
                        LockGrantedCallback callback);
 
   Promise&lt;LockManagerSnapshot&gt; query();
-
-  void forceRelease(DOMString name);
 };
 
 callback LockGrantedCallback = Promise&lt;any&gt; (Lock lock);
