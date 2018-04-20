@@ -10,6 +10,7 @@ Editor: Joshua Bell, Google Inc. https://google.com, jsbell@google.com
 Group: WICG
 Test Suite: https://cs.chromium.org/chromium/src/third_party/WebKit/LayoutTests/http/tests/locks/
 Complain About: accidental-2119 yes
+Markup Shorthands: css no, markdown yes
 </pre>
 
 <pre class=anchors>
@@ -53,6 +54,8 @@ dl.domintro dt code {
 <!-- ====================================================================== -->
 
 # Introduction # {#introduction}
+
+*This section is non-normative.*
 
 A [=lock request=] is made by script for a particular [=resource name=] and [=/mode=]. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a lock request. A [=lock-concept|lock=] is a granted request; it has a [=resource name=] and [=/mode=]. It is represented as an object returned to script. As long as the lock is held it may prevent other lock requests from being granted (depending on the name and mode). A lock can be released by script, at which point it may allow other lock requests to be granted.
 
@@ -126,7 +129,9 @@ across [=browsing contexts=] within an [=/origin=]. Web applications are free to
 <aside class=note>
 To mimic transaction locking over named stores within a named
 database in [[IndexedDB-2]], an origin might compose resource names as:
-<code>encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)</code>
+<pre class=lang-javascript>
+encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)
+</pre>
 </aside>
 
 Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting these will cause an exception.
@@ -203,8 +208,8 @@ const p1 = navigator.locks.request('resource', lock => {
 });
 </pre>
 
-In the above example, <code>p1</code> is the [=lock-concept/released promise=] and <code>p2</code> is the [=lock-concept/waiting promise=].
-Note that in most code the callback would be implemented as an <code>async</code> function and the returned promise would be implicit, as in the following example:
+In the above example, `p1` is the [=lock-concept/released promise=] and `p2` is the [=lock-concept/waiting promise=].
+Note that in most code the callback would be implemented as an `async` function and the returned promise would be implicit, as in the following example:
 
 <pre class=lang-javascript>
 const p1 = navigator.locks.request('resource', async lock => {
@@ -212,8 +217,8 @@ const p1 = navigator.locks.request('resource', async lock => {
 });
 </pre>
 
-The [=lock-concept/waiting promise=] is not named in the above code, but is still present as the return value from the <code>async</code> callback.
-Further note that if the callback is not <code>async</code> and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; so the lock will be released in an upcoming microtask, and the [=lock-concept/released promise=] will also resolve in a subsequent microtask.
+The [=lock-concept/waiting promise=] is not named in the above code, but is still present as the return value from the `async` callback.
+Further note that if the callback is not `async` and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; so the lock will be released in an upcoming microtask, and the [=lock-concept/released promise=] will also resolve in a subsequent microtask.
 </aside>
 
 Each origin has an associated <dfn>held lock set</dfn> which is an [=/ordered set=] of [=lock-concept|locks=].
@@ -349,7 +354,7 @@ the state of the origin's [=lock manager=].
 
     The |name| (initial argument) is a [=resource name=] string.
 
-    The |callback| (final argument) is a [=callback function=] invoked with the {{Lock}} when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a non-<code>async</code> callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.
+    The |callback| (final argument) is a [=callback function=] invoked with the {{Lock}} when granted. This is specified by script, and is usually an `async` function. The lock is held until the callback function completes. If a non-`async` callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.
 
     The returned |promise| resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
 
@@ -413,7 +418,7 @@ try {
     <dt><var>options</var> . ifAvailable</dt>
     <dd>
 
-    If the {{LockOptions/ifAvailable}} option is <code>true</code>, then the lock is only granted if it can be without additional waiting. Note that this is still not <em>synchronous</em>; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, the callback is invoked with <code>null</code>. (Since this is expected, the request is <em>not</em> rejected.)
+    If the {{LockOptions/ifAvailable}} option is `true`, then the lock is only granted if it can be without additional waiting. Note that this is still not *synchronous*; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, the callback is invoked with `null`. (Since this is expected, the request is *not* rejected.)
 
     <pre class=lang-javascript>
 await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
@@ -428,7 +433,7 @@ await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
     </dd>
     <dt><var>options</var> . steal</dt>
     <dd>
-    If the {{LockOptions/steal}} option is <code>true</code>, then any held locks for the resource will be released (and the [=released promise=] of such locks will resolve with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
+    If the {{LockOptions/steal}} option is `true`, then any held locks for the resource will be released (and the [=released promise=] of such locks will resolve with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
 
     If a web application detects an unrecoverable state &mdash; for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding &mdash; then it can "steal" a lock using this option.
 
@@ -493,14 +498,14 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 }
     </pre>
 
-    The <code>clientId</code> field corresponds to a unique context (frame or worker), and is the same value returned by {{Client}}'s {{Client/id}} attribute.
+    The `clientId` field corresponds to a unique context (frame or worker), and is the same value returned by {{Client}}'s {{Client/id}} attribute.
 
     </dd>
   </dl>
 </div>
 
 <aside class=advisement>
-    This data is just a <em>snapshot</em> of the [=lock manager=] state at some point in time. Once the data is returned to script, the lock state might have changed.
+    This data is just a *snapshot* of the [=lock manager=] state at some point in time. By the time the data is returned to script, the actual lock state might have changed.
 </aside>
 
 
@@ -557,7 +562,7 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |cal
       1. [=list/Prepend=] |request| in |origin|'s [=lock request queue=].
    1. Otherwise, run these steps:
       1. If |ifAvailable| is true and |request| is not [=grantable=], then run these steps:
-         1. Let |r| be the result of invoking |callback| with <code>null</code> as the only argument.
+         1. Let |r| be the result of invoking |callback| with `null` as the only argument.
              <aside class=note>Note that |r| could be a regular completion, an abrupt completion, or an unresolved Promise.</aside>
          1. Resolve |promise| with |r| and abort these steps.
       1. [=queue/Enqueue=] |request| in |origin|'s [=lock request queue=].

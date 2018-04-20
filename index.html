@@ -1178,7 +1178,7 @@ Possible extra rowspan handling
 </style>
   <meta content="Bikeshed version 80294e12a0320826cbf4ded0dfff03de21c3a3d7" name="generator">
   <link href="https://inexorabletash.github.io/web-locks/" rel="canonical">
-  <meta content="ebd7e4859f634f94f96ffc71f948401d0e0492e6" name="document-revision">
+  <meta content="cdd7c030924660479ce19a6207580db9fcc97e45" name="document-revision">
   <link href="logo-lock.png" rel="icon">
 <style>
 dl.domintro dt {
@@ -1527,6 +1527,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
   <main>
    <p><img alt="logo" src="https://inexorabletash.github.io/web-locks/logo-lock.svg" style="height: 100px; width: 100px; position: absolute; right: 20px; top: 30px;"></p>
    <h2 class="heading settled" data-level="1" id="introduction"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#introduction"></a></h2>
+   <p><em>This section is non-normative.</em></p>
    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request">lock request</a> is made by script for a particular <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name">resource name</a> and <a data-link-type="dfn" href="#mode" id="ref-for-mode">mode</a>. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a lock request. A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept">lock</a> is a granted request; it has a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name①">resource name</a> and <a data-link-type="dfn" href="#mode" id="ref-for-mode①">mode</a>. It is represented as an object returned to script. As long as the lock is held it may prevent other lock requests from being granted (depending on the name and mode). A lock can be released by script, at which point it may allow other lock requests to be granted.</p>
    <p>The API provides optional functionality that may be used as needed, including:</p>
    <ul>
@@ -1552,8 +1553,8 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li data-md="">
      <p>The lock is automatically released when the task completes.</p>
    </ol>
-   <aside class="example" id="example-33ee9f53">
-    <a class="self-link" href="#example-33ee9f53"></a> 
+   <aside class="example" id="example-10133590">
+    <a class="self-link" href="#example-10133590"></a> 
     <p>A basic example of the API usage is as follows:</p>
 <pre class="lang-javascript highlight">navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'my_resource'</span><span class="p">,</span> async lock <span class="p">=></span> <span class="p">{</span>
    <span class="c1">// The lock has been acquired.</span>
@@ -1578,8 +1579,12 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="resource-name">resource name</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#javascript-string" id="ref-for-javascript-string">JavaScript string</a> chosen by the web application to represent an abstract resource.</p>
    <p>A resource name has no external meaning beyond the scheduling algorithm, but is global
 across <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context">browsing contexts</a> within an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin">origin</a>. Web applications are free to use any resource naming scheme.</p>
-   <aside class="note"> To mimic transaction locking over named stores within a named
-database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]</a>, an origin might compose resource names as: <code>encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)</code> </aside>
+   <aside class="note">
+     To mimic transaction locking over named stores within a named
+database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]</a>, an origin might compose resource names as: 
+<pre class="lang-javascript highlight">encodeURIComponent<span class="p">(</span>db_name<span class="p">)</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> encodeURIComponent<span class="p">(</span>store_name<span class="p">)</span>
+</pre>
+   </aside>
    <p>Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting these will cause an exception.</p>
    <h3 class="heading settled" data-level="2.2" id="lock-managers"><span class="secno">2.2. </span><span class="content">Lock Managers</span><a class="self-link" href="#lock-managers"></a></h3>
    <p>A user agent has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="lock-manager">lock manager</dfn> for each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①">origin</a>, which encapsulates the state of all <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①">locks</a> and <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request①">lock requests</a> for that origin.</p>
@@ -1755,7 +1760,7 @@ the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref
      <dd>
       <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request③">request()</a></code> method is called to request a lock.</p>
       <p>The <var>name</var> (initial argument) is a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource name</a> string.</p>
-      <p>The <var>callback</var> (final argument) is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-callback-function" id="ref-for-dfn-callback-function">callback function</a> invoked with the <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock①">Lock</a></code> when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a non-<code>async</code> callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.</p>
+      <p>The <var>callback</var> (final argument) is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-callback-function" id="ref-for-dfn-callback-function">callback function</a> invoked with the <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock①">Lock</a></code> when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a <code data-span-tag="non-">async</code> callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.</p>
       <p>The returned <var>promise</var> resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.</p>
       <p>Example:</p>
 <pre class="lang-javascript highlight"><span class="k">try</span> <span class="p">{</span>
@@ -1881,7 +1886,7 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
       <p>The <code>clientId</code> field corresponds to a unique context (frame or worker), and is the same value returned by <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#client" id="ref-for-client">Client</a></code>'s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#dom-client-id" id="ref-for-dom-client-id">id</a></code> attribute.</p>
     </dl>
    </div>
-   <aside class="advisement"> This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> state at some point in time. Once the data is returned to script, the lock state might have changed. </aside>
+   <aside class="advisement"> This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> state at some point in time. By the time the data is returned to script, the actual lock state might have changed. </aside>
    <div class="algorithm">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export="" id="dom-lockmanager-query"><code>query()</code></dfn> method, when invoked, must run these steps:</p>
     <ol>
