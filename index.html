@@ -1176,9 +1176,9 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 80294e12a0320826cbf4ded0dfff03de21c3a3d7" name="generator">
+  <meta content="Bikeshed version 150b038a54cb926cf8e3d36fd8b108c226cb94b8" name="generator">
   <link href="https://inexorabletash.github.io/web-locks/" rel="canonical">
-  <meta content="101f090a6346101f6dc0b50dd4bd4f36db9409c6" name="document-revision">
+  <meta content="387d7d7f63bf295dd98e998e5792ce473971f750" name="document-revision">
   <link href="logo-lock.png" rel="icon">
 <style>
 dl.domintro dt {
@@ -1440,7 +1440,7 @@ pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-04-24">24 April 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-05-08">8 May 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1564,8 +1564,8 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li data-md="">
      <p>The lock is automatically released when the task completes.</p>
    </ol>
-   <aside class="example" id="example-bacb7439">
-    <a class="self-link" href="#example-bacb7439"></a> 
+   <aside class="example" id="example-627b48da">
+    <a class="self-link" href="#example-627b48da"></a> 
     <p>A basic example of the API usage is as follows:</p>
 <pre class="lang-javascript highlight">navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'my_resource'</span><span class="p">,</span> async lock <span class="p">=></span> <span class="p">{</span>
    <span class="c1">// The lock has been acquired.</span>
@@ -1601,8 +1601,8 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="resource-name">resource name</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#javascript-string" id="ref-for-javascript-string">JavaScript string</a> chosen by the web application to represent an abstract resource.</p>
    <p>A resource name has no external meaning beyond the scheduling algorithm, but is global
 across <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context">browsing contexts</a> within an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin">origin</a>. Web applications are free to use any resource naming scheme.</p>
-   <aside class="example" id="example-a0ee0886">
-    <a class="self-link" href="#example-a0ee0886"></a> To mimic transaction locking over named stores within a named
+   <aside class="example" id="example-6d646fc3">
+    <a class="self-link" href="#example-6d646fc3"></a> To mimic transaction locking over named stores within a named
 database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]</a>, an origin might compose resource names as: 
 <pre class="lang-javascript highlight">encodeURIComponent<span class="p">(</span>db_name<span class="p">)</span> <span class="o">+</span> <span class="s1">'/'</span> <span class="o">+</span> encodeURIComponent<span class="p">(</span>store_name<span class="p">)</span>
 </pre>
@@ -1622,9 +1622,9 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]<
       <p>Agents that share a lock manager.</p>
     </ul>
    </aside>
-   <aside class="issue" id="issue-53ff2e23"><a class="self-link" href="#issue-53ff2e23"></a> Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. </aside>
+   <aside class="issue" id="issue-fb27f9c9"><a class="self-link" href="#issue-fb27f9c9"></a> Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. </aside>
    <h3 class="heading settled" data-level="2.3" id="modes-scheduling"><span class="secno">2.3. </span><span class="content">Modes and Scheduling</span><a class="self-link" href="#modes-scheduling"></a></h3>
-   <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="mode">mode</dfn> is either "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive">exclusive</a></code>" or "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared">shared</a></code>". Modes can be used to model the common <a href="http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock">readers-writer lock</a> pattern. If an "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive①">exclusive</a></code>" lock is held, then no other locks with that name can be granted. If "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared①">shared</a></code>" lock is held, other "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared②">shared</a></code>" locks with that name can be granted — but not any "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive②">exclusive</a></code>" locks. The default mode in the API is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive③">exclusive</a></code>".</p>
+   <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="mode">mode</dfn> is either "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive">exclusive</a></code>" or "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared">shared</a></code>". Modes can be used to model the common <a href="http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock">readers-writer lock</a> pattern. If an "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive①">exclusive</a></code>" lock is held, then no other locks with that name can be granted. If a "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared①">shared</a></code>" lock is held, other "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared②">shared</a></code>" locks with that name can be granted — but not any "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive②">exclusive</a></code>" locks. The default mode in the API is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive③">exclusive</a></code>".</p>
    <p>Additional properties may influence scheduling, such as timeouts, fairness, and so on.</p>
    <h3 class="heading settled" data-level="2.4" id="concept-lock"><span class="secno">2.4. </span><span class="content">Locks</span><a class="self-link" href="#concept-lock"></a></h3>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="lock-concept" data-noexport="" id="lock-concept">lock</dfn> represents exclusive access to a shared resource.</p>
@@ -1707,7 +1707,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
    <h3 class="heading settled" data-level="2.6" id="agent-integration"><span class="secno">2.6. </span><span class="content">Agent Integration</span><a class="self-link" href="#agent-integration"></a></h3>
    <div class="algorithm">
      When an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent④">agent</a> terminates, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps①">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue①">lock task queue</a>: 
-    <aside class="issue" id="issue-7c4846d1"><a class="self-link" href="#issue-7c4846d1"></a> Normative reference for <i>terminates</i>. </aside>
+    <aside class="issue" id="issue-9d75c9d8"><a class="self-link" href="#issue-9d75c9d8"></a> Normative reference for <i>terminates</i>. </aside>
     <ol>
      <li data-md="">
       <p>For each <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑦">lock request</a> <var>request</var> with <a data-link-type="dfn" href="#lock-concept-agent" id="ref-for-lock-concept-agent">agent</a> equal to the terminating agent:</p>
@@ -1748,7 +1748,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
 
 <span class="kt">callback</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="callback" data-export="" id="callbackdef-lockgrantedcallback"><code>LockGrantedCallback</code></dfn> = <span class="kt">Promise</span>&lt;<span class="kt">any</span>> (<a class="n" data-link-type="idl-name" href="#lock" id="ref-for-lock">Lock</a> <dfn class="nv idl-code" data-dfn-for="LockGrantedCallback" data-dfn-type="argument" data-export="" id="dom-lockgrantedcallback-lock"><code>lock</code><a class="self-link" href="#dom-lockgrantedcallback-lock"></a></dfn>);
 
-<span class="kt">enum</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="enum" data-export="" id="enumdef-lockmode"><code>LockMode</code></dfn> { <dfn class="s dfn-paneled idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;shared&quot;|shared" id="dom-lockmode-shared"><code>"shared"</code></dfn>, <dfn class="s dfn-paneled idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;exclusive&quot;|exclusive" id="dom-lockmode-exclusive"><code>"exclusive"</code></dfn> };
+<span class="kt">enum</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="enum" data-export="" id="enumdef-lockmode"><code>LockMode</code></dfn> { <dfn class="s dfn-paneled idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export="" id="dom-lockmode-shared"><code>"shared"</code></dfn>, <dfn class="s dfn-paneled idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export="" id="dom-lockmode-exclusive"><code>"exclusive"</code></dfn> };
 
 <span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-lockoptions"><code>LockOptions</code></dfn> {
   <a class="n" data-link-type="idl-name" href="#enumdef-lockmode" id="ref-for-enumdef-lockmode">LockMode</a> <dfn class="nv dfn-paneled idl-code" data-default="&quot;exclusive&quot;" data-dfn-for="LockOptions" data-dfn-type="dict-member" data-export="" data-type="LockMode " id="dom-lockoptions-mode"><code>mode</code></dfn> = "exclusive";
@@ -1777,7 +1777,7 @@ the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref
      <dd>
       <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request③">request()</a></code> method is called to request a lock.</p>
       <p>The <var>name</var> (initial argument) is a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource name</a> string.</p>
-      <p>The <var>callback</var> (final argument) is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-callback-function" id="ref-for-dfn-callback-function">callback function</a> invoked with the <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock①">Lock</a></code> when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a <code data-span-tag="non-">async</code> callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.</p>
+      <p>The <var>callback</var> (final argument) is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-callback-function" id="ref-for-dfn-callback-function">callback function</a> invoked with the <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock①">Lock</a></code> when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a non-async callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.</p>
       <p>The returned <var>promise</var> resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.</p>
       <p>Example:</p>
 <pre class="lang-javascript highlight"><span class="k">try</span> <span class="p">{</span>
@@ -2111,8 +2111,8 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
    <p><em>This section is non-normative.</em></p>
    <h3 class="heading settled" data-level="5.1" id="deadlocks"><span class="secno">5.1. </span><span class="content">Deadlocks</span><a class="self-link" href="#deadlocks"></a></h3>
    <p><a href="https://en.wikipedia.org/wiki/Deadlock">Deadlocks</a> are a concept in concurrent computing, and deadlocks scoped to a particular <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager③">lock manager</a> can be introduced by this API.</p>
-   <aside class="example" id="example-a1538dde">
-    <a class="self-link" href="#example-a1538dde"></a> An example of how deadlocks can be encountered through the use of this API is as follows. 
+   <aside class="example" id="example-1ffb2db3">
+    <a class="self-link" href="#example-1ffb2db3"></a> An example of how deadlocks can be encountered through the use of this API is as follows. 
     <p>Script 1:</p>
 <pre class="lang-javascript highlight">navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'A'</span><span class="p">,</span> async a <span class="p">=></span> <span class="p">{</span>
   await navigator<span class="p">.</span>locks<span class="p">.</span>request<span class="p">(</span><span class="s1">'B'</span><span class="p">,</span> async b <span class="p">=></span> <span class="p">{</span>
@@ -2130,8 +2130,8 @@ setTimeout<span class="p">(()</span> <span class="p">=></span> controller<span c
     <p>If script 1 and script 2 run close to the same time, there is a chance that script 1 will hold lock A and script 2 will hold lock B and neither can make further progress - a deadlock. This will not affect the user agent as a whole, pause the tab, or affect other script in the origin, but this particular functionality will be blocked.</p>
    </aside>
    <p>Preventing deadlocks requires care. One approach is to always acquire multiple locks in a strict order.</p>
-   <aside class="example" id="example-8caea5bb">
-    <a class="self-link" href="#example-8caea5bb"></a> 
+   <aside class="example" id="example-2f7ddd8e">
+    <a class="self-link" href="#example-2f7ddd8e"></a> 
     <p>A helper function such as the following could be used to request multiple locks in a consistent order.</p>
 <pre class="lang-javascript highlight">async <span class="kd">function</span> requestMultiple<span class="p">(</span>resources<span class="p">,</span> callback<span class="p">)</span> <span class="p">{</span>
   <span class="kr">const</span> sortedResources <span class="o">=</span> <span class="p">[...</span>resources<span class="p">];</span>
@@ -2344,7 +2344,6 @@ authoring advice.</p>
      <li><a href="#lock-concept-clientid">dfn for lock-concept</a><span>, in §2.4</span>
      <li><a href="#dom-lockinfo-clientid">dict-member for LockInfo</a><span>, in §3.2</span>
     </ul>
-   <li><a href="#dom-lockmode-exclusive">exclusive</a><span>, in §3.2</span>
    <li><a href="#dom-lockmode-exclusive">"exclusive"</a><span>, in §3.2</span>
    <li><a href="#lock-request-grantable">grantable</a><span>, in §2.5</span>
    <li><a href="#dom-lockmanagersnapshot-held">held</a><span>, in §3.2</span>
@@ -2398,7 +2397,6 @@ authoring advice.</p>
    <li><a href="#dom-lockmanager-request">request(name, callback)</a><span>, in §3.2</span>
    <li><a href="#dom-lockmanager-request-name-options-callback">request(name, options, callback)</a><span>, in §3.2</span>
    <li><a href="#resource-name">resource name</a><span>, in §2.1</span>
-   <li><a href="#dom-lockmode-shared">shared</a><span>, in §3.2</span>
    <li><a href="#dom-lockmode-shared">"shared"</a><span>, in §3.2</span>
    <li><a href="#dom-lockoptions-signal">signal</a><span>, in §3.2</span>
    <li><a href="#snapshot-the-lock-state">snapshot the lock state</a><span>, in §4.5</span>
@@ -2547,8 +2545,8 @@ authoring advice.</p>
 </pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
-   <div class="issue"> Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. <a href="#issue-53ff2e23"> ↵ </a></div>
-   <div class="issue"> Normative reference for <i>terminates</i>. <a href="#issue-7c4846d1"> ↵ </a></div>
+   <div class="issue"> Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. <a href="#issue-fb27f9c9"> ↵ </a></div>
+   <div class="issue"> Normative reference for <i>terminates</i>. <a href="#issue-9d75c9d8"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="lock-task-queue">
    <b><a href="#lock-task-queue">#lock-task-queue</a></b><b>Referenced in:</b>
@@ -2961,7 +2959,6 @@ authoring advice.</p>
                 // open the panel
                 var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
                 if(dfnPanel) {
-                    console.log(dfnPanel);
                     dfnPanel.classList.add("on");
                     var rect = el.getBoundingClientRect();
                     dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";

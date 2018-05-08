@@ -369,7 +369,7 @@ the state of the origin's [=lock manager=].
 
     The |name| (initial argument) is a [=resource name=] string.
 
-    The |callback| (final argument) is a [=callback function=] invoked with the {{Lock}} when granted. This is specified by script, and is usually an `async` function. The lock is held until the callback function completes. If a non-`async` callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.
+    The |callback| (final argument) is a [=callback function=] invoked with the {{Lock}} when granted. This is specified by script, and is usually an `async` function. The lock is held until the callback function completes. If a non-async callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.
 
     The returned |promise| resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
 
