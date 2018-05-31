@@ -47,7 +47,7 @@ dl.domintro dt code {
 }
 </style>
 
-<img src="https://inexorabletash.github.io/web-locks/logo-lock.svg" alt="logo"
+<img src="logo-lock.svg" alt="logo"
     style="height: 100px; width: 100px; position: absolute; right: 20px; top: 30px;">
 
 
