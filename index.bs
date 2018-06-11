@@ -311,7 +311,7 @@ WorkerNavigator includes NavigatorLocks;
 
 Each [=environment settings object=] has an associated {{LockManager}} object.
 
-The {{NavigatorLocks/locks}} attribute’s getter must return the [=context object=]’s [=relevant settings object=]’s {{LockManager}} object.
+The {{NavigatorLocks/locks}} attribute's getter must return the [=context object=]'s [=relevant settings object=]'s {{LockManager}} object.
 
 <!-- ====================================================================== -->
 
@@ -484,8 +484,8 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 
 1. Let |promise| be a new promise.
 1. If |options| was not passed, then let |options| be a new {{LockOptions}} dictionary with default members.
-1. Let |environment| be [=context object=]’s [=relevant settings object=].
-1. Let |origin| be |environment|’s [=/origin=].
+1. Let |environment| be [=context object=]'s [=relevant settings object=].
+1. Let |origin| be |environment|'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then reject |promise| with a "{{SecurityError}}" {{DOMException}}.
 1. Otherwise, if |name| starts with U+002D HYPHEN-MINUS (-), then reject |promise| with a "{{NotSupportedError}}" {{DOMException}}.
 1. Otherwise, if both |options|' |steal| dictionary member and |option|'s |ifAvailable| dictionary member are true, then reject |promise| with a "{{NotSupportedError}}" {{DOMException}}.
@@ -548,7 +548,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 The <dfn method for=LockManager>query()</dfn> method, when invoked, must run these steps:
 
 1. Let |promise| be a new promise.
-1. Let |origin| be [=context object=]’s [=relevant settings object=]’s [=/origin=].
+1. Let |origin| be [=context object=]'s [=relevant settings object=]'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then reject |promise| with a "{{SecurityError}}" {{DOMException}} and abort these steps.
 1. Otherwise, [=enqueue the following steps|enqueue the steps=] to [=snapshot the lock state=] for |origin| with |promise| to the [=lock task queue=].
 1. Return |promise|.
@@ -758,12 +758,42 @@ In practice, the use of multiple locks is rarely as straightforward &mdash; libr
 
 <!-- ====================================================================== -->
 
-# Privacy Considerations # {#privacy}
+# Security and Privacy Considerations # {#security-privacy}
+
+## Lock Scope ## {#security-scope}
 
 The definition of a [=lock manager=]'s scope is important as it defines a privacy boundary. Locks can be used as a communication channel, and must be no more privileged than other communication channels. Locks can be used as a state retention mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page and a cross-origin iframe in the same origin for privacy reasons must similarly partition broadcasting and locking.
 
 This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, or a broadcast is made signalling that updated data has been stored, all same-origin browsing contexts must observe the same state.
 
+## Private Browsing ## {#private-browsing}
+
+Every [private browsing](https://en.wikipedia.org/wiki/Privacy_mode) session is considered a separate user agent for the purposes of this API. That is, locks requested/held outside such a session have no affect on requested/held inside such a session, and vice versa. This prevents a website from determining that a session is "incognito" while also not allowing a communication mechanism between such sessions.
+
+## Implementation Risks ## {#implementation-risks}
+
+Implementations must ensure that locks do not span origins. Failure to do so would provide a side-channel for communication between script running in two origins, or allow one script in one origin to disrupt the behavior of another (e.g. denying service).
+
+## Checklist ## {#security-privacy-checklist}
+
+The W3C TAG has developed a [Self-Review Questionnaire: Security and Privacy](https://www.w3.org/TR/security-privacy-questionnaire/) for editors of specifications to informatively answer. Revisiting the questions here:
+
+* The specification does not deal with personally identifiable information, or high-value data.
+* No new state for an origin that persists across browsing sessions is introduced.
+* No new persistent, cross-origin state is exposed to the web.
+* No new data is exposed to an origin that it doesn't currently have access to (e.g. via {{BroadcastChannel}}.)
+* No new script execution/loading mechanisms are enabled.
+* This specification does not allow an origin access to any of the following:
+    * The user's location.
+    * Sensors on a user's device.
+    * Aspects of a user's local computing environment.
+    * Access to other devices.
+    * Any measure of control over a user agent's native UI.
+* No temporary identifiers to the web are exposed to the web. All [=resource names=] are provided by the web application itself.
+* Behavior in first-party and third-party contexts is not distinguished.
+* Behavior in the context of a user agent's "incognito" mode is described in [[#private-browsing]].
+* No data is persisted to a user's local device by this API.
+* This API does not allow downgrading default security characteristics.
 
 <!-- ====================================================================== -->
 
