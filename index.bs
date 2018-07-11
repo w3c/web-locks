@@ -9,7 +9,7 @@ Level: 1
 Editor: Joshua Bell, Google Inc. https://google.com, jsbell@google.com
 Group: WICG
 Test Suite: https://cs.chromium.org/chromium/src/third_party/WebKit/LayoutTests/http/tests/locks/
-Complain About: accidental-2119 yes
+Complain About: accidental-2119 yes, missing-example-ids yes
 Markup Shorthands: css no, markdown yes
 </pre>
 
@@ -83,7 +83,7 @@ The API is used as follows:
 1. Work is done while holding the lock in an asynchronous task.
 1. The lock is automatically released when the task completes.
 
-<aside class=example>
+<aside class=example id=example-basic-usage>
 
 A basic example of the API usage is as follows:
 
@@ -144,7 +144,7 @@ A <dfn>resource name</dfn> is a [=JavaScript string=] chosen by the web applicat
 A resource name has no external meaning beyond the scheduling algorithm, but is global
 across [=browsing contexts=] within an [=/origin=]. Web applications are free to use any resource naming scheme.
 
-<aside class=example>
+<aside class=example id=example-indexeddb-transactions>
 To mimic transaction locking over named stores within a named
 database in [[IndexedDB-2]], an origin might compose resource names as:
 <pre class=lang-javascript>
@@ -697,7 +697,7 @@ To <dfn>snapshot the lock state</dfn> for |origin| with |promise|:
 
 [Deadlocks](https://en.wikipedia.org/wiki/Deadlock) are a concept in concurrent computing, and deadlocks scoped to a particular [=lock manager=] can be introduced by this API.
 
-<aside class=example>
+<aside class=example id=example-deadlocks>
 An example of how deadlocks can be encountered through the use of this API is as follows.
 
 Script 1:
@@ -723,7 +723,7 @@ If script 1 and script 2 run close to the same time, there is a chance that scri
 
 Preventing deadlocks requires care. One approach is to always acquire multiple locks in a strict order.
 
-<aside class=example>
+<aside class=example id=example-request-multiple-locks>
 
 A helper function such as the following could be used to request multiple locks in a consistent order.
 
