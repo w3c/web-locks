@@ -166,9 +166,8 @@ Pages and workers ([=/agents=]) on a single [=/origin=] opened in the same user 
 
     There is an equivalence between the following:
 
-    * Agents that can communicate via {{BroadcastChannel}}
-    * Agents that share [[Storage]]; e.g. a per-origin [=localStorage|local storage area=] [[HTML]], set of [[IndexedDB-2#database-construct|databases]] [[IndexedDB-2]], or [[Service-Workers#cache-objects|caches]] [[Service-Workers]].
-    * Agents that share a lock manager.
+    * Agents that share a [=lock manager=].
+    * Agents that share a [=site storage unit=], i.e. a per-origin [=localStorage|local storage area=] [[HTML]], set of [[IndexedDB-2#database-construct|databases]] [[IndexedDB-2]], or [[Service-Workers#cache-objects|caches]] [[Service-Workers]].
 
 </aside>
 
@@ -285,7 +284,7 @@ When an [=/agent=] terminates, [=enqueue the following steps=] on the [=lock tas
 </aside>
 
 
-1. For each [=lock request=] |request| with [=lock-concept/agent=] equal to the terminating agent:
+1. For each [=lock request=] |request| with [=lock request/agent=] equal to the terminating agent:
     1. [=Abort the request=] |request|.
 1. For each [=lock-concept|lock=] |lock| with [=lock-concept/agent=] equal to the terminating agent:
     1. [=Release the lock=] |lock|.
@@ -762,9 +761,9 @@ In practice, the use of multiple locks is rarely as straightforward &mdash; libr
 
 ## Lock Scope ## {#security-scope}
 
-The definition of a [=lock manager=]'s scope is important as it defines a privacy boundary. Locks can be used as a communication channel, and must be no more privileged than other communication channels. Locks can be used as a state retention mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page and a cross-origin iframe in the same origin for privacy reasons must similarly partition broadcasting and locking.
+The definition of a [=lock manager=]'s scope is important as it defines a privacy boundary. Locks can be used as an ephemeral state retention mechanism and, like storage APIs, can be used as a communication mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page and a cross-origin iframe in the same origin for privacy reasons must similarly partition locking.
 
-This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, or a broadcast is made signalling that updated data has been stored, all same-origin browsing contexts must observe the same state.
+This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, all same-origin browsing contexts must observe the same state.
 
 ## Private Browsing ## {#private-browsing}
 
@@ -781,7 +780,7 @@ The W3C TAG has developed a [Self-Review Questionnaire: Security and Privacy](ht
 * The specification does not deal with personally identifiable information, or high-value data.
 * No new state for an origin that persists across browsing sessions is introduced.
 * No new persistent, cross-origin state is exposed to the web.
-* No new data is exposed to an origin that it doesn't currently have access to (e.g. via {{BroadcastChannel}}.)
+* No new data is exposed to an origin that it doesn't currently have access to (e.g. via polling [[IndexedDB-2]].)
 * No new script execution/loading mechanisms are enabled.
 * This specification does not allow an origin access to any of the following:
     * The user's location.
