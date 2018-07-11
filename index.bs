@@ -7,7 +7,7 @@ ED: https://inexorabletash.github.io/web-locks/
 Level: 1
 Editor: Joshua Bell, Google Inc. https://google.com, jsbell@google.com
 Group: WICG
-Test Suite: https://cs.chromium.org/chromium/src/third_party/WebKit/LayoutTests/http/tests/locks/
+Test Suite: https://github.com/web-platform-tests/wpt/tree/master/web-locks
 Favicon: logo-lock.png
 Complain About: accidental-2119 yes, missing-example-ids yes
 Markup Shorthands: css no, markdown yes
