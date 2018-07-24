@@ -20,7 +20,7 @@ The API is used as follows:
 navigator.locks.request('my_resource', async lock => {
    // The lock has been acquired.
    await do_something();
-   await do_somethng_else();
+   await do_something_else();
    // Now the lock will be released.
 });
 ```
