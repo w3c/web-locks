@@ -1,8 +1,8 @@
-<img src="https://inexorabletash.github.io/web-locks/logo-lock.svg" height="100" align=right>
+<img src="https://wicg.github.io/web-locks/logo-lock.svg" height="100" align=right>
 
 # Web Locks API
 
-Participate: [GitHub issues](https://github.com/inexorabletash/web-locks/issues) or [WICG Discourse](https://discourse.wicg.io/t/application-defined-locks/2581) &mdash;
+Participate: [GitHub issues](https://github.com/WICG/web-locks/issues) or [WICG Discourse](https://discourse.wicg.io/t/application-defined-locks/2581) &mdash;
 Tests: [web-platform-tests](https://github.com/web-platform-tests/wpt/tree/master/web-locks)
 
 ## Abstract
@@ -34,7 +34,7 @@ The API provides optional functionality that may be used as needed, including:
 Cooperative coordination takes place within the scope of same-origin [agents](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-formalism) (informally: frames/windows/tabs and workers); this may span multiple
 [agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism) (informally: process boundaries).
 
-In conjunction with this informal explainer, a [work-in-progress specification](https://inexorabletash.github.io/web-locks/) defines the precise behavior of the proposed API.
+In conjunction with this informal explainer, a [work-in-progress specification](https://wicg.github.io/web-locks/) defines the precise behavior of the proposed API.
 
 Previous discussions:
 * [Application defined "locks" [whatwg]](https://lists.w3.org/Archives/Public/public-whatwg-archive/2009Sep/0266.html)
@@ -185,7 +185,7 @@ await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
   // Use |lock| here.
 });
 ```
-See [issue #13](https://github.com/inexorabletash/web-locks/issues/13) for discussion of this option.
+See [issue #13](https://github.com/WICG/web-locks/issues/13) for discussion of this option.
 
 
 ## Management / Debugging
@@ -220,7 +220,7 @@ This data is just a _snapshot_ of the lock manager state at some point in time. 
 
 If a web application detects an unrecoverable state - for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding - it can "steal" a lock by passing this option to `request()`. When specified, any held locks for the resource will be released (and the _released promise_ of such locks will resolve with `AbortError`), and the request will be granted, preempting any queued requests for it. This should only be used in exceptional cases; any code running in tabs that assume they hold the lock will continue to execute, violating any guarantee of exclusive access to the resource.
 
-Discussion about this controversial option is at: https://github.com/inexorabletash/web-locks/issues/23
+Discussion about this controversial option is at: https://github.com/WICG/web-locks/issues/23
 
 
 ## Deadlocks
@@ -270,9 +270,9 @@ In practice, the use of multiple locks is rarely as straightforward - libraries 
 
 See issues for further discussion:
 
-* [Single vs multi-resource locks](https://github.com/inexorabletash/web-locks/issues/20)
-* [Deadlock detection and resolution?](https://github.com/inexorabletash/web-locks/issues/26)
-* [Avoid deadlocks entirely via crafty API design?](https://github.com/inexorabletash/web-locks/issues/28)
+* [Single vs multi-resource locks](https://github.com/WICG/web-locks/issues/20)
+* [Deadlock detection and resolution?](https://github.com/WICG/web-locks/issues/26)
+* [Avoid deadlocks entirely via crafty API design?](https://github.com/WICG/web-locks/issues/28)
 
 
 ## FAQ
@@ -335,7 +335,7 @@ around formalizing these states and notifications.
     });
 ```
 
- * To wrap a transaction around a lock is harder, since you can't keep an IndexedDB transaction alive arbitrarily. If [transactions supported `waitUntil()`](https://github.com/inexorabletash/indexeddb-promises) this would be possible:
+ * To wrap a transaction around a lock is harder, since you can't keep an IndexedDB transaction alive arbitrarily. If [transactions supported `waitUntil()`](https://github.com/WICG/indexeddb-promises) this would be possible:
 
 ```js
   const tx = db.transaction(...);
