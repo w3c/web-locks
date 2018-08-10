@@ -3,7 +3,7 @@
 # Web Locks API
 
 Participate: [GitHub issues](https://github.com/inexorabletash/web-locks/issues) or [WICG Discourse](https://discourse.wicg.io/t/application-defined-locks/2581) &mdash;
-Tests: [chromium](https://chromium.googlesource.com/chromium/src/+/fcde2906f4890b7f2d68a9a81d04ecc20de57fe5/third_party/WebKit/LayoutTests/http/tests/locks)
+Tests: [web-platform-tests](https://github.com/web-platform-tests/wpt/tree/master/web-locks)
 
 ## Abstract
 
