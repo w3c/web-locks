@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version 0af8ece51a58310888d9da3e5b2ebda903d17c18" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.png" rel="icon">
-  <meta content="dfac2ae13b356984424a2a2907b7915e0764790c" name="document-revision">
+  <meta content="0e7871689305cbb3c2d3fdd93d374ed9d74cfb06" name="document-revision">
 <style>
 dl.domintro dt {
     font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
@@ -1476,7 +1476,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-08-10">10 August 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-08-14">14 August 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1534,7 +1534,12 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
      <a href="#api"><span class="secno">3</span> <span class="content">API</span></a>
      <ol class="toc">
       <li><a href="#navigator-mixins"><span class="secno">3.1</span> <span class="content">Navigator Mixins</span></a>
-      <li><a href="#api-lock-manager"><span class="secno">3.2</span> <span class="content"><code class="idl"><span>LockManager</span></code> class</span></a>
+      <li>
+       <a href="#api-lock-manager"><span class="secno">3.2</span> <span class="content"><code class="idl"><span>LockManager</span></code> class</span></a>
+       <ol class="toc">
+        <li><a href="#api-lock-manager-request"><span class="secno">3.2.1</span> <span class="content">The <code class="idl"><span>request()</span></code> method</span></a>
+        <li><a href="#api-lock-manager-query"><span class="secno">3.2.2</span> <span class="content">The <code class="idl"><span>query()</span></code> method</span></a>
+       </ol>
       <li><a href="#api-lock"><span class="secno">3.3</span> <span class="content"><code class="idl"><span>Lock</span></code> class</span></a>
      </ol>
     <li>
@@ -1811,12 +1816,13 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
 </pre>
    <p>A <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager⑤">LockManager</a></code> instance allows script to make <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑧">lock requests</a> and query
 the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a>.</p>
+   <h4 class="heading settled" data-level="3.2.1" id="api-lock-manager-request"><span class="secno">3.2.1. </span><span class="content">The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request②">request()</a></code> method</span><a class="self-link" href="#api-lock-manager-request"></a></h4>
    <div class="note" role="note">
     <dl class="domintro">
-     <dt><var>promise</var> = navigator . locks . <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request②">request</a></code>(<var>name</var>, <var>callback</var>)
+     <dt><var>promise</var> = navigator . locks . <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request③">request</a></code>(<var>name</var>, <var>callback</var>)
      <dt><var>promise</var> = navigator . locks . <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request-name-options-callback" id="ref-for-dom-lockmanager-request-name-options-callback①">request</a></code>(<var>name</var>, <var>options</var>, <var>callback</var>)
      <dd>
-      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request③">request()</a></code> method is called to request a lock.</p>
+      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request④">request()</a></code> method is called to request a lock.</p>
       <p>The <var>name</var> (initial argument) is a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource name</a> string.</p>
       <p>The <var>callback</var> (final argument) is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-callback-function" id="ref-for-dfn-callback-function">callback function</a> invoked with the <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock①">Lock</a></code> when granted. This is specified by script, and is usually an <code>async</code> function. The lock is held until the callback function completes. If a non-async callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.</p>
       <p>The returned <var>promise</var> resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.</p>
@@ -1927,11 +1933,12 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
       <p>Return <var>promise</var>.</p>
     </ol>
    </div>
+   <h4 class="heading settled" data-level="3.2.2" id="api-lock-manager-query"><span class="secno">3.2.2. </span><span class="content">The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query①">query()</a></code> method</span><a class="self-link" href="#api-lock-manager-query"></a></h4>
    <div class="note" role="note">
     <dl class="domintro">
-     <dt><var>state</var> = await navigator . locks . <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query①">query</a></code>()
+     <dt><var>state</var> = await navigator . locks . <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query②">query</a></code>()
      <dd>
-      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query②">query()</a></code> method can be used to produce a snapshot of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.</p>
+      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query③">query()</a></code> method can be used to produce a snapshot of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.</p>
       <p>The returned promise resolves to <var>state</var>, a plain-old-data structure (i.e. JSON-like data) with this form:</p>
 <pre class="lang-javascript highlight"><c- p>{</c->
   held<c- o>:</c-> <c- p>[</c->
@@ -2474,12 +2481,12 @@ authoring advice.</p>
    <li><a href="#dom-lockmanagersnapshot-pending">pending</a><span>, in §3.2</span>
    <li><a href="#process-the-lock-request-queue">process the lock request queue</a><span>, in §4.4</span>
    <li><a href="#lock-request-promise">promise</a><span>, in §2.5</span>
-   <li><a href="#dom-lockmanager-query">query()</a><span>, in §3.2</span>
+   <li><a href="#dom-lockmanager-query">query()</a><span>, in §3.2.2</span>
    <li><a href="#lock-concept-released-promise">released promise</a><span>, in §2.4</span>
    <li><a href="#release-the-lock">release the lock</a><span>, in §4.2</span>
    <li><a href="#request-a-lock">request a lock</a><span>, in §4.1</span>
-   <li><a href="#dom-lockmanager-request">request(name, callback)</a><span>, in §3.2</span>
-   <li><a href="#dom-lockmanager-request-name-options-callback">request(name, options, callback)</a><span>, in §3.2</span>
+   <li><a href="#dom-lockmanager-request">request(name, callback)</a><span>, in §3.2.1</span>
+   <li><a href="#dom-lockmanager-request-name-options-callback">request(name, options, callback)</a><span>, in §3.2.1</span>
    <li><a href="#resource-name">resource name</a><span>, in §2.1</span>
    <li><a href="#dom-lockmode-shared">"shared"</a><span>, in §3.2</span>
    <li><a href="#dom-lockoptions-signal">signal</a><span>, in §3.2</span>
@@ -2490,26 +2497,28 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-abortsignal">
    <a href="https://dom.spec.whatwg.org/#abortsignal">https://dom.spec.whatwg.org/#abortsignal</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abortsignal">3.2. LockManager class</a> <a href="#ref-for-abortsignal①">(2)</a>
+    <li><a href="#ref-for-abortsignal">3.2. LockManager class</a>
+    <li><a href="#ref-for-abortsignal①">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-abortsignal-aborted-flag">
    <a href="https://dom.spec.whatwg.org/#abortsignal-aborted-flag">https://dom.spec.whatwg.org/#abortsignal-aborted-flag</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abortsignal-aborted-flag">3.2. LockManager class</a>
+    <li><a href="#ref-for-abortsignal-aborted-flag">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-abortsignal-add">
    <a href="https://dom.spec.whatwg.org/#abortsignal-add">https://dom.spec.whatwg.org/#abortsignal-add</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abortsignal-add">3.2. LockManager class</a>
+    <li><a href="#ref-for-abortsignal-add">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-context-object">
    <a href="https://dom.spec.whatwg.org/#context-object">https://dom.spec.whatwg.org/#context-object</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-context-object">3.1. Navigator Mixins</a>
-    <li><a href="#ref-for-context-object①">3.2. LockManager class</a> <a href="#ref-for-context-object②">(2)</a>
+    <li><a href="#ref-for-context-object①">3.2.1. The request() method</a>
+    <li><a href="#ref-for-context-object②">3.2.2. The query() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-agent">
@@ -2519,7 +2528,7 @@ authoring advice.</p>
     <li><a href="#ref-for-agent②">2.2. Lock Managers</a>
     <li><a href="#ref-for-agent③">2.4. Locks</a>
     <li><a href="#ref-for-agent④">2.6. Agent Integration</a>
-    <li><a href="#ref-for-agent⑤">3.2. LockManager class</a>
+    <li><a href="#ref-for-agent⑤">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-navigator">
@@ -2552,7 +2561,8 @@ authoring advice.</p>
    <ul>
     <li><a href="#ref-for-enqueue-the-following-steps">2.4. Locks</a>
     <li><a href="#ref-for-enqueue-the-following-steps①">2.6. Agent Integration</a>
-    <li><a href="#ref-for-enqueue-the-following-steps②">3.2. LockManager class</a> <a href="#ref-for-enqueue-the-following-steps③">(2)</a>
+    <li><a href="#ref-for-enqueue-the-following-steps②">3.2.1. The request() method</a>
+    <li><a href="#ref-for-enqueue-the-following-steps③">3.2.2. The query() method</a>
     <li><a href="#ref-for-enqueue-the-following-steps④">4.1. Request a lock</a>
    </ul>
   </aside>
@@ -2565,7 +2575,7 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-concept-environment-id">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id">https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-environment-id">3.2. LockManager class</a>
+    <li><a href="#ref-for-concept-environment-id">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-localstorage">
@@ -2577,7 +2587,8 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-concept-origin-opaque">
    <a href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque">https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-origin-opaque">3.2. LockManager class</a> <a href="#ref-for-concept-origin-opaque①">(2)</a>
+    <li><a href="#ref-for-concept-origin-opaque">3.2.1. The request() method</a>
+    <li><a href="#ref-for-concept-origin-opaque①">3.2.2. The query() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-origin">
@@ -2586,14 +2597,16 @@ authoring advice.</p>
     <li><a href="#ref-for-concept-origin">2.1. Resources Names</a>
     <li><a href="#ref-for-concept-origin①">2.2. Lock Managers</a> <a href="#ref-for-concept-origin②">(2)</a>
     <li><a href="#ref-for-concept-origin③">2.4. Locks</a>
-    <li><a href="#ref-for-concept-origin④">3.2. LockManager class</a> <a href="#ref-for-concept-origin⑤">(2)</a>
+    <li><a href="#ref-for-concept-origin④">3.2.1. The request() method</a>
+    <li><a href="#ref-for-concept-origin⑤">3.2.2. The query() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-relevant-settings-object">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object">https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-relevant-settings-object">3.1. Navigator Mixins</a>
-    <li><a href="#ref-for-relevant-settings-object①">3.2. LockManager class</a> <a href="#ref-for-relevant-settings-object②">(2)</a>
+    <li><a href="#ref-for-relevant-settings-object①">3.2.1. The request() method</a>
+    <li><a href="#ref-for-relevant-settings-object②">3.2.2. The query() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-starting-a-new-parallel-queue">
@@ -2673,13 +2686,13 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-client">
    <a href="https://w3c.github.io/ServiceWorker/#client">https://w3c.github.io/ServiceWorker/#client</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-client">3.2. LockManager class</a>
+    <li><a href="#ref-for-client">3.2.2. The query() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-client-id">
    <a href="https://w3c.github.io/ServiceWorker/#dom-client-id">https://w3c.github.io/ServiceWorker/#dom-client-id</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-client-id">3.2. LockManager class</a>
+    <li><a href="#ref-for-dom-client-id">3.2.2. The query() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-site-storage-unit">
@@ -2691,14 +2704,15 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-aborterror">
    <a href="https://heycam.github.io/webidl/#aborterror">https://heycam.github.io/webidl/#aborterror</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-aborterror">3.2. LockManager class</a> <a href="#ref-for-aborterror①">(2)</a> <a href="#ref-for-aborterror②">(3)</a> <a href="#ref-for-aborterror③">(4)</a>
+    <li><a href="#ref-for-aborterror">3.2.1. The request() method</a> <a href="#ref-for-aborterror①">(2)</a> <a href="#ref-for-aborterror②">(3)</a> <a href="#ref-for-aborterror③">(4)</a>
     <li><a href="#ref-for-aborterror④">4.1. Request a lock</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMException">
    <a href="https://heycam.github.io/webidl/#idl-DOMException">https://heycam.github.io/webidl/#idl-DOMException</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-DOMException">3.2. LockManager class</a> <a href="#ref-for-idl-DOMException①">(2)</a> <a href="#ref-for-idl-DOMException②">(3)</a> <a href="#ref-for-idl-DOMException③">(4)</a> <a href="#ref-for-idl-DOMException④">(5)</a> <a href="#ref-for-idl-DOMException⑤">(6)</a> <a href="#ref-for-idl-DOMException⑥">(7)</a>
+    <li><a href="#ref-for-idl-DOMException">3.2.1. The request() method</a> <a href="#ref-for-idl-DOMException①">(2)</a> <a href="#ref-for-idl-DOMException②">(3)</a> <a href="#ref-for-idl-DOMException③">(4)</a> <a href="#ref-for-idl-DOMException④">(5)</a> <a href="#ref-for-idl-DOMException⑤">(6)</a>
+    <li><a href="#ref-for-idl-DOMException⑥">3.2.2. The query() method</a>
     <li><a href="#ref-for-idl-DOMException⑦">4.1. Request a lock</a>
    </ul>
   </aside>
@@ -2718,7 +2732,7 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-notsupportederror">
    <a href="https://heycam.github.io/webidl/#notsupportederror">https://heycam.github.io/webidl/#notsupportederror</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-notsupportederror">3.2. LockManager class</a> <a href="#ref-for-notsupportederror①">(2)</a> <a href="#ref-for-notsupportederror②">(3)</a> <a href="#ref-for-notsupportederror③">(4)</a>
+    <li><a href="#ref-for-notsupportederror">3.2.1. The request() method</a> <a href="#ref-for-notsupportederror①">(2)</a> <a href="#ref-for-notsupportederror②">(3)</a> <a href="#ref-for-notsupportederror③">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-SecureContext">
@@ -2732,7 +2746,8 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-securityerror">
    <a href="https://heycam.github.io/webidl/#securityerror">https://heycam.github.io/webidl/#securityerror</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-securityerror">3.2. LockManager class</a> <a href="#ref-for-securityerror①">(2)</a>
+    <li><a href="#ref-for-securityerror">3.2.1. The request() method</a>
+    <li><a href="#ref-for-securityerror①">3.2.2. The query() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-boolean">
@@ -2744,7 +2759,7 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-dfn-callback-function">
    <a href="https://heycam.github.io/webidl/#dfn-callback-function">https://heycam.github.io/webidl/#dfn-callback-function</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dfn-callback-function">3.2. LockManager class</a>
+    <li><a href="#ref-for-dfn-callback-function">3.2.1. The request() method</a>
    </ul>
   </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
@@ -2858,7 +2873,7 @@ authoring advice.</p>
                        <a class="n" data-link-type="idl-name" href="#dictdef-lockoptions" id="ref-for-dictdef-lockoptions②"><c- n>LockOptions</c-></a> <a href="#dom-lockmanager-request-name-options-callback-options"><code><c- g>options</c-></code></a>,
                        <a class="n" data-link-type="idl-name" href="#callbackdef-lockgrantedcallback" id="ref-for-callbackdef-lockgrantedcallback①①"><c- n>LockGrantedCallback</c-></a> <a href="#dom-lockmanager-request-name-options-callback-callback"><code><c- g>callback</c-></code></a>);
 
-  <c- b>Promise</c->&lt;<a class="n" data-link-type="idl-name" href="#dictdef-lockmanagersnapshot" id="ref-for-dictdef-lockmanagersnapshot②"><c- n>LockManagerSnapshot</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query③"><c- g>query</c-></a>();
+  <c- b>Promise</c->&lt;<a class="n" data-link-type="idl-name" href="#dictdef-lockmanagersnapshot" id="ref-for-dictdef-lockmanagersnapshot②"><c- n>LockManagerSnapshot</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query④"><c- g>query</c-></a>();
 };
 
 <c- b>callback</c-> <a href="#callbackdef-lockgrantedcallback"><code><c- g>LockGrantedCallback</c-></code></a> = <c- b>Promise</c->&lt;<c- b>any</c->> (<a class="n" data-link-type="idl-name" href="#lock" id="ref-for-lock⑤"><c- n>Lock</c-></a> <a href="#dom-lockgrantedcallback-lock"><code><c- g>lock</c-></code></a>);
@@ -2900,7 +2915,8 @@ authoring advice.</p>
    <ul>
     <li><a href="#ref-for-lock-task-queue">2.4. Locks</a>
     <li><a href="#ref-for-lock-task-queue①">2.6. Agent Integration</a>
-    <li><a href="#ref-for-lock-task-queue②">3.2. LockManager class</a> <a href="#ref-for-lock-task-queue③">(2)</a>
+    <li><a href="#ref-for-lock-task-queue②">3.2.1. The request() method</a>
+    <li><a href="#ref-for-lock-task-queue③">3.2.2. The query() method</a>
     <li><a href="#ref-for-lock-task-queue④">4.1. Request a lock</a>
     <li><a href="#ref-for-lock-task-queue⑤">4.2. Release a lock</a>
     <li><a href="#ref-for-lock-task-queue⑥">4.3. Abort a request</a>
@@ -2913,7 +2929,7 @@ authoring advice.</p>
    <ul>
     <li><a href="#ref-for-resource-name">1. Introduction</a> <a href="#ref-for-resource-name①">(2)</a>
     <li><a href="#ref-for-resource-name②">2.4. Locks</a>
-    <li><a href="#ref-for-resource-name③">3.2. LockManager class</a>
+    <li><a href="#ref-for-resource-name③">3.2.1. The request() method</a>
     <li><a href="#ref-for-resource-name④">6.4. Checklist</a>
    </ul>
   </aside>
@@ -2921,7 +2937,8 @@ authoring advice.</p>
    <b><a href="#lock-manager">#lock-manager</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-lock-manager">2.2. Lock Managers</a>
-    <li><a href="#ref-for-lock-manager①">3.2. LockManager class</a> <a href="#ref-for-lock-manager②">(2)</a> <a href="#ref-for-lock-manager③">(3)</a>
+    <li><a href="#ref-for-lock-manager①">3.2. LockManager class</a>
+    <li><a href="#ref-for-lock-manager②">3.2.2. The query() method</a> <a href="#ref-for-lock-manager③">(2)</a>
     <li><a href="#ref-for-lock-manager④">5.1. Deadlocks</a>
     <li><a href="#ref-for-lock-manager⑤">6.1. Lock Scope</a>
    </ul>
@@ -2997,7 +3014,7 @@ authoring advice.</p>
    <b><a href="#lock-concept-released-promise">#lock-concept-released-promise</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-lock-concept-released-promise">2.4. Locks</a> <a href="#ref-for-lock-concept-released-promise①">(2)</a> <a href="#ref-for-lock-concept-released-promise②">(3)</a> <a href="#ref-for-lock-concept-released-promise③">(4)</a>
-    <li><a href="#ref-for-lock-concept-released-promise④">3.2. LockManager class</a>
+    <li><a href="#ref-for-lock-concept-released-promise④">3.2.1. The request() method</a>
     <li><a href="#ref-for-lock-concept-released-promise⑤">4.1. Request a lock</a>
     <li><a href="#ref-for-lock-concept-released-promise⑥">4.4. Process a lock request queue</a>
    </ul>
@@ -3121,7 +3138,7 @@ authoring advice.</p>
     <li><a href="#ref-for-dom-lockmode-shared">2.3. Modes and Scheduling</a> <a href="#ref-for-dom-lockmode-shared①">(2)</a> <a href="#ref-for-dom-lockmode-shared②">(3)</a>
     <li><a href="#ref-for-dom-lockmode-shared③">2.4. Locks</a>
     <li><a href="#ref-for-dom-lockmode-shared④">2.5. Lock Requests</a>
-    <li><a href="#ref-for-dom-lockmode-shared⑤">3.2. LockManager class</a> <a href="#ref-for-dom-lockmode-shared⑥">(2)</a>
+    <li><a href="#ref-for-dom-lockmode-shared⑤">3.2.1. The request() method</a> <a href="#ref-for-dom-lockmode-shared⑥">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-lockmode-exclusive">
@@ -3130,37 +3147,38 @@ authoring advice.</p>
     <li><a href="#ref-for-dom-lockmode-exclusive">2.3. Modes and Scheduling</a> <a href="#ref-for-dom-lockmode-exclusive①">(2)</a> <a href="#ref-for-dom-lockmode-exclusive②">(3)</a> <a href="#ref-for-dom-lockmode-exclusive③">(4)</a>
     <li><a href="#ref-for-dom-lockmode-exclusive④">2.4. Locks</a>
     <li><a href="#ref-for-dom-lockmode-exclusive⑤">2.5. Lock Requests</a> <a href="#ref-for-dom-lockmode-exclusive⑥">(2)</a> <a href="#ref-for-dom-lockmode-exclusive⑦">(3)</a>
-    <li><a href="#ref-for-dom-lockmode-exclusive⑧">3.2. LockManager class</a> <a href="#ref-for-dom-lockmode-exclusive⑨">(2)</a> <a href="#ref-for-dom-lockmode-exclusive①⓪">(3)</a>
+    <li><a href="#ref-for-dom-lockmode-exclusive⑧">3.2.1. The request() method</a> <a href="#ref-for-dom-lockmode-exclusive⑨">(2)</a> <a href="#ref-for-dom-lockmode-exclusive①⓪">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-lockoptions">
    <b><a href="#dictdef-lockoptions">#dictdef-lockoptions</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dictdef-lockoptions">3.2. LockManager class</a> <a href="#ref-for-dictdef-lockoptions①">(2)</a>
+    <li><a href="#ref-for-dictdef-lockoptions">3.2. LockManager class</a>
+    <li><a href="#ref-for-dictdef-lockoptions①">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-lockoptions-mode">
    <b><a href="#dom-lockoptions-mode">#dom-lockoptions-mode</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-lockoptions-mode">3.2. LockManager class</a>
+    <li><a href="#ref-for-dom-lockoptions-mode">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-lockoptions-ifavailable">
    <b><a href="#dom-lockoptions-ifavailable">#dom-lockoptions-ifavailable</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-lockoptions-ifavailable">3.2. LockManager class</a>
+    <li><a href="#ref-for-dom-lockoptions-ifavailable">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-lockoptions-steal">
    <b><a href="#dom-lockoptions-steal">#dom-lockoptions-steal</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-lockoptions-steal">3.2. LockManager class</a> <a href="#ref-for-dom-lockoptions-steal①">(2)</a>
+    <li><a href="#ref-for-dom-lockoptions-steal">3.2.1. The request() method</a> <a href="#ref-for-dom-lockoptions-steal①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-lockoptions-signal">
    <b><a href="#dom-lockoptions-signal">#dom-lockoptions-signal</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-lockoptions-signal">3.2. LockManager class</a>
+    <li><a href="#ref-for-dom-lockoptions-signal">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-lockmanagersnapshot">
@@ -3211,25 +3229,29 @@ authoring advice.</p>
    <b><a href="#dom-lockmanager-request">#dom-lockmanager-request</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-lockmanager-request">2.4. Locks</a>
-    <li><a href="#ref-for-dom-lockmanager-request①">3.2. LockManager class</a> <a href="#ref-for-dom-lockmanager-request②">(2)</a> <a href="#ref-for-dom-lockmanager-request③">(3)</a>
+    <li><a href="#ref-for-dom-lockmanager-request①">3.2. LockManager class</a>
+    <li><a href="#ref-for-dom-lockmanager-request②">3.2.1. The request() method</a> <a href="#ref-for-dom-lockmanager-request③">(2)</a> <a href="#ref-for-dom-lockmanager-request④">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-lockmanager-request-name-options-callback">
    <b><a href="#dom-lockmanager-request-name-options-callback">#dom-lockmanager-request-name-options-callback</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-lockmanager-request-name-options-callback">3.2. LockManager class</a> <a href="#ref-for-dom-lockmanager-request-name-options-callback①">(2)</a>
+    <li><a href="#ref-for-dom-lockmanager-request-name-options-callback">3.2. LockManager class</a>
+    <li><a href="#ref-for-dom-lockmanager-request-name-options-callback①">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-lockmanager-query">
    <b><a href="#dom-lockmanager-query">#dom-lockmanager-query</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-lockmanager-query">3.2. LockManager class</a> <a href="#ref-for-dom-lockmanager-query①">(2)</a> <a href="#ref-for-dom-lockmanager-query②">(3)</a>
+    <li><a href="#ref-for-dom-lockmanager-query">3.2. LockManager class</a>
+    <li><a href="#ref-for-dom-lockmanager-query①">3.2.2. The query() method</a> <a href="#ref-for-dom-lockmanager-query②">(2)</a> <a href="#ref-for-dom-lockmanager-query③">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock">
    <b><a href="#lock">#lock</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-lock">3.2. LockManager class</a> <a href="#ref-for-lock①">(2)</a>
+    <li><a href="#ref-for-lock">3.2. LockManager class</a>
+    <li><a href="#ref-for-lock①">3.2.1. The request() method</a>
     <li><a href="#ref-for-lock②">3.3. Lock class</a> <a href="#ref-for-lock③">(2)</a>
     <li><a href="#ref-for-lock④">4.4. Process a lock request queue</a>
    </ul>
@@ -3249,7 +3271,7 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="request-a-lock">
    <b><a href="#request-a-lock">#request-a-lock</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-request-a-lock">3.2. LockManager class</a>
+    <li><a href="#ref-for-request-a-lock">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="release-the-lock">
@@ -3263,7 +3285,7 @@ authoring advice.</p>
    <b><a href="#abort-the-request">#abort-the-request</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-abort-the-request">2.6. Agent Integration</a>
-    <li><a href="#ref-for-abort-the-request①">3.2. LockManager class</a>
+    <li><a href="#ref-for-abort-the-request①">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="process-the-lock-request-queue">
@@ -3277,7 +3299,7 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="snapshot-the-lock-state">
    <b><a href="#snapshot-the-lock-state">#snapshot-the-lock-state</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-snapshot-the-lock-state">3.2. LockManager class</a>
+    <li><a href="#ref-for-snapshot-the-lock-state">3.2.2. The query() method</a>
    </ul>
   </aside>
 <script>/* script-dfn-panel */
