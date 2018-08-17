@@ -7,6 +7,7 @@ This document proposes a new web platform API that allows script to asynchronous
 [![Build Status](https://travis-ci.org/WICG/web-locks.svg?branch=master)](https://travis-ci.org/WICG/web-locks)
 
 Participate: [GitHub issues](https://github.com/WICG/web-locks/issues) or [WICG Discourse](https://discourse.wicg.io/t/application-defined-locks/2581) &mdash;
+Docs: [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) &mdash;
 Tests: [web-platform-tests](https://github.com/web-platform-tests/wpt/tree/master/web-locks)
 
 ## Introduction
