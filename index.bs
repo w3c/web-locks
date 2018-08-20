@@ -315,7 +315,7 @@ The {{NavigatorLocks/locks}} attribute's getter must return the [=context object
 <!-- ====================================================================== -->
 
 <pre class=idl>
-[SecureContext]
+[SecureContext, Exposed=(Window,Worker)]
 interface LockManager {
   Promise&lt;any&gt; request(DOMString name,
                        LockGrantedCallback callback);
