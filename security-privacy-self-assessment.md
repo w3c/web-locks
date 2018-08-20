@@ -50,11 +50,11 @@ No. All identifiers (the arbitrary resource names) are provided by the web appli
 
 ### 3.13 Does this specification distinguish between behavior in first-party and third-party contexts?
 
-No.
+Depending on the browser, yes. The scope of locks is expressly tied to the scope of storage. Browsers that partition storage separately for origins depending on first-party or third-party context (ee.g. "double keying") would reflect that for locks as well.
 
 ### 3.14 How should this specification work in the context of a user agent’s "incognito" mode?
 
-The collection of agents within an incognito browsing session behave as a separate user agent for the purposes of this API. 
+The collection of agents within an incognito browsing session behave as a separate user agent for the purposes of this API.
 That is, locks requested/held outside such a session have no affect on requested/held inside such a session, and vice versa.
 This prevents a website from determining that a session is "incognito" while also not allowing a communication mechanism between such sessions.
 
