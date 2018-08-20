@@ -767,7 +767,7 @@ In practice, the use of multiple locks is rarely as straightforward &mdash; libr
 ## Lock Scope ## {#security-scope}
 <!-- ====================================================================== -->
 
-The definition of a [=lock manager=]'s scope is important as it defines a privacy boundary. Locks can be used as an ephemeral state retention mechanism and, like storage APIs, can be used as a communication mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page and a cross-origin iframe in the same origin for privacy reasons must similarly partition locking.
+The definition of a [=lock manager=]'s scope is important as it defines a privacy boundary. Locks can be used as an ephemeral state retention mechanism and, like storage APIs, can be used as a communication mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page (first-party) and a cross-origin iframe (third-party) in the same origin for privacy reasons must similarly partition locking.
 
 This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, all same-origin browsing contexts must observe the same state.
 
@@ -801,7 +801,7 @@ The W3C TAG has developed a [Self-Review Questionnaire: Security and Privacy](ht
     * Access to other devices.
     * Any measure of control over a user agent's native UI.
 * No temporary identifiers to the web are exposed to the web. All [=resource names=] are provided by the web application itself.
-* Behavior in first-party and third-party contexts is not distinguished.
+* Behavior in first-party and third-party contexts is distguished in a user agent if storage is distinguished. See [[#security-scope]].
 * Behavior in the context of a user agent's "incognito" mode is described in [[#private-browsing]].
 * No data is persisted to a user's local device by this API.
 * This API does not allow downgrading default security characteristics.

@@ -64,9 +64,7 @@ No.
 
 ### 3.16 Does this specification have a "Security Considerations" and "Privacy Considerations" section?
 
-_Not yet!_
-
-**TODO: Make sure this is included when the spec is written.**
+Yes.
 
 ### 3.17 Does this specification allow downgrading default security characteristics?
 
