@@ -87,18 +87,18 @@ The API is used as follows:
 
 A basic example of the API usage is as follows:
 
-<xmp class=lang-javascript>
+```js
 navigator.locks.request('my_resource', async lock => {
    // The lock has been acquired.
    await do_something();
    await do_somethng_else();
    // Now the lock will be released.
 });
-</xmp>
+```
 
 Within an asynchronous function, the request itself can be awaited:
 
-<xmp class=lang-javascript>
+```js
 // Before requesting the lock.
 await navigator.locks.request('my_resource', async lock => {
    // The lock has been acquired.
@@ -106,7 +106,7 @@ await navigator.locks.request('my_resource', async lock => {
    // Now the lock will be released.
 });
 // After the lock has been released
-</xmp>
+```
 
 </aside>
 
@@ -145,9 +145,9 @@ across [=browsing contexts=] within an [=/origin=]. Web applications are free to
 <aside class=example id=example-indexeddb-transactions>
 To mimic transaction locking over named stores within a named
 database in [[IndexedDB-2]], an origin might compose resource names as:
-<xmp class=lang-javascript>
+```js
 encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)
-</xmp>
+```
 </aside>
 
 Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting these will cause an exception.
@@ -211,23 +211,23 @@ There are two promises associated with a lock's lifecycle:
 * A promise provided either implicitly or explicitly by the callback when the lock is granted which determines how long the lock is held. When this promise settles, the lock is released. This is known as the lock's [=lock-concept/waiting promise=].
 * A promise returned by {{LockManager}}'s {{LockManager/request(name, callback)|request()}} method that settles when the lock is released or the request is aborted. This is known as the lock's [=lock-concept/released promise=].
 
-<xmp class=lang-javascript>
+```js
 const p1 = navigator.locks.request('resource', lock => {
   const p2 = new Promise(r => {
     // Logic to use lock and resolve promise...
   });
   return p2;
 });
-</xmp>
+```
 
 In the above example, `p1` is the [=lock-concept/released promise=] and `p2` is the [=lock-concept/waiting promise=].
 Note that in most code the callback would be implemented as an `async` function and the returned promise would be implicit, as in the following example:
 
-<xmp class=lang-javascript>
+```js
 const p1 = navigator.locks.request('resource', async lock => {
   // Logic to use lock...
 });
-</xmp>
+```
 
 The [=lock-concept/waiting promise=] is not named in the above code, but is still present as the return value from the anonymous `async` callback.
 Further note that if the callback is not `async` and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; the lock will be released in an upcoming microtask, and the [=lock-concept/released promise=] will also resolve in a subsequent microtask.
@@ -373,7 +373,7 @@ the state of the origin's [=lock manager=].
     The returned |promise| resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
 
     Example:
-<xmp class=lang-javascript>
+```js
 try {
   const result = await navigator.locks.request('resource', async lock => {
     // The lock is held here.
@@ -386,7 +386,7 @@ try {
 } catch (ex) {
   // if the callback threw, it will be caught here.
 }
-</xmp>
+```
 
     The lock will be released when the callback exits for any reason &mdash; either when the code returns, or if it throws.
 
@@ -405,12 +405,12 @@ try {
     Once reader locks are released a single exclusive writer can acquire the lock to make changes, followed by another exclusive writer or more shared readers.
 
 
-    <xmp class=lang-javascript>
+```js
 await navigator.locks.request('resource', {mode: 'shared'}, async lock => {
   // Lock is held here. Other contexts might also hold the lock in shared mode,
   // but no other contexts will hold the lock in exclusive mode.
 });
-    </xmp>
+```
     </dd>
 
     <!-- ======================================== -->
@@ -420,7 +420,7 @@ await navigator.locks.request('resource', {mode: 'shared'}, async lock => {
 
     If the {{LockOptions/ifAvailable}} option is `true`, then the lock is only granted if it can be without additional waiting. Note that this is still not *synchronous*; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, the callback is invoked with `null`. (Since this is expected, the request is *not* rejected.)
 
-    <xmp class=lang-javascript>
+```js
 await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
   if (!lock) {
     // Didn't get it. Maybe take appropriate action.
@@ -428,7 +428,7 @@ await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
   }
   // Lock is held here.
 });
-    </xmp>
+```
     </dd>
 
     <!-- ======================================== -->
@@ -438,7 +438,7 @@ await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
 
     The {{LockOptions/signal}} option can be set to an {{AbortSignal}}. This allows aborting a lock request, for example if the request is not granted in a timely manner:
 
-    <xmp class=lang-javascript>
+```js
 const controller = new AbortController();
 setTimeout(() => controller.abort(), 200); // Wait at most 200ms.
 
@@ -451,7 +451,7 @@ try {
 } catch (ex) {
   // |ex| will be a DOMException with error name "AbortError" if timer fired.
 }
-    </xmp>
+```
 
     If an abort is signalled before the lock is granted, then the request promise will reject with an {{AbortError}}.
     Once the lock has been granted, the signal is ignored.
@@ -514,7 +514,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 
     The returned promise resolves to |state|, a plain-old-data structure (i.e. JSON-like data) with this form:
 
-    <xmp class=lang-javascript>
+```js
 {
   held: [
     { name: "resource1", mode: "exclusive",
@@ -531,7 +531,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
       clientId: "d341a5d0-1d8d-4224-be10-704d1ef92a15" },
   ]
 }
-    </xmp>
+```
 
     The `clientId` field corresponds to a unique context (frame or worker), and is the same value returned by {{Client}}'s {{Client/id}} attribute.
 
@@ -705,22 +705,22 @@ To <dfn>snapshot the lock state</dfn> for |origin| with |promise|:
 An example of how deadlocks can be encountered through the use of this API is as follows.
 
 Script 1:
-<xmp class=lang-javascript>
+```js
 navigator.locks.request('A', async a => {
   await navigator.locks.request('B', async b => {
     // do stuff with A and B
   });
 });
-</xmp>
+```
 
 Script 2:
-<xmp class=lang-javascript>
+```js
 navigator.locks.request('B', async b => {
   await navigator.locks.request('A', async a => {
     // do stuff with A and B
   });
 });
-</xmp>
+```
 
 If script 1 and script 2 run close to the same time, there is a chance that script 1 will hold lock A and script 2 will hold lock B and neither can make further progress - a deadlock. This will not affect the user agent as a whole, pause the tab, or affect other script in the origin, but this particular functionality will be blocked.
 </aside>
@@ -731,7 +731,7 @@ Preventing deadlocks requires care. One approach is to always acquire multiple l
 
 A helper function such as the following could be used to request multiple locks in a consistent order.
 
-<xmp class=lang-javascript>
+```js
 async function requestMultiple(resources, callback) {
   const sortedResources = [...resources];
   sortedResources.sort(); // Always request in the same order.
@@ -753,7 +753,7 @@ async function requestMultiple(resources, callback) {
   }
   return await requestNext([]);
 }
-</xmp>
+```
 
 In practice, the use of multiple locks is rarely as straightforward &mdash; libraries and other utilities can often unintentionally obfuscate thier use.
 </aside>
