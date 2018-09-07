@@ -1212,10 +1212,10 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 682218b6cb835b6c59f298a21a02c1fa12339c1d" name="generator">
+  <meta content="Bikeshed version db3f42f38318d417fb038711a846849b7a68ff34" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.png" rel="icon">
-  <meta content="e313a04516e3fdf93505e9c65653f7a11bbac128" name="document-revision">
+  <meta content="5dfb614a0e0f43f00e627420ee1667168321af90" name="document-revision">
 <style>
 dl.domintro dt {
     font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
@@ -1476,7 +1476,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-08-24">24 August 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-09-07">7 September 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2021,7 +2021,8 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
       <p>Otherwise, run these steps:</p>
       <ol>
        <li data-md>
-        <p>If <var>ifAvailable</var> is true and <var>request</var> is not <a data-link-type="dfn" href="#lock-request-grantable" id="ref-for-lock-request-grantable">grantable</a>, then run these steps:</p>
+        <p>If <var>ifAvailable</var> is true and <var>request</var> is not <a data-link-type="dfn" href="#lock-request-grantable" id="ref-for-lock-request-grantable">grantable</a>,
+  then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
         <ol>
          <li data-md>
           <p>Let <var>r</var> be the result of invoking <var>callback</var> with <code>null</code> as the only argument.</p>
@@ -2099,10 +2100,14 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>lock</var> to <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set③">held lock set</a>.</p>
          <li data-md>
-          <p>Let <var>r</var> be the result of invoking <var>callback</var> with a new <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock④">Lock</a></code> object associated with <var>lock</var> as the only argument.</p>
-          <aside class="note">Note that <var>r</var> could be a regular completion, an abrupt completion, or an unresolved Promise.</aside>
-         <li data-md>
-          <p>Resolve <var>waiting</var> with <var>r</var>.</p>
+          <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑥">Enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object④">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop①">responsible event loop</a>:</p>
+          <ol>
+           <li data-md>
+            <p>Let <var>r</var> be the result of invoking <var>callback</var> with a new <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock④">Lock</a></code> object associated with <var>lock</var> as the only argument.</p>
+            <aside class="note">Note that <var>r</var> could be a regular completion, an abrupt completion, or an unresolved Promise.</aside>
+           <li data-md>
+            <p>Resolve <var>waiting</var> with <var>r</var>.</p>
+          </ol>
         </ol>
       </ol>
     </ol>
@@ -2564,7 +2569,8 @@ authoring advice.</p>
     <li><a href="#ref-for-enqueue-the-following-steps①">2.6. Agent Integration</a>
     <li><a href="#ref-for-enqueue-the-following-steps②">3.2.1. The request() method</a>
     <li><a href="#ref-for-enqueue-the-following-steps③">3.2.2. The query() method</a>
-    <li><a href="#ref-for-enqueue-the-following-steps④">4.1. Request a lock</a>
+    <li><a href="#ref-for-enqueue-the-following-steps④">4.1. Request a lock</a> <a href="#ref-for-enqueue-the-following-steps⑤">(2)</a>
+    <li><a href="#ref-for-enqueue-the-following-steps⑥">4.4. Process a lock request queue</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-environment-settings-object">
@@ -2608,6 +2614,15 @@ authoring advice.</p>
     <li><a href="#ref-for-relevant-settings-object">3.1. Navigator Mixins</a>
     <li><a href="#ref-for-relevant-settings-object①">3.2.1. The request() method</a>
     <li><a href="#ref-for-relevant-settings-object②">3.2.2. The query() method</a>
+    <li><a href="#ref-for-relevant-settings-object③">4.1. Request a lock</a>
+    <li><a href="#ref-for-relevant-settings-object④">4.4. Process a lock request queue</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-responsible-event-loop">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop">https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-responsible-event-loop">4.1. Request a lock</a>
+    <li><a href="#ref-for-responsible-event-loop①">4.4. Process a lock request queue</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-starting-a-new-parallel-queue">
@@ -2793,6 +2808,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-concept-origin-opaque" style="color:initial">opaque origin</span>
      <li><span class="dfn-paneled" id="term-for-concept-origin" style="color:initial">origin</span>
      <li><span class="dfn-paneled" id="term-for-relevant-settings-object" style="color:initial">relevant settings object</span>
+     <li><span class="dfn-paneled" id="term-for-responsible-event-loop" style="color:initial">responsible event loop</span>
      <li><span class="dfn-paneled" id="term-for-starting-a-new-parallel-queue" style="color:initial">starting a new parallel queue</span>
     </ul>
    <li>
