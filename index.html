@@ -1212,10 +1212,10 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version db3f42f38318d417fb038711a846849b7a68ff34" name="generator">
+  <meta content="Bikeshed version 018be3f805d3272ce699a232398d6e3902d1ea8d" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.png" rel="icon">
-  <meta content="00ce6f48c97ab8b6e646907350ee21c9282f29d6" name="document-revision">
+  <meta content="883025d5121f31746373c44203f7183a4ffe2bc3" name="document-revision">
 <style>
 dl.domintro dt {
     font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
@@ -1476,7 +1476,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-09-07">7 September 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-10-22">22 October 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1792,7 +1792,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
   <c- b>Promise</c->&lt;<a class="n" data-link-type="idl-name" href="#dictdef-lockmanagersnapshot" id="ref-for-dictdef-lockmanagersnapshot"><c- n>LockManagerSnapshot</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query"><c- g>query</c-></a>();
 };
 
-<c- b>callback</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="callback" data-export id="callbackdef-lockgrantedcallback"><code><c- g>LockGrantedCallback</c-></code></dfn> = <c- b>Promise</c->&lt;<c- b>any</c->> (<a class="n" data-link-type="idl-name" href="#lock" id="ref-for-lock"><c- n>Lock</c-></a> <dfn class="idl-code" data-dfn-for="LockGrantedCallback" data-dfn-type="argument" data-export id="dom-lockgrantedcallback-lock"><code><c- g>lock</c-></code><a class="self-link" href="#dom-lockgrantedcallback-lock"></a></dfn>);
+<c- b>callback</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="callback" data-export id="callbackdef-lockgrantedcallback"><code><c- g>LockGrantedCallback</c-></code></dfn> = <c- b>Promise</c->&lt;<c- b>any</c->> (<a class="n" data-link-type="idl-name" href="#lock" id="ref-for-lock"><c- n>Lock</c-></a>? <dfn class="idl-code" data-dfn-for="LockGrantedCallback" data-dfn-type="argument" data-export id="dom-lockgrantedcallback-lock"><code><c- g>lock</c-></code><a class="self-link" href="#dom-lockgrantedcallback-lock"></a></dfn>);
 
 <c- b>enum</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="enum" data-export id="enumdef-lockmode"><code><c- g>LockMode</c-></code></dfn> { <dfn class="dfn-paneled idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export id="dom-lockmode-shared"><code><c- s>"shared"</c-></code></dfn>, <dfn class="dfn-paneled idl-code" data-dfn-for="LockMode" data-dfn-type="enum-value" data-export id="dom-lockmode-exclusive"><code><c- s>"exclusive"</c-></code></dfn> };
 
@@ -2827,7 +2827,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-list-remove" style="color:initial">remove</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[service-workers-2]</a> defines the following terms:
+    <a data-link-type="biblio">[Service-Workers]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-client" style="color:initial">Client</span>
      <li><span class="dfn-paneled" id="term-for-dom-client-id" style="color:initial">id</span>
@@ -2871,8 +2871,6 @@ authoring advice.</p>
    <dd>Ali Alabbas; Joshua Bell. <a href="https://www.w3.org/TR/IndexedDB-2/">Indexed Database API 2.0</a>. 30 January 2018. REC. URL: <a href="https://www.w3.org/TR/IndexedDB-2/">https://www.w3.org/TR/IndexedDB-2/</a>
    <dt id="biblio-service-workers">[Service-Workers]
    <dd>Alex Russell; et al. <a href="https://www.w3.org/TR/service-workers-1/">Service Workers 1</a>. 2 November 2017. WD. URL: <a href="https://www.w3.org/TR/service-workers-1/">https://www.w3.org/TR/service-workers-1/</a>
-   <dt id="biblio-service-workers-2">[SERVICE-WORKERS-2]
-   <dd>Service Workers URL: <a href="https://w3c.github.io/ServiceWorker/">https://w3c.github.io/ServiceWorker/</a>
    <dt id="biblio-storage">[Storage]
    <dd>Anne van Kesteren. <a href="https://storage.spec.whatwg.org/">Storage Standard</a>. Living Standard. URL: <a href="https://storage.spec.whatwg.org/">https://storage.spec.whatwg.org/</a>
   </dl>
@@ -2895,7 +2893,7 @@ authoring advice.</p>
   <c- b>Promise</c->&lt;<a class="n" data-link-type="idl-name" href="#dictdef-lockmanagersnapshot" id="ref-for-dictdef-lockmanagersnapshot②"><c- n>LockManagerSnapshot</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query④"><c- g>query</c-></a>();
 };
 
-<c- b>callback</c-> <a href="#callbackdef-lockgrantedcallback"><code><c- g>LockGrantedCallback</c-></code></a> = <c- b>Promise</c->&lt;<c- b>any</c->> (<a class="n" data-link-type="idl-name" href="#lock" id="ref-for-lock⑤"><c- n>Lock</c-></a> <a href="#dom-lockgrantedcallback-lock"><code><c- g>lock</c-></code></a>);
+<c- b>callback</c-> <a href="#callbackdef-lockgrantedcallback"><code><c- g>LockGrantedCallback</c-></code></a> = <c- b>Promise</c->&lt;<c- b>any</c->> (<a class="n" data-link-type="idl-name" href="#lock" id="ref-for-lock⑤"><c- n>Lock</c-></a>? <a href="#dom-lockgrantedcallback-lock"><code><c- g>lock</c-></code></a>);
 
 <c- b>enum</c-> <a href="#enumdef-lockmode"><code><c- g>LockMode</c-></code></a> { <a href="#dom-lockmode-shared"><code><c- s>"shared"</c-></code></a>, <a href="#dom-lockmode-exclusive"><code><c- s>"exclusive"</c-></code></a> };
 
