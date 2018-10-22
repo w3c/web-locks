@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version 018be3f805d3272ce699a232398d6e3902d1ea8d" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.png" rel="icon">
-  <meta content="883025d5121f31746373c44203f7183a4ffe2bc3" name="document-revision">
+  <meta content="872339199e24736ef327b240e605d5e13d3d7043" name="document-revision">
 <style>
 dl.domintro dt {
     font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
@@ -2025,8 +2025,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
   then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
         <ol>
          <li data-md>
-          <p>Let <var>r</var> be the result of invoking <var>callback</var> with <code>null</code> as the only argument.</p>
-          <aside class="note">Note that <var>r</var> could be a regular completion, an abrupt completion, or an unresolved Promise.</aside>
+          <p>Let <var>r</var> be the result of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#invoke-a-callback-function" id="ref-for-invoke-a-callback-function">invoking</a> <var>callback</var> with <code>null</code> as the only argument.</p>
          <li data-md>
           <p>Resolve <var>promise</var> with <var>r</var> and abort these steps.</p>
         </ol>
@@ -2103,8 +2102,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
           <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑥">Enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object④">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop①">responsible event loop</a>:</p>
           <ol>
            <li data-md>
-            <p>Let <var>r</var> be the result of invoking <var>callback</var> with a new <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock④">Lock</a></code> object associated with <var>lock</var> as the only argument.</p>
-            <aside class="note">Note that <var>r</var> could be a regular completion, an abrupt completion, or an unresolved Promise.</aside>
+            <p>Let <var>r</var> be the result of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#invoke-a-callback-function" id="ref-for-invoke-a-callback-function①">invoking</a> <var>callback</var> with a new <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock④">Lock</a></code> object associated with <var>lock</var> as the only argument.</p>
            <li data-md>
             <p>Resolve <var>waiting</var> with <var>r</var>.</p>
           </ol>
@@ -2780,6 +2778,13 @@ authoring advice.</p>
     <li><a href="#ref-for-dfn-callback-function">3.2.1. The request() method</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-invoke-a-callback-function">
+   <a href="https://heycam.github.io/webidl/#invoke-a-callback-function">https://heycam.github.io/webidl/#invoke-a-callback-function</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-invoke-a-callback-function">4.1. Request a lock</a>
+    <li><a href="#ref-for-invoke-a-callback-function①">4.4. Process a lock request queue</a>
+   </ul>
+  </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
@@ -2849,6 +2854,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-securityerror" style="color:initial">SecurityError</span>
      <li><span class="dfn-paneled" id="term-for-idl-boolean" style="color:initial">boolean</span>
      <li><span class="dfn-paneled" id="term-for-dfn-callback-function" style="color:initial">callback function</span>
+     <li><span class="dfn-paneled" id="term-for-invoke-a-callback-function" style="color:initial">invoke</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
