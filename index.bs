@@ -598,8 +598,7 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |cal
    1. Otherwise, run these steps:
       1. If |ifAvailable| is true and |request| is not [=grantable=],
           then [=enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
-         1. Let |r| be the result of invoking |callback| with `null` as the only argument.
-             <aside class=note>Note that |r| could be a regular completion, an abrupt completion, or an unresolved Promise.</aside>
+         1. Let |r| be the result of [=invoking=] |callback| with `null` as the only argument.
          1. Resolve |promise| with |r| and abort these steps.
       1. [=queue/Enqueue=] |request| in |origin|'s [=lock request queue=].
    1. [=Process the lock request queue=] for |origin|.
@@ -656,8 +655,7 @@ To <dfn>process the lock request queue</dfn> for |origin|:
         1. Let |lock| be a new [=lock-concept|lock=] with [=lock-concept/agent=] |agent|, [=lock-concept/clientId=] |clientId|, [=lock-concept/origin=] |origin|, [=lock-concept/mode=] |mode|, [=lock-concept/name=] |name|, [=lock-concept/released promise=] |p|, and [=lock-concept/waiting promise=] |waiting|.
         1. [=set/Append=] |lock| to |origin|'s [=held lock set=].
         1. [=Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
-            1. Let |r| be the result of invoking |callback| with a new {{Lock}} object associated with |lock| as the only argument.
-                <aside class=note>Note that |r| could be a regular completion, an abrupt completion, or an unresolved Promise.</aside>
+            1. Let |r| be the result of [=invoking=] |callback| with a new {{Lock}} object associated with |lock| as the only argument.
             1. Resolve |waiting| with |r|.
 
 </div>
