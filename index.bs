@@ -128,7 +128,7 @@ The [[IndexedDB-2|Indexed Database API]] defines a transaction model allowing sh
 For the purposes of this specification:
 
  * Separate user profiles within a browser are considered separate user agents.
- * Every [private browsing](https://en.wikipedia.org/wiki/Privacy_mode) session is considered a separate user agent.
+ * Every [private mode](https://github.com/w3ctag/private-mode) browsing session is considered a separate user agent.
 
 A user agent has an associated <dfn>lock task queue</dfn> which is the result of [=starting a new parallel queue=].
 
@@ -775,7 +775,7 @@ This also provides reasonable expectations for web application authors; if a loc
 ## Private Browsing ## {#private-browsing}
 <!-- ====================================================================== -->
 
-Every [private browsing](https://en.wikipedia.org/wiki/Privacy_mode) session is considered a separate user agent for the purposes of this API. That is, locks requested/held outside such a session have no affect on requested/held inside such a session, and vice versa. This prevents a website from determining that a session is "incognito" while also not allowing a communication mechanism between such sessions.
+Every [private mode](https://github.com/w3ctag/private-mode) browsing session is considered a separate user agent for the purposes of this API. That is, locks requested/held outside such a session have no affect on requested/held inside such a session, and vice versa. This prevents a website from determining that a session is "incognito" while also not allowing a communication mechanism between such sessions.
 
 <!-- ====================================================================== -->
 ## Implementation Risks ## {#implementation-risks}

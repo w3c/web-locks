@@ -69,7 +69,7 @@ A user agent has a _lock manager_ for each origin, which encapsulates the state 
 For the purposes of this proposal:
 
  * Separate user profiles within a browser are considered separate user agents.
- * A [private browsing](https://en.wikipedia.org/wiki/Privacy_mode) session is considered a separate user agent.
+ * A [private mode](https://github.com/w3ctag/private-mode) browsing session is considered a separate user agent.
 
 Pages and workers (agents) on a single [origin](https://html.spec.whatwg.org/multipage/origin.html#concept-origin) opened in the same user agent share a lock manager even if they are in unrelated [browsing contexts](https://html.spec.whatwg.org/multipage/browsers.html#browsing-context).
 
