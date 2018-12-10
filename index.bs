@@ -252,14 +252,16 @@ A <dfn>lock request</dfn> represents a pending request for a [=lock-concept|lock
 
 A [=lock request=] is a tuple of (<dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, <dfn>promise</dfn>).
 
-Each origin has an associated <dfn>lock request queue set</dfn>, which is a [=set=] of [=lock request queues=] (a [=lock request queue=] being a [=queue=] of [=lock requests=]) where each queue is associated with a particular resource name.
+A <dfn>lock reqeust queue</dfn> is a [=queue=] of [=lock requests=].
+
+Each origin has an associated <dfn>lock request queue map</dfn>, which is a [=map=] of [=resource names=] to [=lock request queues=].
 
 A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following steps return true:
 
 1. Let |origin| be |request|'s [=lock request/origin=].
-1. Let |queue set| be |origin|'s [=lock request queue set=]
-1. Let |name| be |request|'s associated [=lock request/name=]
-1. Let |queue| be |name|'s associated [=lock request queue=] in |queue set|
+1. Let |queue_map| be |origin|'s [=lock request queue map=].
+1. Let |name| be |request|'s associated [=lock request/name=].
+1. Let |queue| be |queue_map|[|name|].
 1. Let |held| be |origin|'s [=held lock set=]
 1. Let |mode| be |request|'s associated [=lock request/mode=]
 1. If |mode| is "{{exclusive}}", then return true if all of the following conditions are true, and false otherwise:
@@ -267,7 +269,7 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
     * No [=lock request=] in |queue| earlier than |request| exists.
 1. Otherwise, mode is "{{shared}}"; return true if all of the following conditions are true, and false otherwise:
     * No [=lock-concept|lock=] in |held| has [=lock-concept/mode=] "{{exclusive}}" and has a [=lock-concept/name=] that equals |name|.
-    * No [=lock request=] in |queue| earlier than |request| has a [=lock request/mode=] "{{exclusive}}".
+    * No [=lock request=] in |queue| earlier than |request| exists.
 
 </div>
 
@@ -513,10 +515,6 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 
     The {{LockManager/query()}} method can be used to produce a snapshot of the [=lock manager=] state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.
 
-    For any given resource, the snapshot of the pending lock requests should return the requests in the order in which they were made; however, no guarantees are made with respect to the relative ordering of requests across different resources. For example, if pending lock requests A1 and A2 are made against resource A in that order, and pending lock requests B1 and B2 are made against resource B in that order, than both {A1, A2, B1, B2} and {A1, B1, A2, B2} would be valid orderings for a snapshot's pending list, but neither of {A1, A2, B2, B1} or {B1, A2, B2, A1} would be valid (note these examples are not exhaustive).
-
-    No ordering guarantees exist for the snapshot of the held lock state.
-
     The returned promise resolves to |state|, a plain-old-data structure (i.e. JSON-like data) with this form:
 
 ```js
@@ -592,8 +590,8 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |cal
 
 1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |promise|).
 1. [=Enqueue the following steps=] to the [=lock task queue=]:
-   1. Let |queue set| be |origin|'s [=lock request queue set=].
-   1. Let |queue| be |name|'s associated [=lock request queue=] in |queue set|.
+   1. Let |queue_map| be |origin|'s [=lock request queue map=].
+   1. Let |queue| be |queue_map|[|name|].
    1. Let |held| be |origin|'s [=held lock set=].
    1. If |steal| is true, then run these steps:
       1. [=list/For each=] |lock| of |held|:
@@ -621,9 +619,11 @@ To <dfn>release the lock</dfn> |lock|:
 
 1. [=Assert=]: these steps are running on the [=lock task queue=].
 1. Let |origin| be |lock|'s [=lock-concept/origin=].
+1. Let |queue_map| be |origin|'s [=lock request queue map=].
 1. Let |name| be |lock|'s associated [=resource name=].
+1. Let |queue| be |queue_map|[|name|].
 1. [=list/Remove=] [=lock-concept|lock=] from the |origin|'s [=held lock set=].
-1. [=Process the lock request queue=] associated with |name| in the |origin|'s [=lock request queue set=].
+1. [=Process the lock request queue=] |queue|.
 
 </div>
 
@@ -637,8 +637,8 @@ To <dfn>abort the request</dfn> |request|:
 1. [=Assert=]: these steps are running on the [=lock task queue=].
 1. Let |origin| be |request|'s [=lock request/origin=].
 1. Let |name| be |lock|'s associated [=resource name=].
-1. Let |queue set| be |origin|'s [=lock request queue set=].
-1. Let |queue| be |name|'s associated [=lock request queue=] in |queue set|.
+1. Let |queue_map| be |origin|'s [=lock request queue map=].
+1. Let |queue| be |queue_map|[|name|].
 1. [=list/Remove=] |request| from |queue|.
 1. [=Process the lock request queue=] |queue|.
 
@@ -700,6 +700,10 @@ To <dfn>snapshot the lock state</dfn> for |origin| with |promise|:
 1. Resolve |promise| with |snapshot|.
 
 </div>
+
+    For any given resource, the snapshot of the pending lock requests should return the requests in the order in which they were made; however, no guarantees are made with respect to the relative ordering of requests across different resources. For example, if pending lock requests A1 and A2 are made against resource A in that order, and pending lock requests B1 and B2 are made against resource B in that order, than both {A1, A2, B1, B2} and {A1, B1, A2, B2} would be valid orderings for a snapshot's pending list, but neither of {A1, A2, B2, B1} or {B1, A2, B2, A1} would be valid (note these examples are not exhaustive).
+
+    No ordering guarantees exist for the snapshot of the held lock state.
 
 <!-- ====================================================================== -->
 # Usage Considerations # {#usage-considerations}
