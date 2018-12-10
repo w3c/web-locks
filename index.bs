@@ -649,11 +649,9 @@ To <dfn>abort the request</dfn> |request|:
 <!-- ====================================================================== -->
 
 <div class=algorithm>
-To <dfn>process the lock request queue</dfn> for |name| in |origin|:
+To <dfn>process the lock request queue</dfn> |queue|:
 
 1. [=Assert=]: these steps are running on the [=lock task queue=].
-1. Let |queue set| be |origin|'s [=lock request queue set=].
-1. Let |queue| be |name|'s associated [=lock request queue=] in |queue set|.
 1. [=list/For each=] |request| of |queue|:
     1. If |request| is [=grantable=], then run these steps:
         1. [=list/Remove=] |request| from |queue|.
