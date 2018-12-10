@@ -233,7 +233,7 @@ The [=lock-concept/waiting promise=] is not named in the above code, but is stil
 Further note that if the callback is not `async` and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; the lock will be released in an upcoming microtask, and the [=lock-concept/released promise=] will also resolve in a subsequent microtask.
 </aside>
 
-Each origin has an associated <dfn>held lock set</dfn> which is a [=set=] of [=lock-concept|locks=].
+Each origin has an associated <dfn>held lock set</dfn> which is a [=/set=] of [=lock-concept|locks=].
 
 When [=lock-concept|lock=] |lock|'s [=lock-concept/waiting promise=] settles (fulfills or rejects), [=enqueue the following steps=] on the [=lock task queue=]:
 
@@ -252,7 +252,7 @@ A <dfn>lock request</dfn> represents a pending request for a [=lock-concept|lock
 
 A [=lock request=] is a tuple of (<dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, <dfn>promise</dfn>).
 
-A <dfn>lock reqeust queue</dfn> is a [=queue=] of [=lock requests=].
+A <dfn>lock request queue</dfn> is a [=queue=] of [=lock requests=].
 
 Each origin has an associated <dfn>lock request queue map</dfn>, which is a [=map=] of [=resource names=] to [=lock request queues=].
 
@@ -678,7 +678,7 @@ To <dfn>snapshot the lock state</dfn> for |origin| with |promise|:
 
 1. [=Assert=]: these steps are running on the [=lock task queue=].
 1. Let |pending| be a new [=list=].
-1. [=list/For each=] |queue| of |origin|'s [=lock request queue set=]:
+1. [=map/For each=] |name| -> |queue| of |origin|'s [=lock request queue map=]:
     1. [=list/For each=] |request| of |queue|:
         1. Let |info| be a new {{LockInfo}} dictionary.
         1. Set |info|'s {{LockInfo/name}} dictionary member to |request|'s [=lock request/name=].
