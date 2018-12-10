@@ -512,6 +512,8 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 
     The {{LockManager/query()}} method can be used to produce a snapshot of the [=lock manager=] state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.
 
+    For any given resource, the snapshot should return the lock requests in the order in which they were made; however, no guarantees are made with respect to the relative ordering of requests across different resources. For example, if pending lock requests A1 and A2 are made against resource A in that order, and pending lock requests B1 and B2 are made against resource B in that order, than both {A1, A2, B1, B2} and {A1, B1, A2, B2} would be valid orderings for a snapshot's pending list, but neither of {A1, A2, B2, B1} or {B1, A2, B2, A1} would be valid (note these examples are not exhaustive).
+
     The returned promise resolves to |state|, a plain-old-data structure (i.e. JSON-like data) with this form:
 
 ```js
