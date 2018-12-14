@@ -838,6 +838,7 @@ The W3C TAG has developed a [Self-Review Questionnaire: Security and Privacy](ht
 
 Many thanks to
 Alex Russell,
+Andreas Butler,
 Anne van Kesteren,
 Boris Zbarsky,
 Darin Fisher,
