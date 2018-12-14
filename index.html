@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version acda2cc646176dce43c6fae1b17de6710de0cac0" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.png" rel="icon">
-  <meta content="1db49aa0876d17526243bcfa311926ac3066912f" name="document-revision">
+  <meta content="792593cf18f37897755d383343e09ed15b6fd52c" name="document-revision">
 <style>
 dl.domintro dt {
     font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
@@ -1645,6 +1645,7 @@ await navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'my_resourc
      <p>Every <a href="https://github.com/w3ctag/private-mode">private mode</a> browsing session is considered a separate user agent.</p>
    </ul>
    <p>A user agent has an associated <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-task-queue">lock task queue</dfn> which is the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue" id="ref-for-starting-a-new-parallel-queue">starting a new parallel queue</a>.</p>
+   <p>The <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source" id="ref-for-task-source">task source</a> for <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps">steps enqueued</a> below is the <dfn data-dfn-type="dfn" data-export id="web-locks-tasks-source">web locks tasks source<a class="self-link" href="#web-locks-tasks-source"></a></dfn>.</p>
    <h3 class="heading settled" data-level="2.1" id="resource-names"><span class="secno">2.1. </span><span class="content">Resources Names</span><a class="self-link" href="#resource-names"></a></h3>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="resource-name">resource name</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#javascript-string" id="ref-for-javascript-string">JavaScript string</a> chosen by the web application to represent an abstract resource.</p>
    <p>A resource name has no external meaning beyond the scheduling algorithm, but is global
@@ -1707,7 +1708,7 @@ Note that in most code the callback would be implemented as an <code>async</code
 Further note that if the callback is not <code>async</code> and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; the lock will be released in an upcoming microtask, and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise②">released promise</a> will also resolve in a subsequent microtask.</p>
     </aside>
     <p>Each origin has an associated <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-held-lock-set">held lock set</dfn> which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a> of <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑨">locks</a>.</p>
-    <p>When <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⓪">lock</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise③">waiting promise</a> settles (fulfills or rejects), <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue">lock task queue</a>:</p>
+    <p>When <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⓪">lock</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise③">waiting promise</a> settles (fulfills or rejects), <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps①">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue">lock task queue</a>:</p>
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="#release-the-lock" id="ref-for-release-the-lock">Release the lock</a> <var>lock</var>.</p>
@@ -1755,7 +1756,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
    </div>
    <h3 class="heading settled" data-level="2.6" id="agent-integration"><span class="secno">2.6. </span><span class="content">Agent Integration</span><a class="self-link" href="#agent-integration"></a></h3>
    <div class="algorithm">
-     When an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent④">agent</a> terminates, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps①">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue①">lock task queue</a>: 
+     When an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent④">agent</a> terminates, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps②">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue①">lock task queue</a>: 
     <aside class="issue" id="issue-9d75c9d8"><a class="self-link" href="#issue-9d75c9d8"></a> Normative reference for <i>terminates</i>. </aside>
     <ol>
      <li data-md>
@@ -1927,7 +1928,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
         <p>If <var>options</var>’ <var>signal</var> dictionary member is present, then <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-add" id="ref-for-abortsignal-add">add the following abort steps</a> to <var>options</var>’ <var>signal</var> dictionary member:</p>
         <ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps②">Enqueue the steps</a> to <a data-link-type="dfn" href="#abort-the-request" id="ref-for-abort-the-request①">abort the request</a> <var>request</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue②">lock task queue</a>.</p>
+          <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps③">Enqueue the steps</a> to <a data-link-type="dfn" href="#abort-the-request" id="ref-for-abort-the-request①">abort the request</a> <var>request</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue②">lock task queue</a>.</p>
          <li data-md>
           <p>Reject <var>promise</var> with an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror③">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code>.</p>
         </ol>
@@ -1974,7 +1975,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>If <var>origin</var> is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque" id="ref-for-concept-origin-opaque①">opaque origin</a>, then reject <var>promise</var> with a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#securityerror" id="ref-for-securityerror①">SecurityError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code> and abort these steps.</p>
      <li data-md>
-      <p>Otherwise, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps③">enqueue the steps</a> to <a data-link-type="dfn" href="#snapshot-the-lock-state" id="ref-for-snapshot-the-lock-state">snapshot the lock state</a> for <var>origin</var> with <var>promise</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue③">lock task queue</a>.</p>
+      <p>Otherwise, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps④">enqueue the steps</a> to <a data-link-type="dfn" href="#snapshot-the-lock-state" id="ref-for-snapshot-the-lock-state">snapshot the lock state</a> for <var>origin</var> with <var>promise</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue③">lock task queue</a>.</p>
      <li data-md>
       <p>Return <var>promise</var>.</p>
     </ol>
@@ -1997,7 +1998,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑨">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>name</var>, <var>mode</var>, <var>promise</var>).</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps④">Enqueue the following steps</a> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue④">lock task queue</a>:</p>
+      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">Enqueue the following steps</a> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue④">lock task queue</a>:</p>
       <ol>
        <li data-md>
         <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map①">lock request queue map</a>.</p>
@@ -2028,7 +2029,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
         <ol>
          <li data-md>
           <p>If <var>ifAvailable</var> is true and <var>request</var> is not <a data-link-type="dfn" href="#lock-request-grantable" id="ref-for-lock-request-grantable">grantable</a>,
- then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
+ then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑥">enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
           <ol>
            <li data-md>
             <p>Let <var>r</var> be the result of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#invoke-a-callback-function" id="ref-for-invoke-a-callback-function">invoking</a> <var>callback</var> with <code>null</code> as the only argument.</p>
@@ -2116,7 +2117,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>lock</var> to <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set③">held lock set</a>.</p>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑥">Enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object④">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop①">responsible event loop</a>:</p>
+          <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑦">Enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object④">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop①">responsible event loop</a>:</p>
           <ol>
            <li data-md>
             <p>Let <var>r</var> be the result of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#invoke-a-callback-function" id="ref-for-invoke-a-callback-function①">invoking</a> <var>callback</var> with a new <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock④">Lock</a></code> object associated with <var>lock</var> as the only argument.</p>
@@ -2532,6 +2533,7 @@ authoring advice.</p>
    <li><a href="#snapshot-the-lock-state">snapshot the lock state</a><span>, in §4.5</span>
    <li><a href="#dom-lockoptions-steal">steal</a><span>, in §3.2</span>
    <li><a href="#lock-concept-waiting-promise">waiting promise</a><span>, in §2.4</span>
+   <li><a href="#web-locks-tasks-source">web locks tasks source</a><span>, in §2</span>
   </ul>
   <aside class="dfn-panel" data-for="term-for-abortsignal">
    <a href="https://dom.spec.whatwg.org/#abortsignal">https://dom.spec.whatwg.org/#abortsignal</a><b>Referenced in:</b>
@@ -2598,12 +2600,25 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-enqueue-the-following-steps">
    <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps">https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-enqueue-the-following-steps">2.4. Locks</a>
-    <li><a href="#ref-for-enqueue-the-following-steps①">2.6. Agent Integration</a>
-    <li><a href="#ref-for-enqueue-the-following-steps②">3.2.1. The request() method</a>
-    <li><a href="#ref-for-enqueue-the-following-steps③">3.2.2. The query() method</a>
-    <li><a href="#ref-for-enqueue-the-following-steps④">4.1. Request a lock</a> <a href="#ref-for-enqueue-the-following-steps⑤">(2)</a>
-    <li><a href="#ref-for-enqueue-the-following-steps⑥">4.4. Process a lock request queue for a given resource name</a>
+    <li><a href="#ref-for-enqueue-the-following-steps">2. Concepts</a>
+    <li><a href="#ref-for-enqueue-the-following-steps①">2.4. Locks</a>
+    <li><a href="#ref-for-enqueue-the-following-steps②">2.6. Agent Integration</a>
+    <li><a href="#ref-for-enqueue-the-following-steps③">3.2.1. The request() method</a>
+    <li><a href="#ref-for-enqueue-the-following-steps④">3.2.2. The query() method</a>
+    <li><a href="#ref-for-enqueue-the-following-steps⑤">4.1. Request a lock</a> <a href="#ref-for-enqueue-the-following-steps⑥">(2)</a>
+    <li><a href="#ref-for-enqueue-the-following-steps⑦">4.4. Process a lock request queue for a given resource name</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-enqueue-the-following-steps">
+   <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps">https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-enqueue-the-following-steps">2. Concepts</a>
+    <li><a href="#ref-for-enqueue-the-following-steps①">2.4. Locks</a>
+    <li><a href="#ref-for-enqueue-the-following-steps②">2.6. Agent Integration</a>
+    <li><a href="#ref-for-enqueue-the-following-steps③">3.2.1. The request() method</a>
+    <li><a href="#ref-for-enqueue-the-following-steps④">3.2.2. The query() method</a>
+    <li><a href="#ref-for-enqueue-the-following-steps⑤">4.1. Request a lock</a> <a href="#ref-for-enqueue-the-following-steps⑥">(2)</a>
+    <li><a href="#ref-for-enqueue-the-following-steps⑦">4.4. Process a lock request queue for a given resource name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-environment-settings-object">
@@ -2662,6 +2677,12 @@ authoring advice.</p>
    <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue">https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-starting-a-new-parallel-queue">2. Concepts</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-task-source">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source">https://html.spec.whatwg.org/multipage/webappapis.html#task-source</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-task-source">2. Concepts</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-set-append">
@@ -2845,7 +2866,8 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-workernavigator" style="color:initial">WorkerNavigator</span>
      <li><span class="dfn-paneled" id="term-for-integration-with-the-javascript-agent-cluster-formalism" style="color:initial">agent cluster</span>
      <li><span class="dfn-paneled" id="term-for-browsing-context" style="color:initial">browsing context</span>
-     <li><span class="dfn-paneled" id="term-for-enqueue-the-following-steps" style="color:initial">enqueue the following steps</span>
+     <li><span class="dfn-paneled" id="term-for-enqueue-the-following-steps" style="color:initial">enqueue steps</span>
+     <li><span class="dfn-paneled" id="term-for-enqueue-the-following-steps①" style="color:initial">enqueue the following steps</span>
      <li><span class="dfn-paneled" id="term-for-environment-settings-object" style="color:initial">environment settings object</span>
      <li><span class="dfn-paneled" id="term-for-concept-environment-id" style="color:initial">id</span>
      <li><span class="dfn-paneled" id="term-for-dom-localstorage" style="color:initial">localstorage</span>
@@ -2854,6 +2876,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-relevant-settings-object" style="color:initial">relevant settings object</span>
      <li><span class="dfn-paneled" id="term-for-responsible-event-loop" style="color:initial">responsible event loop</span>
      <li><span class="dfn-paneled" id="term-for-starting-a-new-parallel-queue" style="color:initial">starting a new parallel queue</span>
+     <li><span class="dfn-paneled" id="term-for-task-source" style="color:initial">task source</span>
     </ul>
    <li>
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
