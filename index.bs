@@ -132,6 +132,8 @@ For the purposes of this specification:
 
 A user agent has an associated <dfn>lock task queue</dfn> which is the result of [=starting a new parallel queue=].
 
+The [=task source=] for [=enqueue steps|steps enqueued=] below is the <dfn export>web locks tasks source</dfn>.
+
 
 <!-- ====================================================================== -->
 ## Resources Names ## {#resource-names}
