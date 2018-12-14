@@ -590,22 +590,22 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |cal
 
 1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |promise|).
 1. [=Enqueue the following steps=] to the [=lock task queue=]:
-   1. Let |queueMap| be |origin|'s [=lock request queue map=].
-   1. Let |queue| be |queueMap|[|name|].
-   1. Let |held| be |origin|'s [=held lock set=].
-   1. If |steal| is true, then run these steps:
-      1. [=list/For each=] |lock| of |held|:
-         1. If |lock|'s [=lock-concept/name=] is |name|, then run these steps:
-            1. [=list/Remove=] [=lock-concept|lock=] from |held|.
-            1. Reject |lock|'s [=lock-concept/released promise=] with an "{{AbortError}}" {{DOMException}}.
-      1. [=list/Prepend=] |request| in |queue|.
-   1. Otherwise, run these steps:
-      1. If |ifAvailable| is true and |request| is not [=grantable=],
-          then [=enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
-         1. Let |r| be the result of [=invoking=] |callback| with `null` as the only argument.
-         1. Resolve |promise| with |r| and abort these steps.
-      1. [=queue/Enqueue=] |request| in |queue|.
-   1. [=Process the lock request queue=] |queue|.
+    1. Let |queueMap| be |origin|'s [=lock request queue map=].
+    1. Let |queue| be |queueMap|[|name|].
+    1. Let |held| be |origin|'s [=held lock set=].
+    1. If |steal| is true, then run these steps:
+        1. [=list/For each=] |lock| of |held|:
+            1. If |lock|'s [=lock-concept/name=] is |name|, then run these steps:
+                1. [=list/Remove=] [=lock-concept|lock=] from |held|.
+                1. Reject |lock|'s [=lock-concept/released promise=] with an "{{AbortError}}" {{DOMException}}.
+        1. [=list/Prepend=] |request| in |queue|.
+    1. Otherwise, run these steps:
+        1. If |ifAvailable| is true and |request| is not [=grantable=],
+             then [=enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
+            1. Let |r| be the result of [=invoking=] |callback| with `null` as the only argument.
+            1. Resolve |promise| with |r| and abort these steps.
+        1. [=queue/Enqueue=] |request| in |queue|.
+    1. [=Process the lock request queue=] |queue|.
 1. Return |request|.
 
 </div>
