@@ -1215,7 +1215,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version acda2cc646176dce43c6fae1b17de6710de0cac0" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.png" rel="icon">
-  <meta content="b2f9ef3e03e78a03ab43138d08af7fa54715c45d" name="document-revision">
+  <meta content="1db49aa0876d17526243bcfa311926ac3066912f" name="document-revision">
 <style>
 dl.domintro dt {
     font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
@@ -1998,47 +1998,49 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
       <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑨">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>name</var>, <var>mode</var>, <var>promise</var>).</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps④">Enqueue the following steps</a> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue④">lock task queue</a>:</p>
-     <li data-md>
-      <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map①">lock request queue map</a>.</p>
-     <li data-md>
-      <p>Let <var>queue</var> be <var>queueMap</var>[<var>name</var>].</p>
-     <li data-md>
-      <p>Let <var>held</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set①">held lock set</a>.</p>
-     <li data-md>
-      <p>If <var>steal</var> is true, then run these steps:</p>
       <ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate">For each</a> <var>lock</var> of <var>held</var>:</p>
+        <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map①">lock request queue map</a>.</p>
+       <li data-md>
+        <p>Let <var>queue</var> be <var>queueMap</var>[<var>name</var>].</p>
+       <li data-md>
+        <p>Let <var>held</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set①">held lock set</a>.</p>
+       <li data-md>
+        <p>If <var>steal</var> is true, then run these steps:</p>
         <ol>
          <li data-md>
-          <p>If <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name③">name</a> is <var>name</var>, then run these steps:</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate">For each</a> <var>lock</var> of <var>held</var>:</p>
           <ol>
            <li data-md>
-            <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove">Remove</a> <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑧">lock</a> from <var>held</var>.</p>
-           <li data-md>
-            <p>Reject <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise⑤">released promise</a> with an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror④">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
+            <p>If <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name③">name</a> is <var>name</var>, then run these steps:</p>
+            <ol>
+             <li data-md>
+              <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove">Remove</a> <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑧">lock</a> from <var>held</var>.</p>
+             <li data-md>
+              <p>Reject <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise⑤">released promise</a> with an "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#aborterror" id="ref-for-aborterror④">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
+            </ol>
           </ol>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-prepend" id="ref-for-list-prepend">Prepend</a> <var>request</var> in <var>queue</var>.</p>
         </ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-prepend" id="ref-for-list-prepend">Prepend</a> <var>request</var> in <var>queue</var>.</p>
-      </ol>
-     <li data-md>
-      <p>Otherwise, run these steps:</p>
-      <ol>
-       <li data-md>
-        <p>If <var>ifAvailable</var> is true and <var>request</var> is not <a data-link-type="dfn" href="#lock-request-grantable" id="ref-for-lock-request-grantable">grantable</a>,
-  then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
+        <p>Otherwise, run these steps:</p>
         <ol>
          <li data-md>
-          <p>Let <var>r</var> be the result of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#invoke-a-callback-function" id="ref-for-invoke-a-callback-function">invoking</a> <var>callback</var> with <code>null</code> as the only argument.</p>
+          <p>If <var>ifAvailable</var> is true and <var>request</var> is not <a data-link-type="dfn" href="#lock-request-grantable" id="ref-for-lock-request-grantable">grantable</a>,
+ then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
+          <ol>
+           <li data-md>
+            <p>Let <var>r</var> be the result of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#invoke-a-callback-function" id="ref-for-invoke-a-callback-function">invoking</a> <var>callback</var> with <code>null</code> as the only argument.</p>
+           <li data-md>
+            <p>Resolve <var>promise</var> with <var>r</var> and abort these steps.</p>
+          </ol>
          <li data-md>
-          <p>Resolve <var>promise</var> with <var>r</var> and abort these steps.</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#queue-enqueue" id="ref-for-queue-enqueue">Enqueue</a> <var>request</var> in <var>queue</var>.</p>
         </ol>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#queue-enqueue" id="ref-for-queue-enqueue">Enqueue</a> <var>request</var> in <var>queue</var>.</p>
+        <p><a data-link-type="dfn" href="#process-the-lock-request-queue" id="ref-for-process-the-lock-request-queue">Process the lock request queue</a> <var>queue</var>.</p>
       </ol>
-     <li data-md>
-      <p><a data-link-type="dfn" href="#process-the-lock-request-queue" id="ref-for-process-the-lock-request-queue">Process the lock request queue</a> <var>queue</var>.</p>
      <li data-md>
       <p>Return <var>request</var>.</p>
     </ol>
