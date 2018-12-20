@@ -1,7 +1,7 @@
 <pre class=metadata>
 Title: Web Locks API
 Shortname: WebLocks
-Abstract: This document defines a web platform API that allows script to asynchronously acquire a lock over a resource, hold it while work is performed, then release it. While held, no other script in the origin can aquire a lock over the same resource. This allows contexts (windows, workers) within a web application to coordinate the usage of resources.
+Abstract: This document defines a web platform API that allows script to asynchronously acquire a lock over a resource, hold it while work is performed, then release it. While held, no other script in the origin can acquire a lock over the same resource. This allows contexts (windows, workers) within a web application to coordinate the usage of resources.
 Status: ED
 ED: https://wicg.github.io/web-locks/
 Level: 1
@@ -783,7 +783,7 @@ async function requestMultiple(resources, callback) {
 }
 ```
 
-In practice, the use of multiple locks is rarely as straightforward &mdash; libraries and other utilities can often unintentionally obfuscate thier use.
+In practice, the use of multiple locks is rarely as straightforward &mdash; libraries and other utilities can often unintentionally obfuscate their use.
 </aside>
 
 
@@ -829,7 +829,7 @@ The W3C TAG has developed a [Self-Review Questionnaire: Security and Privacy](ht
     * Access to other devices.
     * Any measure of control over a user agent's native UI.
 * No temporary identifiers to the web are exposed to the web. All [=resource names=] are provided by the web application itself.
-* Behavior in first-party and third-party contexts is distguished in a user agent if storage is distinguished. See [[#security-scope]].
+* Behavior in first-party and third-party contexts is distinguished in a user agent if storage is distinguished. See [[#security-scope]].
 * Behavior in the context of a user agent's "incognito" mode is described in [[#private-browsing]].
 * No data is persisted to a user's local device by this API.
 * This API does not allow downgrading default security characteristics.
