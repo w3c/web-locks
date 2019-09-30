@@ -1029,7 +1029,7 @@ Possible extra rowspan handling
 		}
 	/* } */
 
-	@supports (display:grid) {
+	@supports (display:grid) and (display:contents) {
 		/* Use #toc over .toc to override non-@supports rules. */
 		#toc {
 			display: grid;
@@ -1212,10 +1212,11 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 4d208866a95a1121fceca549a36bfb09c5bf1705" name="generator">
+  <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
+  <meta content="Bikeshed version e86d5b1b47a216fa66165c234892adc259212183" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.png" rel="icon">
-  <meta content="45529ad167c53510160c95e5d8d3153309a82a96" name="document-revision">
+  <meta content="8a48375fe4f8a5c68e60564154ec3a7af7ee6cb2" name="document-revision">
 <style>
 dl.domintro dt {
     font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
@@ -1476,7 +1477,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-04-20">20 April 2019</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2019-09-30">30 September 2019</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2279,9 +2280,9 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     <li data-md>
      <p>No temporary identifiers to the web are exposed to the web. All <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name⑦">resource names</a> are provided by the web application itself.</p>
     <li data-md>
-     <p>Behavior in first-party and third-party contexts is distinguished in a user agent if storage is distinguished. See <a href="#security-scope">§6.1 Lock Scope</a>.</p>
+     <p>Behavior in first-party and third-party contexts is distinguished in a user agent if storage is distinguished. See <a href="#security-scope">§ 6.1 Lock Scope</a>.</p>
     <li data-md>
-     <p>Behavior in the context of a user agent’s "incognito" mode is described in <a href="#private-browsing">§6.2 Private Browsing</a>.</p>
+     <p>Behavior in the context of a user agent’s "incognito" mode is described in <a href="#private-browsing">§ 6.2 Private Browsing</a>.</p>
     <li data-md>
      <p>No data is persisted to a user’s local device by this API.</p>
     <li data-md>
@@ -2938,7 +2939,7 @@ authoring advice.</p>
    <dt id="biblio-indexeddb-2">[IndexedDB-2]
    <dd>Ali Alabbas; Joshua Bell. <a href="https://www.w3.org/TR/IndexedDB-2/">Indexed Database API 2.0</a>. 30 January 2018. REC. URL: <a href="https://www.w3.org/TR/IndexedDB-2/">https://www.w3.org/TR/IndexedDB-2/</a>
    <dt id="biblio-service-workers">[Service-Workers]
-   <dd>Alex Russell; et al. <a href="https://www.w3.org/TR/service-workers-1/">Service Workers 1</a>. 2 November 2017. WD. URL: <a href="https://www.w3.org/TR/service-workers-1/">https://www.w3.org/TR/service-workers-1/</a>
+   <dd>Alex Russell; et al. <a href="https://www.w3.org/TR/service-workers-1/">Service Workers 1</a>. 13 August 2019. WD. URL: <a href="https://www.w3.org/TR/service-workers-1/">https://www.w3.org/TR/service-workers-1/</a>
    <dt id="biblio-storage">[Storage]
    <dd>Anne van Kesteren. <a href="https://storage.spec.whatwg.org/">Storage Standard</a>. Living Standard. URL: <a href="https://storage.spec.whatwg.org/">https://storage.spec.whatwg.org/</a>
   </dl>
