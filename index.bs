@@ -492,9 +492,9 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 1. Let |origin| be |environment|'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. If |name| starts with U+002D HYPHEN-MINUS (-), then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If both |options|' |steal| dictionary member and |option|'s |ifAvailable| dictionary member are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|' |steal| dictionary member is true and |option|'s |mode| dictionary member is not "{{exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |option|'s |signal| dictionary member is present, and either of |options|' |steal| dictionary member or |options|' |ifAvailable| dictionary member is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If both |options|' |steal| dictionary member and |options|' |ifAvailable| dictionary member are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If |options|' |steal| dictionary member is true and |options|' |mode| dictionary member is not "{{exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If |options|' |signal| dictionary member is present, and either of |options|' |steal| dictionary member or |options|' |ifAvailable| dictionary member is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|' |signal| dictionary member is present and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
 1. Let |promise| be [=a new promise=].
 1. Let |request| be the result of running the steps to [=request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|' |mode| dictionary member, |options|' |ifAvailable| dictionary member, and |options|' |steal| dictionary member.
