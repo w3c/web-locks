@@ -34,16 +34,20 @@ spec:webidl; type:dfn; text:resolve
 </pre>
 
 <style>
-dl.domintro dt {
+.domintro::before {
+    content: 'For web developers (non-normative)';
+    text-transform: initial;
+}
+.domintro dt {
     font-family: Menlo, Consolas, "DejaVu Sans Mono", Monaco, monospace;
 
     padding-top: 0.5em;
     padding-bottom: 1em;
 }
-dl.domintro dt a {
+.domintro dt a {
     color: inherit; border-bottom-style: none;
 }
-dl.domintro dt code {
+.domintro dt code {
     font-size: inherit;
 }
 </style>
@@ -362,23 +366,19 @@ the state of the origin's [=lock manager=].
 ### The {{LockManager/request(name, callback)|request()}} method ### {#api-lock-manager-request}
 <!-- ====================================================================== -->
 
-<div class=note>
-  <dl class=domintro>
-    <dt><var>promise</var> = navigator . locks .
-        {{LockManager/request(name, callback)|request}}(<var>name</var>, <var>callback</var>)</dt>
-    <dt><var>promise</var> = navigator . locks .
-        {{LockManager/request(name, options, callback)|request}}(<var>name</var>, <var>options</var>, <var>callback</var>)</dt>
-    <dd>
+<div class="domintro note">
+    : |promise| = navigator . locks . {{LockManager/request(name, callback)|request}}(|name|, |callback|)
+    : |promise| = navigator . locks . {{LockManager/request(name, options, callback)|request}}(|name|, |options|, |callback|)
 
-    The {{LockManager/request(name, callback)|request()}} method is called to request a lock.
+    ::  The {{LockManager/request(name, callback)|request()}} method is called to request a lock.
 
-    The |name| (initial argument) is a [=resource name=] string.
+        The |name| (initial argument) is a [=resource name=] string.
 
-    The |callback| (final argument) is a [=callback function=] invoked with the {{Lock}} when granted. This is specified by script, and is usually an `async` function. The lock is held until the callback function completes. If a non-async callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.
+        The |callback| (final argument) is a [=callback function=] invoked with the {{Lock}} when granted. This is specified by script, and is usually an `async` function. The lock is held until the callback function completes. If a non-async callback function is passed in, then it is automatically wrapped in a promise that resolves immediately, so the lock is only held for the duration of the synchronous callback.
 
-    The returned |promise| resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
+       The returned |promise| resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.
 
-    Example:
+       Example:
 ```js
 try {
   const result = await navigator.locks.request('resource', async lock => {
@@ -394,21 +394,18 @@ try {
 }
 ```
 
-    The lock will be released when the callback exits for any reason &mdash; either when the code returns, or if it throws.
+        The lock will be released when the callback exits for any reason &mdash; either when the code returns, or if it throws.
 
-    An |options| dictionary can be specified as a second argument; the |callback| argument is always last.
-    </dd>
+        An |options| dictionary can be specified as a second argument; the |callback| argument is always last.
 
-    <!-- ======================================== -->
 
-    <dt><var>options</var> . mode</dt>
-    <dd>
+    : |options| . mode
 
-    The {{LockOptions/mode}} option can be "{{exclusive}}" (the default if not specified) or "{{shared}}".
-    Multiple tabs/workers can hold a lock for the same resource in "{{shared}}" mode, but only one tab/worker can hold a lock for the resource in "{{exclusive}}" mode.
+    ::  The {{LockOptions/mode}} option can be "{{exclusive}}" (the default if not specified) or "{{shared}}".
+        Multiple tabs/workers can hold a lock for the same resource in "{{shared}}" mode, but only one tab/worker can hold a lock for the resource in "{{exclusive}}" mode.
 
-    The most common use for this is to allow multiple readers to access a resource simultaneously but prevent changes.
-    Once reader locks are released a single exclusive writer can acquire the lock to make changes, followed by another exclusive writer or more shared readers.
+        The most common use for this is to allow multiple readers to access a resource simultaneously but prevent changes.
+        Once reader locks are released a single exclusive writer can acquire the lock to make changes, followed by another exclusive writer or more shared readers.
 
 
 ```js
@@ -417,14 +414,11 @@ await navigator.locks.request('resource', {mode: 'shared'}, async lock => {
   // but no other contexts will hold the lock in exclusive mode.
 });
 ```
-    </dd>
 
-    <!-- ======================================== -->
 
-    <dt><var>options</var> . ifAvailable</dt>
-    <dd>
+    : |options| . ifAvailable
 
-    If the {{LockOptions/ifAvailable}} option is `true`, then the lock is only granted if it can be without additional waiting. Note that this is still not *synchronous*; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, the callback is invoked with `null`. (Since this is expected, the request is *not* rejected.)
+    ::  If the {{LockOptions/ifAvailable}} option is `true`, then the lock is only granted if it can be without additional waiting. Note that this is still not *synchronous*; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, the callback is invoked with `null`. (Since this is expected, the request is *not* rejected.)
 
 ```js
 await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
@@ -435,14 +429,10 @@ await navigator.locks.request('resource', {ifAvailable: true}, async lock => {
   // Lock is held here.
 });
 ```
-    </dd>
 
-    <!-- ======================================== -->
+    : |options| . signal
 
-    <dt><var>options</var> . signal</dt>
-    <dd>
-
-    The {{LockOptions/signal}} option can be set to an {{AbortSignal}}. This allows aborting a lock request, for example if the request is not granted in a timely manner:
+    ::  The {{LockOptions/signal}} option can be set to an {{AbortSignal}}. This allows aborting a lock request, for example if the request is not granted in a timely manner:
 
 ```js
 const controller = new AbortController();
@@ -459,20 +449,16 @@ try {
 }
 ```
 
-    If an abort is signalled before the lock is granted, then the request promise will reject with an {{AbortError}}.
-    Once the lock has been granted, the signal is ignored.
-    </dd>
+        If an abort is signalled before the lock is granted, then the request promise will reject with an {{AbortError}}.
+        Once the lock has been granted, the signal is ignored.
 
-    <!-- ======================================== -->
 
-    <dt><var>options</var> . steal</dt>
-    <dd>
-    If the {{LockOptions/steal}} option is `true`, then any held locks for the resource will be released (and the [=released promise=] of such locks will resolve with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
+    : |options| . steal
 
-    If a web application detects an unrecoverable state &mdash; for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding &mdash; then it can "steal" a lock using this option.
+    ::  If the {{LockOptions/steal}} option is `true`, then any held locks for the resource will be released (and the [=released promise=] of such locks will resolve with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
 
-    </dd>
-  </dl>
+        If a web application detects an unrecoverable state &mdash; for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding &mdash; then it can "steal" a lock using this option.
+
 </div>
 
 <aside class=advisement>
@@ -509,15 +495,13 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 ### The {{LockManager/query()}} method ### {#api-lock-manager-query}
 <!-- ====================================================================== -->
 
-<div class=note>
-  <dl class=domintro>
-    <dt><var>state</var> = await navigator . locks .
-        {{LockManager/query()|query}}()</dt>
-    <dd>
+<div class="domintro note">
 
-    The {{LockManager/query()}} method can be used to produce a snapshot of the [=lock manager=] state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.
+    : |state| = await navigator . locks . {{LockManager/query()|query}}()
 
-    The returned promise resolves to |state|, a plain-old-data structure (i.e. JSON-like data) with this form:
+    ::  The {{LockManager/query()}} method can be used to produce a snapshot of the [=lock manager=] state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.
+
+        The returned promise resolves to |state|, a plain-old-data structure (i.e. JSON-like data) with this form:
 
 ```js
 {
@@ -538,10 +522,8 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 }
 ```
 
-    The `clientId` field corresponds to a unique context (frame or worker), and is the same value returned by {{Client}}'s {{Client/id}} attribute.
+        The `clientId` field corresponds to a unique context (frame or worker), and is the same value returned by {{Client}}'s {{Client/id}} attribute.
 
-    </dd>
-  </dl>
 </div>
 
 <aside class=advisement>
