@@ -1225,7 +1225,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version d2959a41, updated Fri Apr 24 17:44:40 2020 -0700" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.png" rel="icon">
-  <meta content="fdc85f6ed4f26a3af49c954da80fd368e1213f1c" name="document-revision">
+  <meta content="69a6ae272d5edf10bec7bd89e5dbbe5c05bef38e" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -1382,6 +1382,52 @@ figcaption:not(.no-marker)::before {
 [data-md] > :last-child {
     margin-bottom: 0;
 }</style>
+<style>/* style-mdn-anno */
+
+            @media (max-width: 767px) { .mdn-anno { opacity: .1 } }
+            .mdn-anno { font: 1em sans-serif; padding: 0.3em; position: absolute; z-index: 8; right: 0.3em; background: #EEE; color: black; box-shadow: 0 0 3px #999; overflow: hidden; border-collapse: initial; border-spacing: initial; min-width: 9em; max-width: min-content; white-space: nowrap; word-wrap: normal; hyphens: none}
+            .mdn-anno:not(.wrapped) { opacity: 1}
+            .mdn-anno:hover { z-index: 9 }
+            .mdn-anno.wrapped { min-width: 0 }
+            .mdn-anno.wrapped > :not(button) { display: none; }
+            .mdn-anno > .mdn-anno-btn { cursor: pointer; border: none; color: #000; background: transparent; margin: -8px; float: right; padding: 10px 8px 8px 8px; outline: none; }
+            .mdn-anno > .mdn-anno-btn > .less-than-two-engines-flag { color: red; padding-right: 2px; }
+            .mdn-anno > .mdn-anno-btn > .all-engines-flag { color: green; padding-right: 2px; }
+            .mdn-anno > .mdn-anno-btn > span { color: #fff; background-color: #000; font-weight: normal; font-family: zillaslab, Palatino, "Palatino Linotype", serif; padding: 2px 3px 0px 3px; line-height: 1.3em; vertical-align: top; }
+            .mdn-anno > .feature { margin-top: 20px; }
+            .mdn-anno > .feature:not(:first-of-type) { border-top: 1px solid #999; margin-top: 6px; padding-top: 2px; }
+            .mdn-anno > .feature > .less-than-two-engines-text { color: red }
+            .mdn-anno > .feature > .all-engines-text { color: green }
+            .mdn-anno > .feature > p { font-size: .75em; margin-top: 6px; margin-bottom: 0; }
+            .mdn-anno > .feature > p + p { margin-top: 3px; }
+            .mdn-anno > .feature > .support { display: block; font-size: 0.6em; margin: 0; padding: 0; margin-top: 2px }
+            .mdn-anno > .feature > .support + div { padding-top: 0.5em; }
+            .mdn-anno > .feature > .support > hr { display: block; border: none; border-top: 1px dotted #999; padding: 3px 0px 0px 0px; margin: 2px 3px 0px 3px; }
+            .mdn-anno > .feature > .support > hr::before { content: ""; }
+            .mdn-anno > .feature > .support > span { padding: 0.2em 0; display: block; display: table; }
+            .mdn-anno > .feature > .support > span.no { color: #CCCCCC; filter: grayscale(100%); }
+            .mdn-anno > .feature > .support > span.no::before { opacity: 0.5; }
+            .mdn-anno > .feature > .support > span:first-of-type { padding-top: 0.5em; }
+            .mdn-anno > .feature > .support > span > span { padding: 0 0.5em; display: table-cell; }
+            .mdn-anno > .feature > .support > span > span:first-child { width: 100%; }
+            .mdn-anno > .feature > .support > span > span:last-child { width: 100%; white-space: pre; padding: 0; }
+            .mdn-anno > .feature > .support > span::before { content: ' '; display: table-cell; min-width: 1.5em; height: 1.5em; background: no-repeat center center; background-size: contain; text-align: right; font-size: 0.75em; font-weight: bold; }
+            .mdn-anno > .feature > .support > .chrome_android::before { background-image: url(https://resources.whatwg.org/browser-logos/chrome.svg); }
+            .mdn-anno > .feature > .support > .firefox_android::before { background-image: url(https://resources.whatwg.org/browser-logos/firefox.png); }
+            .mdn-anno > .feature > .support > .chrome::before { background-image: url(https://resources.whatwg.org/browser-logos/chrome.svg); }
+            .mdn-anno > .feature > .support > .edge_blink::before { background-image: url(https://resources.whatwg.org/browser-logos/edge.svg); }
+            .mdn-anno > .feature > .support > .edge::before { background-image: url(https://resources.whatwg.org/browser-logos/edge_legacy.svg); }
+            .mdn-anno > .feature > .support > .firefox::before { background-image: url(https://resources.whatwg.org/browser-logos/firefox.png); }
+            .mdn-anno > .feature > .support > .ie::before { background-image: url(https://resources.whatwg.org/browser-logos/ie.png); }
+            .mdn-anno > .feature > .support > .safari_ios::before { background-image: url(https://resources.whatwg.org/browser-logos/safari-ios.svg); }
+            .mdn-anno > .feature > .support > .nodejs::before { background-image: url(https://nodejs.org/static/images/favicons/favicon.ico); }
+            .mdn-anno > .feature > .support > .opera_android::before { background-image: url(https://resources.whatwg.org/browser-logos/opera.svg); }
+            .mdn-anno > .feature > .support > .opera::before { background-image: url(https://resources.whatwg.org/browser-logos/opera.svg); }
+            .mdn-anno > .feature > .support > .safari::before { background-image: url(https://resources.whatwg.org/browser-logos/safari.png); }
+            .mdn-anno > .feature > .support > .samsunginternet_android::before { background-image: url(https://resources.whatwg.org/browser-logos/samsung.svg); }
+            .mdn-anno > .feature > .support > .webview_android::before { background-image: url(https://resources.whatwg.org/browser-logos/android-webview.png); }
+            .name-slug-mismatch { color: red }
+            </style>
 <style>/* style-selflinks */
 
 .heading, .issue, .note, .example, li, dt {
@@ -2453,6 +2499,118 @@ authoring advice.</p>
 
 })();
 </script>
+  <aside class="mdn-anno wrapped" data-deco data-mdn-for="dom-lock-mode">
+   <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+   <div class="feature">
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Lock/mode" title="The mode read-only property of the Lock interface returns the access mode passed to LockManager.request() when the lock was requested. The mode is either &quot;exclusive&quot; (the default) or &quot;shared&quot;.">Lock/mode</a></p>
+    <p class="less-than-two-engines-text">In only one current engine.</p>
+    <div class="support">
+     <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+     <hr>
+     <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <hr>
+     <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>?</span></span>
+     <hr>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+    </div>
+   </div>
+  </aside>
+  <aside class="mdn-anno wrapped" data-deco data-mdn-for="dom-lock-name">
+   <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+   <div class="feature">
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Lock/name" title="The name read-only property of the Lock interface returns the name passed to LockManager.request selected when the lock was requested.">Lock/name</a></p>
+    <p class="less-than-two-engines-text">In only one current engine.</p>
+    <div class="support">
+     <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+     <hr>
+     <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <hr>
+     <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>?</span></span>
+     <hr>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+    </div>
+   </div>
+  </aside>
+  <aside class="mdn-anno wrapped" data-deco data-mdn-for="api-lock">
+   <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+   <div class="feature">
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Lock" title="The Lock interface of the the Web Locks API provides the name and mode of a previously requested lock, which is received in the callback to LockManager.request().">Lock</a></p>
+    <p class="less-than-two-engines-text">In only one current engine.</p>
+    <div class="support">
+     <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+     <hr>
+     <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <hr>
+     <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>?</span></span>
+     <hr>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+    </div>
+   </div>
+  </aside>
+  <aside class="mdn-anno wrapped" data-deco data-mdn-for="dom-lockmanager-query">
+   <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+   <div class="feature">
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/LockManager/query" title="The query() method of the LockManager interface returns a Promise which resolves with an object containing information about held and pending locks. ">LockManager/query</a></p>
+    <p class="less-than-two-engines-text">In only one current engine.</p>
+    <div class="support">
+     <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+     <hr>
+     <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <hr>
+     <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>?</span></span>
+     <hr>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+    </div>
+   </div>
+  </aside>
+  <aside class="mdn-anno wrapped" data-deco data-mdn-for="dom-lockmanager-request">
+   <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+   <div class="feature">
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request" title="The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves with undefined.">LockManager/request</a></p>
+    <p class="less-than-two-engines-text">In only one current engine.</p>
+    <div class="support">
+     <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+     <hr>
+     <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <hr>
+     <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>?</span></span>
+     <hr>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+    </div>
+   </div>
+  </aside>
+  <aside class="mdn-anno wrapped" data-deco data-mdn-for="api-lock-manager">
+   <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+   <div class="feature">
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/LockManager" title="The LockManager interface of the the Web Locks API provides methods for requesting a new Lock object and querying for an existing Lock object. To get an instance of LockManager, call navigator.locks.">LockManager</a></p>
+    <p class="less-than-two-engines-text">In only one current engine.</p>
+    <div class="support">
+     <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+     <hr>
+     <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <hr>
+     <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>?</span></span>
+     <hr>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+    </div>
+   </div>
+  </aside>
+  <aside class="mdn-anno wrapped" data-deco data-mdn-for="navigator-mixins">
+   <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
+   <div class="feature">
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/locks" title="The locks read-only property of the Navigator interface returns a LockManager object which provides methods for requesting a new Lock object and querying for an existing Lock object. ">Navigator/locks</a></p>
+    <p class="less-than-two-engines-text">In only one current engine.</p>
+    <div class="support">
+     <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>?</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+     <hr>
+     <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
+     <hr>
+     <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>?</span></span>
+     <hr>
+     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+    </div>
+   </div>
+  </aside>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
@@ -3451,3 +3609,43 @@ document.body.addEventListener("click", function(e) {
 
 });
 </script>
+<script>/* script-mdn-anno */
+
+            function positionAnnos() {
+                var annos = [].slice.call(document.querySelectorAll(".mdn-anno"));
+                for(var i = 0; i < annos.length; i++) {
+                    var anno = annos[i];
+                    id = anno.getAttribute("data-mdn-for");
+                    var dfn = document.querySelector("[id='" + id +"']");
+                    if (dfn !== null) {
+                        var rect = dfn.getBoundingClientRect(id);
+                        anno.style.top = (window.scrollY + rect.top) + "px";
+                        /* See https://domspec.herokuapp.com/#dom-event-cancelable
+                         * for an example of a spec that defines multiple terms in
+                         * the same sentence on the same line. In such cases, we
+                         * need to offset the vertical positioning of each Nth anno
+                         * for that term, to prevent the annos from being placed
+                         * exactly on top of the previous ones at that position. */
+                        var top = anno.style.top;
+                        var offset = 10 * (document.querySelectorAll("[style='top: " + top + ";']").length - 1)
+                        anno.style.top = (Number(top.slice(0, -2)) + offset) + "px";
+                    } else {
+                        console.error('MDN anno references non-existent element ID "%s".%o', id, anno);
+                    }
+                }
+            }
+            window.addEventListener("load", positionAnnos())
+            document.body.addEventListener("click", (e) => {
+                if(e.target.closest(".mdn-anno-btn")) {
+                    e.target.closest(".mdn-anno").classList.toggle("wrapped");
+                }
+            });
+            /* If this is a document styled for W3C publication with a ToC
+             * sidebar, and the ToC "Collapse Sidebar" button is pushed, some
+             * MDN annos seem to end up getting wildly out of place unless we
+             * reposition them where they belong. */
+            const tocToggle = document.querySelector("#toc-toggle");
+            if (tocToggle) {
+                tocToggle.addEventListener("click", () => positionAnnos());
+            }
+            </script>
