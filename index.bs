@@ -172,7 +172,7 @@ Pages and workers ([=/agents=]) on a single [=/origin=] opened in the same user 
     There is an equivalence between the following:
 
     * Agents that share a [=lock manager=].
-    * Agents that share a [=site storage unit=], i.e. a per-origin [=localStorage|local storage area=] [[HTML]], set of [[IndexedDB-2#database-construct|databases]] [[IndexedDB-2]], or [[Service-Workers#cache-objects|caches]] [[Service-Workers]].
+    * Agents that share a [=/storage unit=], i.e. a per-origin [=localStorage|local storage area=] [[HTML]], set of [[IndexedDB-2#database-construct|databases]] [[IndexedDB-2]], or [[Service-Workers#cache-objects|caches]] [[Service-Workers]].
 
 </aside>
 
