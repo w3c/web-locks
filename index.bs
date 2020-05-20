@@ -321,7 +321,7 @@ WorkerNavigator includes NavigatorLocks;
 
 Each [=environment settings object=] has a {{LockManager}} object.
 
-The <dfn attribute for=NavigatorLocks>locks</dfn> getter's steps are to return the [=context object=]'s [=relevant settings object=]'s {{LockManager}} object.
+The <dfn attribute for=NavigatorLocks>locks</dfn> getter's steps are to return [=/this=]'s [=relevant settings object=]'s {{LockManager}} object.
 
 <!-- ====================================================================== -->
 ## {{LockManager}} class ## {#api-lock-manager}
@@ -477,7 +477,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 <dfn method for=LockManager>request(|name|, |options|, |callback|)</dfn> method steps are:
 
 1. If |options| was not passed, then let |options| be a new {{LockOptions}} dictionary with default members.
-1. Let |environment| be [=context object=]'s [=relevant settings object=].
+1. Let |environment| be [=/this=]'s [=relevant settings object=].
 1. Let |origin| be |environment|'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. If |name| starts with U+002D HYPHEN-MINUS (-), then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
@@ -538,7 +538,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 
 The <dfn method for=LockManager>query()</dfn> method steps are:
 
-1. Let |origin| be [=context object=]'s [=relevant settings object=]'s [=/origin=].
+1. Let |origin| be [=/this=]'s [=relevant settings object=]'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. Let |promise| be [=a new promise=].
 1. [=enqueue the following steps|Enqueue the steps=] to [=snapshot the lock state=] for |origin| with |promise| to the [=lock task queue=].
