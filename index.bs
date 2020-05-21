@@ -24,6 +24,9 @@ spec: html; urlPrefix: https://html.spec.whatwg.org/multipage/
     urlPrefix: webappapis.html
         type: dfn
             text: agent cluster; url: integration-with-the-javascript-agent-cluster-formalism
+spec: storage; urlPrefix: https://storage.spec.whatwg.org/
+    type: dfn
+        text: storage shelf; url: storage-shelf
 </pre>
 
 <pre class=link-defaults>
@@ -172,7 +175,7 @@ Pages and workers ([=/agents=]) on a single [=/origin=] opened in the same user 
     There is an equivalence between the following:
 
     * Agents that share a [=lock manager=].
-    * Agents that share a [=/storage unit=], i.e. a per-origin [=localStorage|local storage area=] [[HTML]], set of [[IndexedDB-2#database-construct|databases]] [[IndexedDB-2]], or [[Service-Workers#cache-objects|caches]] [[Service-Workers]].
+    * Agents that share a [=/storage shelf=], i.e. a per-origin [=localStorage|local storage area=] [[HTML]], set of [[IndexedDB-2#database-construct|databases]] [[IndexedDB-2]], or [[Service-Workers#cache-objects|caches]] [[Service-Workers]].
 
 </aside>
 
@@ -318,7 +321,7 @@ WorkerNavigator includes NavigatorLocks;
 
 Each [=environment settings object=] has a {{LockManager}} object.
 
-The {{NavigatorLocks/locks}} attribute's getter must return the [=context object=]'s [=relevant settings object=]'s {{LockManager}} object.
+The <dfn attribute for=NavigatorLocks>locks</dfn> getter's steps are to return [=/this=]'s [=relevant settings object=]'s {{LockManager}} object.
 
 <!-- ====================================================================== -->
 ## {{LockManager}} class ## {#api-lock-manager}
@@ -468,23 +471,23 @@ try {
     It is intended for use by web applications that need to attempt recovery in the face of application and/or user-agent defects, where behavior is already unpredictable.
 </aside>
 
-<div class=algorithm>
+<div algorithm="LockManager request method">
 
 The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
-<dfn method for=LockManager>request(|name|, |options|, |callback|)</dfn> methods, when invoked, must run these steps:
+<dfn method for=LockManager>request(|name|, |options|, |callback|)</dfn> method steps are:
 
 1. If |options| was not passed, then let |options| be a new {{LockOptions}} dictionary with default members.
-1. Let |environment| be [=context object=]'s [=relevant settings object=].
+1. Let |environment| be [=/this=]'s [=relevant settings object=].
 1. Let |origin| be |environment|'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. If |name| starts with U+002D HYPHEN-MINUS (-), then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If both |options|' |steal| dictionary member and |options|' |ifAvailable| dictionary member are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|' |steal| dictionary member is true and |options|' |mode| dictionary member is not "{{exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|' |signal| dictionary member is present, and either of |options|' |steal| dictionary member or |options|' |ifAvailable| dictionary member is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|' |signal| dictionary member is present and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
+1. If both |options|' `steal` dictionary member and |options|' `ifAvailable` dictionary member are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If |options|' `steal` dictionary member is true and |options|' `mode` dictionary member is not "{{exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If |options|' `signal` dictionary member is present, and either of |options|' `steal` dictionary member or |options|' `ifAvailable` dictionary member is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If |options|' `signal` dictionary member is present and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
 1. Let |promise| be [=a new promise=].
-1. Let |request| be the result of running the steps to [=request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|' |mode| dictionary member, |options|' |ifAvailable| dictionary member, and |options|' |steal| dictionary member.
-1. If |options|' |signal| dictionary member is present, then <a for=AbortSignal lt=add>add the following abort steps</a> to |options|' |signal| dictionary member:
+1. Let |request| be the result of running the steps to [=request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|' `mode` dictionary member, |options|' `ifAvailable` dictionary member, and |options|' `steal` dictionary member.
+1. If |options|' `signal` dictionary member is present, then <a for=AbortSignal lt=add>add the following abort steps</a> to |options|' `signal` dictionary member:
     1. [=enqueue the following steps|Enqueue the steps=] to [=abort the request=] |request| to the [=lock task queue=].
     1. [=Reject=] |promise| with an "{{AbortError}}" {{DOMException}}.
 1. Return |promise|.
@@ -531,11 +534,11 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 </aside>
 
 
-<div class=algorithm>
+<div algorithm>
 
-The <dfn method for=LockManager>query()</dfn> method, when invoked, must run these steps:
+The <dfn method for=LockManager>query()</dfn> method steps are:
 
-1. Let |origin| be [=context object=]'s [=relevant settings object=]'s [=/origin=].
+1. Let |origin| be [=/this=]'s [=relevant settings object=]'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. Let |promise| be [=a new promise=].
 1. [=enqueue the following steps|Enqueue the steps=] to [=snapshot the lock state=] for |origin| with |promise| to the [=lock task queue=].
@@ -557,9 +560,9 @@ interface Lock {
 
 A {{Lock}} object has an associated [=lock-concept|lock=].
 
-The {{Lock/name}} attribute getter returns the associated [=lock-concept|lock=]'s [=lock-concept/name=].
+The <dfn attribute for=Lock>name</dfn> getter's steps are to return the associated [=lock-concept|lock=]'s [=lock-concept/name=].
 
-The {{Lock/mode}} attribute getter returns the associated [=lock-concept|lock=]'s [=lock-concept/mode=].
+The <dfn attribute for=Lock>mode</dfn> getter's steps are to return the associated [=lock-concept|lock=]'s [=lock-concept/mode=].
 
 <!-- ====================================================================== -->
 # Algorithms # {#algorithms}
@@ -570,7 +573,7 @@ The {{Lock/mode}} attribute getter returns the associated [=lock-concept|lock=]'
 <!-- ====================================================================== -->
 
 <div class=algorithm>
-To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |callback|, |name|, |mode|, |ifAvailable|, |steal|, and optional |signal|:
+To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |callback|, |name|, |mode|, |ifAvailable| and |steal|:
 
 1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |promise|).
 1. [=Enqueue the following steps=] to the [=lock task queue=]:
