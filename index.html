@@ -1175,7 +1175,7 @@ Possible extra rowspan handling
 		   1. When table < content column, centers table in column.
 		   2. When content < table < available, left-aligns.
 		   3. When table > available, fills available + scroll bar.
-		*/ 
+		*/
 		display: grid;
 		grid-template-columns: minmax(0, 50em);
 	}
@@ -1222,10 +1222,10 @@ Possible extra rowspan handling
 	}
 </style>
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version cac0058e, updated Tue May 19 10:56:43 2020 -0700" name="generator">
+  <meta content="Bikeshed version 76bae64b, updated Wed Jun 3 14:38:35 2020 -0700" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.png" rel="icon">
-  <meta content="a108c47cc6b061e40cf6413cde4a6d31db53e3c8" name="document-revision">
+  <meta content="8271eeaaed4fd41935ac4f7f95149543249f7a92" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -1547,7 +1547,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-05-21">21 May 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-04">4 June 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1826,7 +1826,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
     </ol>
    </div>
    <h3 class="heading settled" data-level="2.6" id="agent-integration"><span class="secno">2.6. </span><span class="content">Agent Integration</span><a class="self-link" href="#agent-integration"></a></h3>
-   <div class="algorithm">
+   <div class="algorithm" data-algorithm="agent termination">
      When an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent④">agent</a> terminates, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps②">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue①">lock task queue</a>: 
     <aside class="issue" id="issue-9d75c9d8"><a class="self-link" href="#issue-9d75c9d8"></a> Normative reference for <i>terminates</i>. </aside>
     <ol>
@@ -2067,7 +2067,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Lock" data-dfn-type="attribute" data-export id="dom-lock-mode"><code>mode</code></dfn> getter’s steps are to return the associated <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑦">lock</a>'s <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode①">mode</a>.</p>
    <h2 class="heading settled" data-level="4" id="algorithms"><span class="secno">4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
    <h3 class="heading settled" data-level="4.1" id="algorithm-request-lock"><span class="secno">4.1. </span><span class="content">Request a lock</span><a class="self-link" href="#algorithm-request-lock"></a></h3>
-   <div class="algorithm">
+   <div class="algorithm" data-algorithm="request a lock">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="request-a-lock">request a lock</dfn> with <var>promise</var>, <var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>callback</var>, <var>name</var>, <var>mode</var>, <var>ifAvailable</var> and <var>steal</var>: 
     <ol>
      <li data-md>
@@ -2122,7 +2122,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     </ol>
    </div>
    <h3 class="heading settled" data-level="4.2" id="algorithm-release-lock"><span class="secno">4.2. </span><span class="content">Release a lock</span><a class="self-link" href="#algorithm-release-lock"></a></h3>
-   <div class="algorithm">
+   <div class="algorithm" data-algorithm="release the lock">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="release-the-lock">release the lock</dfn> <var>lock</var>: 
     <ol>
      <li data-md>
@@ -2142,7 +2142,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     </ol>
    </div>
    <h3 class="heading settled" data-level="4.3" id="algorithm-abort-request"><span class="secno">4.3. </span><span class="content">Abort a request</span><a class="self-link" href="#algorithm-abort-request"></a></h3>
-   <div class="algorithm">
+   <div class="algorithm" data-algorithm="abort the request">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="abort-the-request">abort the request</dfn> <var>request</var>: 
     <ol>
      <li data-md>
@@ -2150,7 +2150,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>origin</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-origin" id="ref-for-lock-request-origin①">origin</a>.</p>
      <li data-md>
-      <p>Let <var>name</var> be <var>lock</var>’s <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name⑥">resource name</a>.</p>
+      <p>Let <var>name</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name①">name</a>.</p>
      <li data-md>
       <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map③">lock request queue map</a>.</p>
      <li data-md>
@@ -2162,7 +2162,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     </ol>
    </div>
    <h3 class="heading settled" data-level="4.4" id="algorithm-process-request"><span class="secno">4.4. </span><span class="content">Process a lock request queue for a given resource name</span><a class="self-link" href="#algorithm-process-request"></a></h3>
-   <div class="algorithm">
+   <div class="algorithm" data-algorithm="process the lock request queue">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-the-lock-request-queue">process the lock request queue</dfn> <var>queue</var>: 
     <ol>
      <li data-md>
@@ -2180,7 +2180,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
          <li data-md>
           <p>Let <var>clientId</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-clientid" id="ref-for-lock-request-clientid">clientId</a>.</p>
          <li data-md>
-          <p>Let <var>name</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name①">name</a>.</p>
+          <p>Let <var>name</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name②">name</a>.</p>
          <li data-md>
           <p>Let <var>mode</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode①">mode</a>.</p>
          <li data-md>
@@ -2204,7 +2204,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     </ol>
    </div>
    <h3 class="heading settled" data-level="4.5" id="algorithm-snapshot-state"><span class="secno">4.5. </span><span class="content">Snapshot the lock state</span><a class="self-link" href="#algorithm-snapshot-state"></a></h3>
-   <div class="algorithm">
+   <div class="algorithm" data-algorithm="snapshot the lock state">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="snapshot-the-lock-state">snapshot the lock state</dfn> for <var>origin</var> with <var>promise</var>: 
     <ol>
      <li data-md>
@@ -2212,13 +2212,13 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>pending</var> be a new <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list">list</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>name</var> → <var>queue</var> of <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map④">lock request queue map</a>:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>queue</var> of <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map④">lock request queue map</a>'s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-value" id="ref-for-map-value">values</a>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">For each</a> <var>request</var> of <var>queue</var>:</p>
         <ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append">Append</a> «[ "name" → <var>request</var>’s <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name②">name</a>, "mode" → <var>request</var>’s <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode②">mode</a>, "clientId" → <var>request</var>’s <a data-link-type="dfn" href="#lock-request-clientid" id="ref-for-lock-request-clientid①">clientId</a> ]» to <var>pending</var>.</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append">Append</a> «[ "name" → <var>request</var>’s <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name③">name</a>, "mode" → <var>request</var>’s <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode②">mode</a>, "clientId" → <var>request</var>’s <a data-link-type="dfn" href="#lock-request-clientid" id="ref-for-lock-request-clientid①">clientId</a> ]» to <var>pending</var>.</p>
         </ol>
       </ol>
      <li data-md>
@@ -2330,7 +2330,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
        <p>Any measure of control over a user agent’s native UI.</p>
      </ul>
     <li data-md>
-     <p>No temporary identifiers to the web are exposed to the web. All <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name⑦">resource names</a> are provided by the web application itself.</p>
+     <p>No temporary identifiers to the web are exposed to the web. All <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name⑥">resource names</a> are provided by the web application itself.</p>
     <li data-md>
      <p>Behavior in first-party and third-party contexts is distinguished in a user agent if storage is distinguished. See <a href="#security-scope">§ 6.1 Lock Scope</a>.</p>
     <li data-md>
@@ -2914,6 +2914,12 @@ authoring advice.</p>
     <li><a href="#ref-for-ordered-set">2.4. Locks</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-map-value">
+   <a href="https://infra.spec.whatwg.org/#map-value">https://infra.spec.whatwg.org/#map-value</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-map-value">4.5. Snapshot the lock state</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-client">
    <a href="https://w3c.github.io/ServiceWorker/#client">https://w3c.github.io/ServiceWorker/#client</a><b>Referenced in:</b>
    <ul>
@@ -3087,6 +3093,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-queue" style="color:initial">queue</span>
      <li><span class="dfn-paneled" id="term-for-list-remove" style="color:initial">remove</span>
      <li><span class="dfn-paneled" id="term-for-ordered-set" style="color:initial">set</span>
+     <li><span class="dfn-paneled" id="term-for-map-value" style="color:initial">value</span>
     </ul>
    <li>
     <a data-link-type="biblio">[Service-Workers]</a> defines the following terms:
@@ -3217,8 +3224,7 @@ authoring advice.</p>
     <li><a href="#ref-for-resource-name③">2.5. Lock Requests</a>
     <li><a href="#ref-for-resource-name④">3.2.1. The request() method</a>
     <li><a href="#ref-for-resource-name⑤">4.2. Release a lock</a>
-    <li><a href="#ref-for-resource-name⑥">4.3. Abort a request</a>
-    <li><a href="#ref-for-resource-name⑦">6.4. Checklist</a>
+    <li><a href="#ref-for-resource-name⑥">6.4. Checklist</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock-manager">
@@ -3352,8 +3358,9 @@ authoring advice.</p>
    <b><a href="#lock-request-name">#lock-request-name</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-lock-request-name">2.5. Lock Requests</a>
-    <li><a href="#ref-for-lock-request-name①">4.4. Process a lock request queue for a given resource name</a>
-    <li><a href="#ref-for-lock-request-name②">4.5. Snapshot the lock state</a>
+    <li><a href="#ref-for-lock-request-name①">4.3. Abort a request</a>
+    <li><a href="#ref-for-lock-request-name②">4.4. Process a lock request queue for a given resource name</a>
+    <li><a href="#ref-for-lock-request-name③">4.5. Snapshot the lock state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock-request-mode">
