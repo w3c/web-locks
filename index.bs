@@ -245,10 +245,14 @@ Further note that if the callback is not `async` and returns a non-promise, the 
 
 Each origin has a <dfn>held lock set</dfn> which is a [=/set=] of [=lock-concept|locks=].
 
+<div algorithm="waiting promise settles">
+
 When [=lock-concept|lock=] |lock|'s [=lock-concept/waiting promise=] settles (fulfills or rejects), [=enqueue the following steps=] on the [=lock task queue=]:
 
 1. [=Release the lock=] |lock|.
 1. [=Resolve=] |lock|'s [=lock-concept/released promise=] with |lock|'s [=lock-concept/waiting promise=].
+
+</div>
 
 </div>
 
@@ -260,11 +264,13 @@ A <dfn>lock request</dfn> represents a pending request for a [=lock-concept|lock
 
 <div dfn-for="lock request">
 
-A [=lock request=] is a tuple of (<dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, <dfn>promise</dfn>).
+A [=lock request=] is a [=/struct=] with [=struct/items=] <dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, and <dfn>promise</dfn>.
 
 A <dfn>lock request queue</dfn> is a [=queue=] of [=lock requests=].
 
 Each origin has a <dfn>lock request queue map</dfn>, which is a [=map=] of [=resource names=] to [=lock request queues=].
+
+<div algorithm>
 
 A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following steps return true:
 
@@ -283,6 +289,8 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 
 </div>
 
+</div>
+
 <!-- ====================================================================== -->
 ## Agent Integration ## {#agent-integration}
 <!-- ====================================================================== -->
@@ -291,7 +299,7 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 When an [=/agent=] terminates, [=enqueue the following steps=] on the [=lock task queue=]:
 
 <aside class=issue>
-    Normative reference for <i>terminates</i>.
+    Identify a normative reference for <i>terminates</i>.
 </aside>
 
 
