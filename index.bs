@@ -8,7 +8,7 @@ Level: 1
 Editor: Joshua Bell, Google Inc. https://google.com, jsbell@google.com
 Group: WICG
 Test Suite: https://github.com/web-platform-tests/wpt/tree/master/web-locks
-Favicon: logo-lock.png
+Favicon: logo-lock.svg
 Complain About: accidental-2119 yes, missing-example-ids yes
 Markup Shorthands: css no, markdown yes
 </pre>
