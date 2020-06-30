@@ -1225,7 +1225,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version 04c91f0f, updated Mon Jun 29 08:51:04 2020 +0200" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="ef9125ba1bc56392b4f436fba38129e906c50548" name="document-revision">
+  <meta content="a4598fda5c66d6f055f51dffcfed2f830d0630a1" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -1554,7 +1554,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-29">29 June 2020</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2020-06-30">30 June 2020</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1786,56 +1786,60 @@ Note that in most code the callback would be implemented as an <code>async</code
 Further note that if the callback is not <code>async</code> and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; the lock will be released in an upcoming microtask, and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise②">released promise</a> will also resolve in a subsequent microtask.</p>
     </aside>
     <p>Each origin has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-held-lock-set">held lock set</dfn> which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a> of <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑨">locks</a>.</p>
-    <p>When <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⓪">lock</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise③">waiting promise</a> settles (fulfills or rejects), <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps①">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue">lock task queue</a>:</p>
-    <ol>
-     <li data-md>
-      <p><a data-link-type="dfn" href="#release-the-lock" id="ref-for-release-the-lock">Release the lock</a> <var>lock</var>.</p>
-     <li data-md>
-      <p><a data-link-type="dfn" href="https://heycam.github.io/webidl/#resolve" id="ref-for-resolve">Resolve</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise③">released promise</a> with <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise④">waiting promise</a>.</p>
-    </ol>
+    <div class="algorithm" data-algorithm="waiting promise settles">
+     <p>When <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⓪">lock</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise③">waiting promise</a> settles (fulfills or rejects), <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps①">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue">lock task queue</a>:</p>
+     <ol>
+      <li data-md>
+       <p><a data-link-type="dfn" href="#release-the-lock" id="ref-for-release-the-lock">Release the lock</a> <var>lock</var>.</p>
+      <li data-md>
+       <p><a data-link-type="dfn" href="https://heycam.github.io/webidl/#resolve" id="ref-for-resolve">Resolve</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise③">released promise</a> with <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise④">waiting promise</a>.</p>
+     </ol>
+    </div>
    </div>
    <h3 class="heading settled" data-level="2.5" id="concept-lock-request"><span class="secno">2.5. </span><span class="content">Lock Requests</span><a class="self-link" href="#concept-lock-request"></a></h3>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-request">lock request</dfn> represents a pending request for a <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①①">lock</a>.</p>
    <div>
-    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request②">lock request</a> is a tuple of (<dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-agent">agent</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-clientid">clientId</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-origin">origin</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-name">name</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-mode">mode</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-promise">promise</dfn>).</p>
+    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request②">lock request</a> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> with <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item">items</a> <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-agent">agent</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-clientid">clientId</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-origin">origin</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-name">name</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-mode">mode</dfn>, and <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-promise">promise</dfn>.</p>
     <p>A <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-lock-request-queue">lock request queue</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#queue" id="ref-for-queue">queue</a> of <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request③">lock requests</a>.</p>
     <p>Each origin has a <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-lock-request-queue-map">lock request queue map</dfn>, which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">map</a> of <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource names</a> to <a data-link-type="dfn" href="#lock-request-lock-request-queue" id="ref-for-lock-request-lock-request-queue">lock request queues</a>.</p>
-    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request④">lock request</a> <var>request</var> is said to be <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-grantable">grantable</dfn> if the following steps return true:</p>
-    <ol>
-     <li data-md>
-      <p>Let <var>origin</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-origin" id="ref-for-lock-request-origin">origin</a>.</p>
-     <li data-md>
-      <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map">lock request queue map</a>.</p>
-     <li data-md>
-      <p>Let <var>name</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name">name</a>.</p>
-     <li data-md>
-      <p>Let <var>queue</var> be <var>queueMap</var>[<var>name</var>].</p>
-     <li data-md>
-      <p>Let <var>held</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set">held lock set</a></p>
-     <li data-md>
-      <p>Let <var>mode</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode">mode</a></p>
-     <li data-md>
-      <p>If <var>mode</var> is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑤">exclusive</a></code>", then return true if all of the following conditions are true, and false otherwise:</p>
-      <ul>
-       <li data-md>
-        <p>No <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①②">lock</a> in <var>held</var> has a <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name">name</a> that equals <var>name</var></p>
-       <li data-md>
-        <p>No <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑤">lock request</a> in <var>queue</var> earlier than <var>request</var> exists.</p>
-      </ul>
-     <li data-md>
-      <p>Otherwise, mode is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared④">shared</a></code>"; return true if all of the following conditions are true, and false otherwise:</p>
-      <ul>
-       <li data-md>
-        <p>No <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①③">lock</a> in <var>held</var> has <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode">mode</a> "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑥">exclusive</a></code>" and has a <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name①">name</a> that equals <var>name</var>.</p>
-       <li data-md>
-        <p>No <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑥">lock request</a> in <var>queue</var> earlier than <var>request</var> exists.</p>
-      </ul>
-    </ol>
+    <div class="algorithm" data-algorithm="grantable">
+     <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request④">lock request</a> <var>request</var> is said to be <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-grantable">grantable</dfn> if the following steps return true:</p>
+     <ol>
+      <li data-md>
+       <p>Let <var>origin</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-origin" id="ref-for-lock-request-origin">origin</a>.</p>
+      <li data-md>
+       <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map">lock request queue map</a>.</p>
+      <li data-md>
+       <p>Let <var>name</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name">name</a>.</p>
+      <li data-md>
+       <p>Let <var>queue</var> be <var>queueMap</var>[<var>name</var>].</p>
+      <li data-md>
+       <p>Let <var>held</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set">held lock set</a></p>
+      <li data-md>
+       <p>Let <var>mode</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode">mode</a></p>
+      <li data-md>
+       <p>If <var>mode</var> is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑤">exclusive</a></code>", then return true if all of the following conditions are true, and false otherwise:</p>
+       <ul>
+        <li data-md>
+         <p>No <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①②">lock</a> in <var>held</var> has a <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name">name</a> that equals <var>name</var></p>
+        <li data-md>
+         <p>No <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑤">lock request</a> in <var>queue</var> earlier than <var>request</var> exists.</p>
+       </ul>
+      <li data-md>
+       <p>Otherwise, mode is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared④">shared</a></code>"; return true if all of the following conditions are true, and false otherwise:</p>
+       <ul>
+        <li data-md>
+         <p>No <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①③">lock</a> in <var>held</var> has <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode">mode</a> "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑥">exclusive</a></code>" and has a <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name①">name</a> that equals <var>name</var>.</p>
+        <li data-md>
+         <p>No <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑥">lock request</a> in <var>queue</var> earlier than <var>request</var> exists.</p>
+       </ul>
+     </ol>
+    </div>
    </div>
    <h3 class="heading settled" data-level="2.6" id="agent-integration"><span class="secno">2.6. </span><span class="content">Agent Integration</span><a class="self-link" href="#agent-integration"></a></h3>
    <div class="algorithm" data-algorithm="agent termination">
      When an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent④">agent</a> terminates, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps②">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue①">lock task queue</a>: 
-    <aside class="issue" id="issue-9d75c9d8"><a class="self-link" href="#issue-9d75c9d8"></a> Normative reference for <i>terminates</i>. </aside>
+    <aside class="issue" id="issue-77a47106"><a class="self-link" href="#issue-77a47106"></a> Identify a normative reference for <i>terminates</i>. </aside>
     <ol>
      <li data-md>
       <p>For each <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑦">lock request</a> <var>request</var> with <a data-link-type="dfn" href="#lock-request-agent" id="ref-for-lock-request-agent">agent</a> equal to the terminating agent:</p>
@@ -2876,6 +2880,12 @@ authoring advice.</p>
     <li><a href="#ref-for-map-iterate">4.5. Snapshot the lock state</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-struct-item">
+   <a href="https://infra.spec.whatwg.org/#struct-item">https://infra.spec.whatwg.org/#struct-item</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-struct-item">2.5. Lock Requests</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-string">
    <a href="https://infra.spec.whatwg.org/#string">https://infra.spec.whatwg.org/#string</a><b>Referenced in:</b>
    <ul>
@@ -2919,6 +2929,12 @@ authoring advice.</p>
    <a href="https://infra.spec.whatwg.org/#ordered-set">https://infra.spec.whatwg.org/#ordered-set</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-ordered-set">2.4. Locks</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-struct">
+   <a href="https://infra.spec.whatwg.org/#struct">https://infra.spec.whatwg.org/#struct</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-struct">2.5. Lock Requests</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-map-value">
@@ -3093,6 +3109,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-assert" style="color:initial">assert</span>
      <li><span class="dfn-paneled" id="term-for-queue-enqueue" style="color:initial">enqueue</span>
      <li><span class="dfn-paneled" id="term-for-map-iterate" style="color:initial">for each <small>(for map)</small></span>
+     <li><span class="dfn-paneled" id="term-for-struct-item" style="color:initial">item</span>
      <li><span class="dfn-paneled" id="term-for-string" style="color:initial">javascript string</span>
      <li><span class="dfn-paneled" id="term-for-list" style="color:initial">list</span>
      <li><span class="dfn-paneled" id="term-for-ordered-map" style="color:initial">map</span>
@@ -3100,6 +3117,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-queue" style="color:initial">queue</span>
      <li><span class="dfn-paneled" id="term-for-list-remove" style="color:initial">remove</span>
      <li><span class="dfn-paneled" id="term-for-ordered-set" style="color:initial">set</span>
+     <li><span class="dfn-paneled" id="term-for-struct" style="color:initial">struct</span>
      <li><span class="dfn-paneled" id="term-for-map-value" style="color:initial">value</span>
     </ul>
    <li>
@@ -3207,7 +3225,7 @@ authoring advice.</p>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. <a href="#issue-fb27f9c9"> ↵ </a></div>
-   <div class="issue"> Normative reference for <i>terminates</i>. <a href="#issue-9d75c9d8"> ↵ </a></div>
+   <div class="issue"> Identify a normative reference for <i>terminates</i>. <a href="#issue-77a47106"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="lock-task-queue">
    <b><a href="#lock-task-queue">#lock-task-queue</a></b><b>Referenced in:</b>
