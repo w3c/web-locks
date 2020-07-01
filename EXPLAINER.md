@@ -2,7 +2,7 @@
 
 # Explainer: Web Locks API
 
-This document proposes a new web platform API that allows script to asynchronously acquire a lock over a resource, hold it while work is performed, then release it. While held, no other script in the origin can aquire a lock over the same resource. This allows contexts (windows, workers) within a web application to coordinate the usage of resources.
+This document proposes a new web platform API that allows script to asynchronously acquire a lock over a resource, hold it while work is performed, then release it. While held, no other script in the origin can acquire a lock over the same resource. This allows contexts (windows, workers) within a web application to coordinate the usage of resources.
 
 Participate: [GitHub issues](https://github.com/WICG/web-locks/issues) or [WICG Discourse](https://discourse.wicg.io/t/application-defined-locks/2581) &mdash;
 Docs: [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) &mdash;
