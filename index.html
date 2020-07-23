@@ -1225,7 +1225,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version a1fcaa3b, updated Fri Jul 17 17:22:25 2020 -0700" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="af2a6d6cba27a6b6c331d3fcb7938fa24a14ac24" name="document-revision">
+  <meta content="0c78d6d1c3fb9236dd6b068d8f7b4c937a19c976" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -1715,7 +1715,7 @@ await navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'my_resourc
    </aside>
    <h3 class="heading settled" data-level="1.2" id="motivations"><span class="secno">1.2. </span><span class="content">Motivating Use Cases</span><a class="self-link" href="#motivations"></a></h3>
    <p>A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as the <a data-link-type="biblio" href="#biblio-indexeddb-2">Indexed Database API</a> for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronize the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active.</p>
-   <p>In a data synchronization service, a "master tab" is designated. This tab is the only one that should be performing some operations (e.g. network sync, cleaning up queued data, etc). It holds a lock and never releases it. Other tabs can attempt to acquire the lock, and such attempts will be queued. If the "master tab" crashes or is closed then one of the other tabs will get the lock and become the new master.</p>
+   <p>In a data synchronization service, a "primary tab" is designated. This tab is the only one that should be performing some operations (e.g. network sync, cleaning up queued data, etc). It holds a lock and never releases it. Other tabs can attempt to acquire the lock, and such attempts will be queued. If the "primary tab" crashes or is closed then one of the other tabs will get the lock and become the new primary.</p>
    <p>The <a data-link-type="biblio" href="#biblio-indexeddb-2">Indexed Database API</a> defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. Exposing this concept as a primitive allows any Web Platform activity to be scheduled based on resource availability, for example allowing transactions to be composed for other storage types (such as Caches <a data-link-type="biblio" href="#biblio-service-workers">[Service-Workers]</a>), across storage types, even across non-storage APIs (e.g. network fetches).</p>
    <h2 class="heading settled" data-level="2" id="concepts"><span class="secno">2. </span><span class="content">Concepts</span><a class="self-link" href="#concepts"></a></h2>
    <p>For the purposes of this specification:</p>
