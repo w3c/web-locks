@@ -43,7 +43,7 @@ Previous discussions:
 
 A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as IndexedDB for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronize the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active.
 
-In a data synchronization service, a "master tab" is designated. This tab is the only one that should be performing some operations (e.g. network sync, cleaning up queued data, etc). It holds a lock and never releases it. Other tabs can attempt to acquire the lock, and such attempts will be queued. If the "master tab" crashes or is closed then one of the other tabs will get the lock and become the new master.
+In a data synchronization service, a "primary tab" is designated. This tab is the only one that should be performing some operations (e.g. network sync, cleaning up queued data, etc). It holds a lock and never releases it. Other tabs can attempt to acquire the lock, and such attempts will be queued. If the "primary tab" crashes or is closed then one of the other tabs will get the lock and become the new primary.
 
 The [Indexed Database API](https://w3c.github.io/IndexedDB/) defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. Exposing this concept as a primitive allows any Web Platform activity to be scheduled based on resource availability, for example allowing transactions to be composed for other storage types (such as Cache Storage), across storage types, even across non-storage APIs (e.g. network fetches).
 
@@ -382,7 +382,7 @@ Yes. Using the API, just pass in a promise that never resolves:
 ```js
 navigator.locks.request(name, lock => new Promise(r => {}));
 ```
-In practice, you may want to reserve some ability to resolve the promise, e.g. in response to a "sign out" event or indication that the tab has become inactive. But in some scenarios (e.g. master election) then never releasing the lock until the page is terminated is entirely reasonable.
+In practice, you may want to reserve some ability to resolve the promise, e.g. in response to a "sign out" event or indication that the tab has become inactive. But in some scenarios (e.g. primary election) then never releasing the lock until the page is terminated is entirely reasonable.
 
 
 *If a tab is holding an exclusive lock, what happens if another lock request for the same resource is made?*
