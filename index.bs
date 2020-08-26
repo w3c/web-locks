@@ -29,13 +29,6 @@ spec: storage; urlPrefix: https://storage.spec.whatwg.org/
         text: storage shelf; url: storage-shelf
 </pre>
 
-<pre class=link-defaults>
-spec:infra; type:dfn; text:list
-spec:html; type:dfn; for:/; text:origin
-spec:html; type:dfn; for:/; text:browsing context
-spec:webidl; type:dfn; text:resolve
-</pre>
-
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -150,7 +143,7 @@ The [=task source=] for [=enqueue steps|steps enqueued=] below is the <dfn expor
 A <dfn>resource name</dfn> is a [=JavaScript string=] chosen by the web application to represent an abstract resource.
 
 A resource name has no external meaning beyond the scheduling algorithm, but is global
-across [=browsing contexts=] within an [=/origin=]. Web applications are free to use any resource naming scheme.
+across [=/browsing contexts=] within an [=/origin=]. Web applications are free to use any resource naming scheme.
 
 <aside class=example id=example-indexeddb-transactions>
 To mimic transaction locking over named stores within a named
@@ -168,7 +161,7 @@ Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting th
 
 A user agent has a <dfn>lock manager</dfn> for each [=/origin=], which encapsulates the state of all [=lock-concept|locks=] and [=lock requests=] for that origin.
 
-Pages and workers ([=/agents=]) on a single [=/origin=] opened in the same user agent share a lock manager even if they are in unrelated [=browsing contexts=].
+Pages and workers ([=/agents=]) on a single [=/origin=] opened in the same user agent share a lock manager even if they are in unrelated [=/browsing contexts=].
 
 <aside class=note>
 
@@ -250,7 +243,7 @@ Each origin has a <dfn>held lock set</dfn> which is a [=/set=] of [=lock-concept
 When [=lock-concept|lock=] |lock|'s [=lock-concept/waiting promise=] settles (fulfills or rejects), [=enqueue the following steps=] on the [=lock task queue=]:
 
 1. [=Release the lock=] |lock|.
-1. [=Resolve=] |lock|'s [=lock-concept/released promise=] with |lock|'s [=lock-concept/waiting promise=].
+1. [=/Resolve=] |lock|'s [=lock-concept/released promise=] with |lock|'s [=lock-concept/waiting promise=].
 
 </div>
 
@@ -266,7 +259,7 @@ A <dfn>lock request</dfn> represents a pending request for a [=lock-concept|lock
 
 A [=lock request=] is a [=/struct=] with [=struct/items=] <dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, and <dfn>promise</dfn>.
 
-A <dfn>lock request queue</dfn> is a [=queue=] of [=lock requests=].
+A <dfn>lock request queue</dfn> is a [=/queue=] of [=lock requests=].
 
 Each origin has a <dfn>lock request queue map</dfn>, which is a [=map=] of [=resource names=] to [=lock request queues=].
 
@@ -598,7 +591,7 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |cal
         1. If |ifAvailable| is true and |request| is not [=grantable=],
              then [=enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
             1. Let |r| be the result of [=invoking=] |callback| with `null` as the only argument.
-            1. [=Resolve=] |promise| with |r| and abort these steps.
+            1. [=/Resolve=] |promise| with |r| and abort these steps.
         1. [=queue/Enqueue=] |request| in |queue|.
     1. [=Process the lock request queue=] |queue|.
 1. Return |request|.
@@ -660,7 +653,7 @@ To <dfn>process the lock request queue</dfn> |queue|:
         1. [=set/Append=] |lock| to |origin|'s [=held lock set=].
         1. [=Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
             1. Let |r| be the result of [=invoking=] |callback| with a new {{Lock}} object associated with |lock| as the only argument.
-            1. [=Resolve=] |waiting| with |r|.
+            1. [=/Resolve=] |waiting| with |r|.
 
 </div>
 
@@ -672,14 +665,14 @@ To <dfn>process the lock request queue</dfn> |queue|:
 To <dfn>snapshot the lock state</dfn> for |origin| with |promise|:
 
 1. [=Assert=]: these steps are running on the [=lock task queue=].
-1. Let |pending| be a new [=list=].
+1. Let |pending| be a new [=/list=].
 1. [=map/For each=] |queue| of |origin|'s [=lock request queue map=]'s [=map/values=]:
     1. [=list/For each=] |request| of |queue|:
         1. [=list/Append=] «[ "name" → |request|'s [=lock request/name=], "mode" → |request|'s [=lock request/mode=], "clientId" → |request|'s [=lock request/clientId=] ]» to |pending|.
-1. Let |held| be a new [=list=].
+1. Let |held| be a new [=/list=].
 1. [=list/For each=] |lock| of |origin|'s [=held lock set=]:
     1. [=list/Append=] «[ "name" → |lock|'s [=lock-concept/name=], "mode" → |lock|'s [=lock-concept/mode=], "clientId" → |lock|'s [=lock-concept/clientId=] ]» to |held|.
-1. [=Resolve=] |promise| with «[ "held" → |held|, "pending" → |pending| ]».
+1. [=/Resolve=] |promise| with «[ "held" → |held|, "pending" → |pending| ]».
 
 </div>
 
