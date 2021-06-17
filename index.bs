@@ -48,7 +48,7 @@ spec: storage; urlPrefix: https://storage.spec.whatwg.org/
 }
 </style>
 
-<img src="logo-lock.svg" alt="logo"
+<img src="logo-lock.svg" alt="logo" width="100" height="100"
     style="height: 100px; width: 100px; position: absolute; right: 20px; top: 30px;">
 
 
