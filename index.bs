@@ -287,10 +287,10 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 1. Let |mode| be |request|'s [=lock request/mode=]
 1. If |mode| is "{{exclusive}}", then return true if all of the following conditions are true, and false otherwise:
     * No [=lock-concept|lock=] in |held| has a [=lock-concept/name=] that equals |name|
-    * No [=lock request=] in |queue| earlier than |request| exists.
-1. Otherwise, mode is "{{shared}}"; return true if all of the following conditions are true, and false otherwise:
+    * Either |queue| [=queue/is empty=], or |request| is the first [=queue/item=] in |queue|.
+1. Otherwise, |mode| is "{{shared}}"; return true if all of the following conditions are true, and false otherwise:
     * No [=lock-concept|lock=] in |held| has [=lock-concept/mode=] "{{exclusive}}" and has a [=lock-concept/name=] that equals |name|.
-    * No [=lock request=] in |queue| earlier than |request| exists.
+    * Either |queue| [=queue/is empty=], or |request| is the first [=queue/item=] in |queue|.
 
 </div>
 
