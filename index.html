@@ -7,7 +7,7 @@
   <meta content="Bikeshed version 4f053d00e, updated Tue Aug 10 14:13:32 2021 -0700" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="09fd29dedb52b046ae9a092eb82ae79d5734ebce" name="document-revision">
+  <meta content="d141513f28bef5aebc91f0f665c02bfe7a606d78" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -932,21 +932,11 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
      <li data-md>
       <p>Let <var>mode</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode">mode</a></p>
      <li data-md>
-      <p>If <var>mode</var> is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑤">exclusive</a></code>", then return true if all of the following conditions are true, and false otherwise:</p>
-      <ul>
-       <li data-md>
-        <p>No <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①②">lock</a> in <var>held</var> has a <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name">name</a> that equals <var>name</var></p>
-       <li data-md>
-        <p>No <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑤">lock request</a> in <var>queue</var> earlier than <var>request</var> exists.</p>
-      </ul>
+      <p>If <var>queue</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-is-empty" id="ref-for-list-is-empty">is not empty</a> and <var>request</var> is not the first <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-item" id="ref-for-list-item">item</a> in <var>queue</var>, then return false.</p>
      <li data-md>
-      <p>Otherwise, mode is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared④">shared</a></code>"; return true if all of the following conditions are true, and false otherwise:</p>
-      <ul>
-       <li data-md>
-        <p>No <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①③">lock</a> in <var>held</var> has <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode">mode</a> "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑥">exclusive</a></code>" and has a <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name①">name</a> that equals <var>name</var>.</p>
-       <li data-md>
-        <p>No <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑥">lock request</a> in <var>queue</var> earlier than <var>request</var> exists.</p>
-      </ul>
+      <p>If <var>mode</var> is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑤">exclusive</a></code>", then return true if no <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①②">lock</a> in <var>held</var> has <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name">name</a> equal to <var>name</var>, and false otherwise.</p>
+     <li data-md>
+      <p>Otherwise, <var>mode</var> is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared④">shared</a></code>"; return true if no <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①③">lock</a> in <var>held</var> has <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode">mode</a> "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑥">exclusive</a></code>" and has <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name①">name</a> equal to <var>name</var>, and false otherwise.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="2.6" id="agent-integration"><span class="secno">2.6. </span><span class="content">Agent Integration</span><a class="self-link" href="#agent-integration"></a></h3>
@@ -955,7 +945,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
     <aside class="issue" id="issue-77a47106"><a class="self-link" href="#issue-77a47106"></a> Identify a normative reference for <i>terminates</i>. </aside>
     <ol>
      <li data-md>
-      <p>For each <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑦">lock request</a> <var>request</var> with <a data-link-type="dfn" href="#lock-request-agent" id="ref-for-lock-request-agent">agent</a> equal to the terminating agent:</p>
+      <p>For each <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑤">lock request</a> <var>request</var> with <a data-link-type="dfn" href="#lock-request-agent" id="ref-for-lock-request-agent">agent</a> equal to the terminating agent:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="#abort-the-request" id="ref-for-abort-the-request">Abort the request</a> <var>request</var>.</p>
@@ -1045,7 +1035,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString③"><c- b>DOMString</c-></a> <dfn class="idl-code" data-dfn-for="LockInfo" data-dfn-type="dict-member" data-export data-type="DOMString " id="dom-lockinfo-clientid"><code><c- g>clientId</c-></code><a class="self-link" href="#dom-lockinfo-clientid"></a></dfn>;
 };
 </pre>
-   <p>A <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager⑤">LockManager</a></code> instance allows script to make <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑧">lock requests</a> and query
+   <p>A <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager⑤">LockManager</a></code> instance allows script to make <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑥">lock requests</a> and query
 the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a>.</p>
    <h4 class="heading settled" data-level="3.2.1" id="api-lock-manager-request"><span class="secno">3.2.1. </span><span class="content">The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request②">request()</a></code> method</span><a class="self-link" href="#api-lock-manager-request"></a></h4>
    <div class="mdn-anno wrapped after">
@@ -1307,7 +1297,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="request-a-lock">request a lock</dfn> with <var>promise</var>, <var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>callback</var>, <var>name</var>, <var>mode</var>, <var>ifAvailable</var> and <var>steal</var>: 
     <ol>
      <li data-md>
-      <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑨">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>name</var>, <var>mode</var>, <var>callback</var>, <var>promise</var>).</p>
+      <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑦">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>name</var>, <var>mode</var>, <var>callback</var>, <var>promise</var>).</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">Enqueue the following steps</a> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue④">lock task queue</a>:</p>
       <ol>
@@ -1900,6 +1890,12 @@ authoring advice.</p>
     <li><a href="#ref-for-map-iterate">4.5. Snapshot the lock state</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-list-is-empty">
+   <a href="https://infra.spec.whatwg.org/#list-is-empty">https://infra.spec.whatwg.org/#list-is-empty</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-list-is-empty">2.5. Lock Requests</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-struct-item">
    <a href="https://infra.spec.whatwg.org/#struct-item">https://infra.spec.whatwg.org/#struct-item</a><b>Referenced in:</b>
    <ul>
@@ -2148,7 +2144,8 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-queue-enqueue">enqueue</span>
      <li><span class="dfn-paneled" id="term-for-map-exists">exist</span>
      <li><span class="dfn-paneled" id="term-for-map-iterate">for each <small>(for map)</small></span>
-     <li><span class="dfn-paneled" id="term-for-struct-item">item</span>
+     <li><span class="dfn-paneled" id="term-for-list-is-empty">is empty</span>
+     <li><span class="dfn-paneled" id="term-for-struct-item">item <small>(for struct)</small></span>
      <li><span class="dfn-paneled" id="term-for-string">javascript string</span>
      <li><span class="dfn-paneled" id="term-for-list">list</span>
      <li><span class="dfn-paneled" id="term-for-ordered-map">map</span>
@@ -2395,10 +2392,10 @@ authoring advice.</p>
    <ul>
     <li><a href="#ref-for-lock-request">1. Introduction</a>
     <li><a href="#ref-for-lock-request①">2.2. Lock Managers</a>
-    <li><a href="#ref-for-lock-request②">2.5. Lock Requests</a> <a href="#ref-for-lock-request③">(2)</a> <a href="#ref-for-lock-request④">(3)</a> <a href="#ref-for-lock-request⑤">(4)</a> <a href="#ref-for-lock-request⑥">(5)</a>
-    <li><a href="#ref-for-lock-request⑦">2.6. Agent Integration</a>
-    <li><a href="#ref-for-lock-request⑧">3.2. LockManager class</a>
-    <li><a href="#ref-for-lock-request⑨">4.1. Request a lock</a>
+    <li><a href="#ref-for-lock-request②">2.5. Lock Requests</a> <a href="#ref-for-lock-request③">(2)</a> <a href="#ref-for-lock-request④">(3)</a>
+    <li><a href="#ref-for-lock-request⑤">2.6. Agent Integration</a>
+    <li><a href="#ref-for-lock-request⑥">3.2. LockManager class</a>
+    <li><a href="#ref-for-lock-request⑦">4.1. Request a lock</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock-request-agent">
