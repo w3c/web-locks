@@ -285,12 +285,9 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
 1. Let |held| be |origin|'s [=held lock set=]
 1. Let |mode| be |request|'s [=lock request/mode=]
-1. If |mode| is "{{exclusive}}", then return true if all of the following conditions are true, and false otherwise:
-    * No [=lock-concept|lock=] in |held| has a [=lock-concept/name=] that equals |name|
-    * Either |queue| [=queue/is empty=], or |request| is the first [=queue/item=] in |queue|.
-1. Otherwise, |mode| is "{{shared}}"; return true if all of the following conditions are true, and false otherwise:
-    * No [=lock-concept|lock=] in |held| has [=lock-concept/mode=] "{{exclusive}}" and has a [=lock-concept/name=] that equals |name|.
-    * Either |queue| [=queue/is empty=], or |request| is the first [=queue/item=] in |queue|.
+1. If |queue| [=queue/is empty|is not empty=] and |request| is not the first [=queue/item=] in |queue|, then return false.
+1. If |mode| is "{{exclusive}}", then return true if no [=lock-concept|lock=] in |held| has [=lock-concept/name=] equal to |name|, and false otherwise.
+1. Otherwise, |mode| is "{{shared}}"; return true if no [=lock-concept|lock=] in |held| has [=lock-concept/mode=] "{{exclusive}}" and has [=lock-concept/name=] equal to |name|, and false otherwise.
 
 </div>
 
