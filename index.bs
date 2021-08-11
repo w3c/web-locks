@@ -257,7 +257,7 @@ A <dfn>lock request</dfn> represents a pending request for a [=lock-concept|lock
 
 <div dfn-for="lock request">
 
-A [=lock request=] is a [=/struct=] with [=struct/items=] <dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, and <dfn>promise</dfn>.
+A [=lock request=] is a [=/struct=] with [=struct/items=] <dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, <dfn>callback</dfn>, and <dfn>promise</dfn>.
 
 A <dfn>lock request queue</dfn> is a [=/queue=] of [=lock requests=].
 
@@ -576,7 +576,7 @@ The <dfn attribute for=Lock>mode</dfn> getter's steps are to return the associat
 <div algorithm>
 To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |callback|, |name|, |mode|, |ifAvailable| and |steal|:
 
-1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |promise|).
+1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |callback|, |promise|).
 1. [=Enqueue the following steps=] to the [=lock task queue=]:
     1. Let |queueMap| be |origin|'s [=lock request queue map=].
     1. Let |queue| be |queueMap|[|name|].
@@ -647,6 +647,7 @@ To <dfn>process the lock request queue</dfn> |queue|:
         1. Let |clientId| be |request|'s [=lock request/clientId=].
         1. Let |name| be |request|'s [=lock request/name=].
         1. Let |mode| be |request|'s [=lock request/mode=].
+        1. Let |callback| be |request|'s [=lock request/callback=].
         1. Let |p| be |request|'s [=lock request/promise=].
         1. Let |waiting| be [=a new promise=].
         1. Let |lock| be a new [=lock-concept|lock=] with [=lock-concept/agent=] |agent|, [=lock-concept/clientId=] |clientId|, [=lock-concept/origin=] |origin|, [=lock-concept/mode=] |mode|, [=lock-concept/name=] |name|, [=lock-concept/released promise=] |p|, and [=lock-concept/waiting promise=] |waiting|.
@@ -823,6 +824,7 @@ Domenic Denicola,
 Gus Caplan,
 Harald Alvestrand,
 Jake Archibald,
+Kagami Sascha Rosylight,
 L. David Baron,
 Luciano Pacheco,
 Marcos Caceres,
