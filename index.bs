@@ -259,9 +259,21 @@ A <dfn>lock request</dfn> represents a pending request for a [=lock-concept|lock
 
 A [=lock request=] is a [=/struct=] with [=struct/items=] <dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, <dfn>callback</dfn>, and <dfn>promise</dfn>.
 
-A <dfn>lock request queue</dfn> is a [=/queue=] of [=lock requests=].
+</div>
 
-Each origin has a <dfn>lock request queue map</dfn>, which is a [=map=] of [=resource names=] to [=lock request queues=].
+A <dfn>lock request queue</dfn> is a [=/queue=] of [=/lock requests=].
+
+Each origin has a <dfn>lock request queue map</dfn>, which is a [=map=] of [=resource names=] to [=/lock request queues=].
+
+<div algorithm>
+
+To <dfn>get the lock request queue</dfn> from [=/lock request queue map=] |queueMap| from [=/resource name=] |name|, run these steps:
+
+1. If |queueMap|[|name|] does not [=map/exist=], [=map/set=] |queueMap|[|name|] to a new empty [=/lock request queue=].
+1. Return |queueMap|[|name|].
+
+</div>
+
 
 <div algorithm>
 
@@ -270,7 +282,7 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 1. Let |origin| be |request|'s [=lock request/origin=].
 1. Let |queueMap| be |origin|'s [=lock request queue map=].
 1. Let |name| be |request|'s [=lock request/name=].
-1. Let |queue| be |queueMap|[|name|].
+1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
 1. Let |held| be |origin|'s [=held lock set=]
 1. Let |mode| be |request|'s [=lock request/mode=]
 1. If |mode| is "{{exclusive}}", then return true if all of the following conditions are true, and false otherwise:
@@ -279,8 +291,6 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 1. Otherwise, mode is "{{shared}}"; return true if all of the following conditions are true, and false otherwise:
     * No [=lock-concept|lock=] in |held| has [=lock-concept/mode=] "{{exclusive}}" and has a [=lock-concept/name=] that equals |name|.
     * No [=lock request=] in |queue| earlier than |request| exists.
-
-</div>
 
 </div>
 
@@ -579,7 +589,7 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |cal
 1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |callback|, |promise|).
 1. [=Enqueue the following steps=] to the [=lock task queue=]:
     1. Let |queueMap| be |origin|'s [=lock request queue map=].
-    1. Let |queue| be |queueMap|[|name|].
+    1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
     1. Let |held| be |origin|'s [=held lock set=].
     1. If |steal| is true, then run these steps:
         1. [=list/For each=] |lock| of |held|:
@@ -609,7 +619,7 @@ To <dfn>release the lock</dfn> |lock|:
 1. Let |origin| be |lock|'s [=lock-concept/origin=].
 1. Let |queueMap| be |origin|'s [=lock request queue map=].
 1. Let |name| be |lock|'s [=resource name=].
-1. Let |queue| be |queueMap|[|name|].
+1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
 1. [=list/Remove=] [=lock-concept|lock=] from the |origin|'s [=held lock set=].
 1. [=Process the lock request queue=] |queue|.
 
@@ -626,7 +636,7 @@ To <dfn>abort the request</dfn> |request|:
 1. Let |origin| be |request|'s [=lock request/origin=].
 1. Let |name| be |request|'s [=lock request/name=].
 1. Let |queueMap| be |origin|'s [=lock request queue map=].
-1. Let |queue| be |queueMap|[|name|].
+1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
 1. [=list/Remove=] |request| from |queue|.
 1. [=Process the lock request queue=] |queue|.
 
