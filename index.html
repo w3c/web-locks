@@ -4,10 +4,10 @@
   <title>Web Locks API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2016/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version 3d6a6fcbb, updated Wed Jun 16 16:19:39 2021 -0700" name="generator">
+  <meta content="Bikeshed version 4f053d00e, updated Tue Aug 10 14:13:32 2021 -0700" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="3a7078147571bad7c7379210d3dab194ae73d890" name="document-revision">
+  <meta content="b09326e6b20e0ffc06db37a8d7aa0bb752e96d37" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -653,7 +653,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-06-17">17 June 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-08-11">11 August 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -903,7 +903,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
    <h3 class="heading settled" data-level="2.5" id="concept-lock-request"><span class="secno">2.5. </span><span class="content">Lock Requests</span><a class="self-link" href="#concept-lock-request"></a></h3>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-request">lock request</dfn> represents a pending request for a <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①①">lock</a>.</p>
    <div>
-    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request②">lock request</a> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> with <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item">items</a> <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-agent">agent</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-clientid">clientId</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-origin">origin</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-name">name</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-mode">mode</dfn>, and <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-promise">promise</dfn>.</p>
+    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request②">lock request</a> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> with <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item">items</a> <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-agent">agent</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-clientid">clientId</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-origin">origin</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-name">name</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-mode">mode</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-callback">callback</dfn>, and <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-promise">promise</dfn>.</p>
     <p>A <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-lock-request-queue">lock request queue</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#queue" id="ref-for-queue">queue</a> of <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request③">lock requests</a>.</p>
     <p>Each origin has a <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-lock-request-queue-map">lock request queue map</dfn>, which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">map</a> of <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource names</a> to <a data-link-type="dfn" href="#lock-request-lock-request-queue" id="ref-for-lock-request-lock-request-queue">lock request queues</a>.</p>
     <div class="algorithm" data-algorithm="grantable">
@@ -993,13 +993,13 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
      <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/LockManager" title="The LockManager interface of the Web Locks API provides methods for requesting a new Lock object and querying for an existing Lock object. To get an instance of LockManager, call navigator.locks.">LockManager</a></p>
      <p class="less-than-two-engines-text">In only one current engine.</p>
      <div class="support">
-      <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
       <hr>
       <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
       <hr>
       <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
      </div>
     </div>
    </div>
@@ -1045,13 +1045,13 @@ the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref
      <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request" title="The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves with undefined.">LockManager/request</a></p>
      <p class="less-than-two-engines-text">In only one current engine.</p>
      <div class="support">
-      <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
       <hr>
       <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
       <hr>
       <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
      </div>
     </div>
    </div>
@@ -1182,13 +1182,13 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/LockManager/query" title="The query() method of the LockManager interface returns a Promise which resolves with an object containing information about held and pending locks. ">LockManager/query</a></p>
      <p class="less-than-two-engines-text">In only one current engine.</p>
      <div class="support">
-      <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
       <hr>
       <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
       <hr>
       <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
      </div>
     </div>
    </div>
@@ -1241,13 +1241,13 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Lock" title="The Lock interface of the Web Locks API provides the name and mode of a previously requested lock, which is received in the callback to LockManager.request().">Lock</a></p>
      <p class="less-than-two-engines-text">In only one current engine.</p>
      <div class="support">
-      <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
       <hr>
       <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
       <hr>
       <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
      </div>
     </div>
    </div>
@@ -1264,13 +1264,13 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Lock/name" title="The name read-only property of the Lock interface returns the name passed to LockManager.request selected when the lock was requested.">Lock/name</a></p>
      <p class="less-than-two-engines-text">In only one current engine.</p>
      <div class="support">
-      <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
       <hr>
       <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
       <hr>
       <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
      </div>
     </div>
    </div>
@@ -1281,13 +1281,13 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Lock/mode" title="The mode read-only property of the Lock interface returns the access mode passed to LockManager.request() when the lock was requested. The mode is either &quot;exclusive&quot; (the default) or &quot;shared&quot;.">Lock/mode</a></p>
      <p class="less-than-two-engines-text">In only one current engine.</p>
      <div class="support">
-      <span class="firefox no"><span>Firefox</span><span>?</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
+      <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="safari no"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
       <hr>
       <span class="opera yes"><span>Opera</span><span>56+</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
       <hr>
       <span class="edge no"><span>Edge (Legacy)</span><span>None</span></span><span class="ie no"><span>IE</span><span>None</span></span>
       <hr>
-      <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
+      <span class="firefox_android no"><span>Firefox for Android</span><span>None</span></span><span class="safari_ios no"><span>iOS Safari</span><span>None</span></span><span class="chrome_android yes"><span>Chrome for Android</span><span>69+</span></span><span class="webview_android yes"><span>Android WebView</span><span>69+</span></span><span class="samsunginternet_android yes"><span>Samsung Internet</span><span>10.0+</span></span><span class="opera_android yes"><span>Opera Mobile</span><span>48+</span></span>
      </div>
     </div>
    </div>
@@ -1298,7 +1298,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="request-a-lock">request a lock</dfn> with <var>promise</var>, <var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>callback</var>, <var>name</var>, <var>mode</var>, <var>ifAvailable</var> and <var>steal</var>: 
     <ol>
      <li data-md>
-      <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑨">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>name</var>, <var>mode</var>, <var>promise</var>).</p>
+      <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑨">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>name</var>, <var>mode</var>, <var>callback</var>, <var>promise</var>).</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">Enqueue the following steps</a> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue④">lock task queue</a>:</p>
       <ol>
@@ -1411,6 +1411,8 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
          <li data-md>
           <p>Let <var>mode</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode①">mode</a>.</p>
          <li data-md>
+          <p>Let <var>callback</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-callback" id="ref-for-lock-request-callback">callback</a>.</p>
+         <li data-md>
           <p>Let <var>p</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-promise" id="ref-for-lock-request-promise">promise</a>.</p>
          <li data-md>
           <p>Let <var>waiting</var> be <a data-link-type="dfn" href="https://heycam.github.io/webidl/#a-new-promise" id="ref-for-a-new-promise②">a new promise</a>.</p>
@@ -1439,7 +1441,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>pending</var> be a new <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list">list</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>queue</var> of <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map④">lock request queue map</a>'s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-value" id="ref-for-map-value">values</a>:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>queue</var> of <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-lock-request-queue-map" id="ref-for-lock-request-lock-request-queue-map④">lock request queue map</a>'s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values">values</a>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">For each</a> <var>request</var> of <var>queue</var>:</p>
@@ -1578,6 +1580,7 @@ Domenic Denicola,
 Gus Caplan,
 Harald Alvestrand,
 Jake Archibald,
+Kagami Sascha Rosylight,
 L. David Baron,
 Luciano Pacheco,
 Marcos Caceres,
@@ -1636,80 +1639,81 @@ authoring advice.</p>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
-   <li><a href="#abort-the-request">abort the request</a><span>, in §4.3</span>
+   <li><a href="#abort-the-request">abort the request</a><span>, in § 4.3</span>
    <li>
     agent
     <ul>
-     <li><a href="#lock-request-agent">dfn for lock request</a><span>, in §2.5</span>
-     <li><a href="#lock-concept-agent">dfn for lock-concept</a><span>, in §2.4</span>
+     <li><a href="#lock-request-agent">dfn for lock request</a><span>, in § 2.5</span>
+     <li><a href="#lock-concept-agent">dfn for lock-concept</a><span>, in § 2.4</span>
     </ul>
+   <li><a href="#lock-request-callback">callback</a><span>, in § 2.5</span>
    <li>
     clientId
     <ul>
-     <li><a href="#lock-request-clientid">dfn for lock request</a><span>, in §2.5</span>
-     <li><a href="#lock-concept-clientid">dfn for lock-concept</a><span>, in §2.4</span>
-     <li><a href="#dom-lockinfo-clientid">dict-member for LockInfo</a><span>, in §3.2</span>
+     <li><a href="#lock-request-clientid">dfn for lock request</a><span>, in § 2.5</span>
+     <li><a href="#lock-concept-clientid">dfn for lock-concept</a><span>, in § 2.4</span>
+     <li><a href="#dom-lockinfo-clientid">dict-member for LockInfo</a><span>, in § 3.2</span>
     </ul>
-   <li><a href="#dom-lockmode-exclusive">"exclusive"</a><span>, in §3.2</span>
-   <li><a href="#lock-request-grantable">grantable</a><span>, in §2.5</span>
-   <li><a href="#dom-lockmanagersnapshot-held">held</a><span>, in §3.2</span>
-   <li><a href="#lock-concept-held-lock-set">held lock set</a><span>, in §2.4</span>
-   <li><a href="#dom-lockoptions-ifavailable">ifAvailable</a><span>, in §3.2</span>
-   <li><a href="#lock">Lock</a><span>, in §3.3</span>
-   <li><a href="#lock-concept">lock-concept</a><span>, in §2.4</span>
-   <li><a href="#callbackdef-lockgrantedcallback">LockGrantedCallback</a><span>, in §3.2</span>
-   <li><a href="#dictdef-lockinfo">LockInfo</a><span>, in §3.2</span>
-   <li><a href="#lock-manager">lock manager</a><span>, in §2.2</span>
-   <li><a href="#lockmanager">LockManager</a><span>, in §3.2</span>
-   <li><a href="#dictdef-lockmanagersnapshot">LockManagerSnapshot</a><span>, in §3.2</span>
-   <li><a href="#enumdef-lockmode">LockMode</a><span>, in §3.2</span>
-   <li><a href="#dictdef-lockoptions">LockOptions</a><span>, in §3.2</span>
-   <li><a href="#lock-request">lock request</a><span>, in §2.5</span>
-   <li><a href="#lock-request-lock-request-queue">lock request queue</a><span>, in §2.5</span>
-   <li><a href="#lock-request-lock-request-queue-map">lock request queue map</a><span>, in §2.5</span>
-   <li><a href="#dom-navigatorlocks-locks">locks</a><span>, in §3.1</span>
-   <li><a href="#lock-task-queue">lock task queue</a><span>, in §2</span>
+   <li><a href="#dom-lockmode-exclusive">"exclusive"</a><span>, in § 3.2</span>
+   <li><a href="#lock-request-grantable">grantable</a><span>, in § 2.5</span>
+   <li><a href="#dom-lockmanagersnapshot-held">held</a><span>, in § 3.2</span>
+   <li><a href="#lock-concept-held-lock-set">held lock set</a><span>, in § 2.4</span>
+   <li><a href="#dom-lockoptions-ifavailable">ifAvailable</a><span>, in § 3.2</span>
+   <li><a href="#lock">Lock</a><span>, in § 3.3</span>
+   <li><a href="#lock-concept">lock-concept</a><span>, in § 2.4</span>
+   <li><a href="#callbackdef-lockgrantedcallback">LockGrantedCallback</a><span>, in § 3.2</span>
+   <li><a href="#dictdef-lockinfo">LockInfo</a><span>, in § 3.2</span>
+   <li><a href="#lock-manager">lock manager</a><span>, in § 2.2</span>
+   <li><a href="#lockmanager">LockManager</a><span>, in § 3.2</span>
+   <li><a href="#dictdef-lockmanagersnapshot">LockManagerSnapshot</a><span>, in § 3.2</span>
+   <li><a href="#enumdef-lockmode">LockMode</a><span>, in § 3.2</span>
+   <li><a href="#dictdef-lockoptions">LockOptions</a><span>, in § 3.2</span>
+   <li><a href="#lock-request">lock request</a><span>, in § 2.5</span>
+   <li><a href="#lock-request-lock-request-queue">lock request queue</a><span>, in § 2.5</span>
+   <li><a href="#lock-request-lock-request-queue-map">lock request queue map</a><span>, in § 2.5</span>
+   <li><a href="#dom-navigatorlocks-locks">locks</a><span>, in § 3.1</span>
+   <li><a href="#lock-task-queue">lock task queue</a><span>, in § 2</span>
    <li>
     mode
     <ul>
-     <li><a href="#dom-lock-mode">attribute for Lock</a><span>, in §3.3</span>
-     <li><a href="#mode">definition of</a><span>, in §2.3</span>
-     <li><a href="#lock-request-mode">dfn for lock request</a><span>, in §2.5</span>
-     <li><a href="#lock-concept-mode">dfn for lock-concept</a><span>, in §2.4</span>
-     <li><a href="#dom-lockinfo-mode">dict-member for LockInfo</a><span>, in §3.2</span>
-     <li><a href="#dom-lockoptions-mode">dict-member for LockOptions</a><span>, in §3.2</span>
+     <li><a href="#dom-lock-mode">attribute for Lock</a><span>, in § 3.3</span>
+     <li><a href="#mode">definition of</a><span>, in § 2.3</span>
+     <li><a href="#lock-request-mode">dfn for lock request</a><span>, in § 2.5</span>
+     <li><a href="#lock-concept-mode">dfn for lock-concept</a><span>, in § 2.4</span>
+     <li><a href="#dom-lockinfo-mode">dict-member for LockInfo</a><span>, in § 3.2</span>
+     <li><a href="#dom-lockoptions-mode">dict-member for LockOptions</a><span>, in § 3.2</span>
     </ul>
    <li>
     name
     <ul>
-     <li><a href="#dom-lock-name">attribute for Lock</a><span>, in §3.3</span>
-     <li><a href="#lock-request-name">dfn for lock request</a><span>, in §2.5</span>
-     <li><a href="#lock-concept-name">dfn for lock-concept</a><span>, in §2.4</span>
-     <li><a href="#dom-lockinfo-name">dict-member for LockInfo</a><span>, in §3.2</span>
+     <li><a href="#dom-lock-name">attribute for Lock</a><span>, in § 3.3</span>
+     <li><a href="#lock-request-name">dfn for lock request</a><span>, in § 2.5</span>
+     <li><a href="#lock-concept-name">dfn for lock-concept</a><span>, in § 2.4</span>
+     <li><a href="#dom-lockinfo-name">dict-member for LockInfo</a><span>, in § 3.2</span>
     </ul>
-   <li><a href="#navigatorlocks">NavigatorLocks</a><span>, in §3.1</span>
+   <li><a href="#navigatorlocks">NavigatorLocks</a><span>, in § 3.1</span>
    <li>
     origin
     <ul>
-     <li><a href="#lock-request-origin">dfn for lock request</a><span>, in §2.5</span>
-     <li><a href="#lock-concept-origin">dfn for lock-concept</a><span>, in §2.4</span>
+     <li><a href="#lock-request-origin">dfn for lock request</a><span>, in § 2.5</span>
+     <li><a href="#lock-concept-origin">dfn for lock-concept</a><span>, in § 2.4</span>
     </ul>
-   <li><a href="#dom-lockmanagersnapshot-pending">pending</a><span>, in §3.2</span>
-   <li><a href="#process-the-lock-request-queue">process the lock request queue</a><span>, in §4.4</span>
-   <li><a href="#lock-request-promise">promise</a><span>, in §2.5</span>
-   <li><a href="#dom-lockmanager-query">query()</a><span>, in §3.2.2</span>
-   <li><a href="#lock-concept-released-promise">released promise</a><span>, in §2.4</span>
-   <li><a href="#release-the-lock">release the lock</a><span>, in §4.2</span>
-   <li><a href="#request-a-lock">request a lock</a><span>, in §4.1</span>
-   <li><a href="#dom-lockmanager-request">request(name, callback)</a><span>, in §3.2.1</span>
-   <li><a href="#dom-lockmanager-request-name-options-callback">request(name, options, callback)</a><span>, in §3.2.1</span>
-   <li><a href="#resource-name">resource name</a><span>, in §2.1</span>
-   <li><a href="#dom-lockmode-shared">"shared"</a><span>, in §3.2</span>
-   <li><a href="#dom-lockoptions-signal">signal</a><span>, in §3.2</span>
-   <li><a href="#snapshot-the-lock-state">snapshot the lock state</a><span>, in §4.5</span>
-   <li><a href="#dom-lockoptions-steal">steal</a><span>, in §3.2</span>
-   <li><a href="#lock-concept-waiting-promise">waiting promise</a><span>, in §2.4</span>
-   <li><a href="#web-locks-tasks-source">web locks tasks source</a><span>, in §2</span>
+   <li><a href="#dom-lockmanagersnapshot-pending">pending</a><span>, in § 3.2</span>
+   <li><a href="#process-the-lock-request-queue">process the lock request queue</a><span>, in § 4.4</span>
+   <li><a href="#lock-request-promise">promise</a><span>, in § 2.5</span>
+   <li><a href="#dom-lockmanager-query">query()</a><span>, in § 3.2.2</span>
+   <li><a href="#lock-concept-released-promise">released promise</a><span>, in § 2.4</span>
+   <li><a href="#release-the-lock">release the lock</a><span>, in § 4.2</span>
+   <li><a href="#request-a-lock">request a lock</a><span>, in § 4.1</span>
+   <li><a href="#dom-lockmanager-request">request(name, callback)</a><span>, in § 3.2.1</span>
+   <li><a href="#dom-lockmanager-request-name-options-callback">request(name, options, callback)</a><span>, in § 3.2.1</span>
+   <li><a href="#resource-name">resource name</a><span>, in § 2.1</span>
+   <li><a href="#dom-lockmode-shared">"shared"</a><span>, in § 3.2</span>
+   <li><a href="#dom-lockoptions-signal">signal</a><span>, in § 3.2</span>
+   <li><a href="#snapshot-the-lock-state">snapshot the lock state</a><span>, in § 4.5</span>
+   <li><a href="#dom-lockoptions-steal">steal</a><span>, in § 3.2</span>
+   <li><a href="#lock-concept-waiting-promise">waiting promise</a><span>, in § 2.4</span>
+   <li><a href="#web-locks-tasks-source">web locks tasks source</a><span>, in § 2</span>
   </ul>
   <aside class="dfn-panel" data-for="term-for-abortsignal">
    <a href="https://dom.spec.whatwg.org/#abortsignal">https://dom.spec.whatwg.org/#abortsignal</a><b>Referenced in:</b>
@@ -1937,10 +1941,10 @@ authoring advice.</p>
     <li><a href="#ref-for-struct">2.5. Lock Requests</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-map-value">
-   <a href="https://infra.spec.whatwg.org/#map-value">https://infra.spec.whatwg.org/#map-value</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-map-getting-the-values">
+   <a href="https://infra.spec.whatwg.org/#map-getting-the-values">https://infra.spec.whatwg.org/#map-getting-the-values</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-map-value">4.5. Snapshot the lock state</a>
+    <li><a href="#ref-for-map-getting-the-values">4.5. Snapshot the lock state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-client">
@@ -2136,7 +2140,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-list-remove">remove</span>
      <li><span class="dfn-paneled" id="term-for-ordered-set">set</span>
      <li><span class="dfn-paneled" id="term-for-struct">struct</span>
-     <li><span class="dfn-paneled" id="term-for-map-value">value</span>
+     <li><span class="dfn-paneled" id="term-for-map-getting-the-values">values</span>
     </ul>
    <li>
     <a data-link-type="biblio">[Service-Workers]</a> defines the following terms:
@@ -2176,24 +2180,24 @@ authoring advice.</p>
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-dom">[DOM]
-   <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
+   <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-html">[HTML]
-   <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/">HTML Standard</a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
+   <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-infra">[INFRA]
-   <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/">Infra Standard</a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
+   <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-rfc2119">[RFC2119]
-   <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
+   <dd>S. Bradner. <a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
    <dt id="biblio-webidl">[WebIDL]
-   <dd>Boris Zbarsky. <a href="https://heycam.github.io/webidl/">Web IDL</a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
+   <dd>Boris Zbarsky. <a href="https://heycam.github.io/webidl/"><cite>Web IDL</cite></a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
   </dl>
   <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
    <dt id="biblio-indexeddb-2">[IndexedDB-2]
-   <dd>Ali Alabbas; Joshua Bell. <a href="https://www.w3.org/TR/IndexedDB-2/">Indexed Database API 2.0</a>. 30 January 2018. REC. URL: <a href="https://www.w3.org/TR/IndexedDB-2/">https://www.w3.org/TR/IndexedDB-2/</a>
+   <dd>Ali Alabbas; Joshua Bell. <a href="https://www.w3.org/TR/IndexedDB-2/"><cite>Indexed Database API 2.0</cite></a>. 30 January 2018. REC. URL: <a href="https://www.w3.org/TR/IndexedDB-2/">https://www.w3.org/TR/IndexedDB-2/</a>
    <dt id="biblio-service-workers">[Service-Workers]
-   <dd>Alex Russell; et al. <a href="https://www.w3.org/TR/service-workers-1/">Service Workers 1</a>. 19 November 2019. CR. URL: <a href="https://www.w3.org/TR/service-workers-1/">https://www.w3.org/TR/service-workers-1/</a>
+   <dd>Alex Russell; et al. <a href="https://www.w3.org/TR/service-workers-1/"><cite>Service Workers 1</cite></a>. 19 November 2019. CR. URL: <a href="https://www.w3.org/TR/service-workers-1/">https://www.w3.org/TR/service-workers-1/</a>
    <dt id="biblio-storage">[Storage]
-   <dd>Anne van Kesteren. <a href="https://storage.spec.whatwg.org/">Storage Standard</a>. Living Standard. URL: <a href="https://storage.spec.whatwg.org/">https://storage.spec.whatwg.org/</a>
+   <dd>Anne van Kesteren. <a href="https://storage.spec.whatwg.org/"><cite>Storage Standard</cite></a>. Living Standard. URL: <a href="https://storage.spec.whatwg.org/">https://storage.spec.whatwg.org/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext"><c- g>SecureContext</c-></a>]
@@ -2415,6 +2419,12 @@ authoring advice.</p>
     <li><a href="#ref-for-lock-request-mode">2.5. Lock Requests</a>
     <li><a href="#ref-for-lock-request-mode①">4.4. Process a lock request queue for a given resource name</a>
     <li><a href="#ref-for-lock-request-mode②">4.5. Snapshot the lock state</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="lock-request-callback">
+   <b><a href="#lock-request-callback">#lock-request-callback</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-lock-request-callback">4.4. Process a lock request queue for a given resource name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock-request-promise">
