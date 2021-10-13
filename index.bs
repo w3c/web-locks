@@ -581,7 +581,7 @@ The <dfn attribute for=Lock>mode</dfn> getter's steps are to return the associat
 To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |callback|, |name|, |mode|, |ifAvailable|, |steal|, and |signal|:
 
 1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |callback|, |promise|, |signal|).
-1. If |signal| is present, then <a for=AbortSignal>add</a> the algorithm [=signal to abort the request=] |request| to |signal|.
+1. If |signal| is present, then [=AbortSignal/add=] the algorithm [=signal to abort the request=] |request| to |signal|.
 1. [=Enqueue the following steps=] to the [=lock task queue=]:
     1. Let |queueMap| be |origin|'s [=lock request queue map=].
     1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
@@ -667,7 +667,9 @@ To <dfn>process the lock request queue</dfn> |queue|:
         1. Let |lock| be a new [=lock-concept|lock=] with [=lock-concept/agent=] |agent|, [=lock-concept/clientId=] |clientId|, [=lock-concept/origin=] |origin|, [=lock-concept/mode=] |mode|, [=lock-concept/name=] |name|, [=lock-concept/released promise=] |p|, and [=lock-concept/waiting promise=] |waiting|.
         1. [=set/Append=] |lock| to |origin|'s [=held lock set=].
         1. [=Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
-            1. If |signal| is present, then <a for=AbortSignal>remove</a> the algorithm [=signal to abort the request=] |request| from |signal|.
+            1. If |signal| is present, then run these steps:
+                1. If |signal|'s [=AbortSignal/aborted flag=] is set, then return.
+                1. [=AbortSignal/Remove=] the algorithm [=signal to abort the request=] |request| from |signal|.
             1. Let |r| be the result of [=invoking=] |callback| with a new {{Lock}} object associated with |lock| as the only argument.
             1. [=/Resolve=] |waiting| with |r|.
 
