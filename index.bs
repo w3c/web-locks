@@ -668,7 +668,8 @@ To <dfn>process the lock request queue</dfn> |queue|:
         1. [=set/Append=] |lock| to |origin|'s [=held lock set=].
         1. [=Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
             1. If |signal| is present, then run these steps:
-                1. If |signal|'s [=AbortSignal/aborted flag=] is set, then return.
+                1. If |signal|'s [=AbortSignal/aborted flag=] is set, then [=enqueue the following step=] to the [=lock task queue=]:
+                    1. [=Release the lock=] |lock|.
                 1. [=AbortSignal/Remove=] the algorithm [=signal to abort the request=] |request| from |signal|.
             1. Let |r| be the result of [=invoking=] |callback| with a new {{Lock}} object associated with |lock| as the only argument.
             1. [=/Resolve=] |waiting| with |r|.
