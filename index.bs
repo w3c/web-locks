@@ -257,7 +257,7 @@ A <dfn>lock request</dfn> represents a pending request for a [=lock-concept|lock
 
 <div dfn-for="lock request">
 
-A [=lock request=] is a [=/struct=] with [=struct/items=] <dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, <dfn>callback</dfn>, and <dfn>promise</dfn>.
+A [=lock request=] is a [=/struct=] with [=struct/items=] <dfn>agent</dfn>, <dfn>clientId</dfn>, <dfn>origin</dfn>, <dfn>name</dfn>, <dfn>mode</dfn>, <dfn>callback</dfn>, <dfn>promise</dfn>, and <dfn>signal</dfn>.
 
 </div>
 
@@ -494,10 +494,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 1. If |options|' `signal` dictionary member is present, and either of |options|' `steal` dictionary member or |options|' `ifAvailable` dictionary member is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|' `signal` dictionary member is present and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
 1. Let |promise| be [=a new promise=].
-1. Let |request| be the result of running the steps to [=request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|' `mode` dictionary member, |options|' `ifAvailable` dictionary member, and |options|' `steal` dictionary member.
-1. If |options|' `signal` dictionary member is present, then <a for=AbortSignal lt=add>add the following abort steps</a> to |options|' `signal` dictionary member:
-    1. [=enqueue the following steps|Enqueue the steps=] to [=abort the request=] |request| to the [=lock task queue=].
-    1. [=Reject=] |promise| with an "{{AbortError}}" {{DOMException}}.
+1. [=Request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|' `mode` dictionary member, |options|' `ifAvailable` dictionary member, |options|' `steal` dictionary member, and |options|' `signal` dictionary member.
 1. Return |promise|.
 
 </div>
@@ -581,9 +578,10 @@ The <dfn attribute for=Lock>mode</dfn> getter's steps are to return the associat
 <!-- ====================================================================== -->
 
 <div algorithm>
-To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |callback|, |name|, |mode|, |ifAvailable| and |steal|:
+To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |callback|, |name|, |mode|, |ifAvailable|, |steal|, and |signal|:
 
-1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |callback|, |promise|).
+1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |callback|, |promise|, |signal|).
+1. If |signal| is present, then [=AbortSignal/add=] the algorithm [=signal to abort the request=] |request| to |signal|.
 1. [=Enqueue the following steps=] to the [=lock task queue=]:
     1. Let |queueMap| be |origin|'s [=lock request queue map=].
     1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
@@ -639,6 +637,14 @@ To <dfn>abort the request</dfn> |request|:
 
 </div>
 
+<div algorithm>
+To <dfn>signal to abort the request</dfn> |request|:
+
+1. [=enqueue the following steps|Enqueue the steps=] to [=abort the request=] |request| to the [=lock task queue=].
+1. [=Reject=] |request|'s [=lock request/promise=] with an "{{AbortError}}" {{DOMException}}.
+
+</div>
+
 <!-- ====================================================================== -->
 ## Process a lock request queue for a given resource name ## {#algorithm-process-request}
 <!-- ====================================================================== -->
@@ -659,10 +665,17 @@ To <dfn>process the lock request queue</dfn> |queue|:
     1. Let |mode| be |request|'s [=lock request/mode=].
     1. Let |callback| be |request|'s [=lock request/callback=].
     1. Let |p| be |request|'s [=lock request/promise=].
+    1. Let |signal| be |request|'s [=lock request/signal=].
     1. Let |waiting| be [=a new promise=].
     1. Let |lock| be a new [=lock-concept|lock=] with [=lock-concept/agent=] |agent|, [=lock-concept/clientId=] |clientId|, [=lock-concept/origin=] |origin|, [=lock-concept/mode=] |mode|, [=lock-concept/name=] |name|, [=lock-concept/released promise=] |p|, and [=lock-concept/waiting promise=] |waiting|.
     1. [=set/Append=] |lock| to |origin|'s [=held lock set=].
     1. [=Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
+        1. If |signal| is present, then run these steps:
+            1. If |signal|'s [=AbortSignal/aborted flag=] is set, then run these steps:
+                1. [=Enqueue the following step=] to the [=lock task queue=]:
+                    1. [=Release the lock=] |lock|.
+                1. Return.
+            1. [=AbortSignal/Remove=] the algorithm [=signal to abort the request=] |request| from |signal|.
         1. Let |r| be the result of [=invoking=] |callback| with a new {{Lock}} object associated with |lock| as the only argument.
         1. [=/Resolve=] |waiting| with |r|.
 
