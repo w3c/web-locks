@@ -7,7 +7,7 @@
   <meta content="Bikeshed version d7036035b, updated Fri Oct 8 17:07:11 2021 -0700" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="a39da2608d76e819576ce6f0294535f2a5bcbdbc" name="document-revision">
+  <meta content="9d5643ecbaadb65c6c9ac5df2e3742e0d666f34e" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -25,6 +25,11 @@
 .domintro dt code {
     font-size: inherit;
 }
+</style>
+<style>
+#speclogo { height: 100px; width: 100px; }
+main #speclogo { position: absolute; right: 20px; top: 30px; }
+.logo #speclogo { margin-top: 20px; }
 </style>
 <style>/* style-autolinks */
 
@@ -663,7 +668,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-11-01">1 November 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Draft Community Group Report, <time class="dt-updated" datetime="2021-11-02">2 November 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -775,7 +780,13 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
    </ol>
   </nav>
   <main>
-   <p><img alt="logo" height="100" src="logo-lock.svg" style="height: 100px; width: 100px; position: absolute; right: 20px; top: 30px;" width="100"></p>
+   <p><img alt="logo" height="100" id="speclogo" src="logo-lock.svg" width="100"></p>
+<script>
+(function() {
+  const logo = document.querySelector('.logo');
+  if (logo) logo.appendChild(document.querySelector('#speclogo'));
+})();
+</script>
    <h2 class="heading settled" data-level="1" id="introduction"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#introduction"></a></h2>
    <p><em>This section is non-normative.</em></p>
    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request">lock request</a> is made by script for a particular <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name">resource name</a> and <a data-link-type="dfn" href="#mode" id="ref-for-mode">mode</a>. A scheduling algorithm looks at the state of current and previous requests, and eventually grants a lock request. A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept">lock</a> is a granted request; it has a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name①">resource name</a> and <a data-link-type="dfn" href="#mode" id="ref-for-mode①">mode</a>. It is represented as an object returned to script. As long as the lock is held it may prevent other lock requests from being granted (depending on the name and mode). A lock can be released by script, at which point it may allow other lock requests to be granted.</p>
