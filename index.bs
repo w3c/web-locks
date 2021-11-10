@@ -594,7 +594,7 @@ The <dfn attribute for=Lock>mode</dfn> getter's steps are to return the associat
 To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |origin|, |callback|, |name|, |mode|, |ifAvailable|, |steal|, and |signal|:
 
 1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |origin|, |name|, |mode|, |callback|, |promise|, |signal|).
-1. If |signal| is present, then [=AbortSignal/add=] the algorithm [=signal to abort the request=] |request| to |signal|.
+1. If |signal| is present, then [=AbortSignal/add=] the algorithm [=signal to abort the request=] |request| with |signal| to |signal|.
 1. [=Enqueue the following steps=] to the [=lock task queue=]:
     1. Let |queueMap| be |origin|'s [=lock request queue map=].
     1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
@@ -651,10 +651,10 @@ To <dfn>abort the request</dfn> |request|:
 </div>
 
 <div algorithm>
-To <dfn>signal to abort the request</dfn> |request|:
+To <dfn>signal to abort the request</dfn> |request| with |signal|:
 
 1. [=enqueue the following steps|Enqueue the steps=] to [=abort the request=] |request| to the [=lock task queue=].
-1. [=Reject=] |request|'s [=lock request/promise=] with an "{{AbortError}}" {{DOMException}}.
+1. [=Reject=] |request|'s [=lock request/promise=] with |signal|'s [=AbortSignal/abort reason=].
 
 </div>
 
