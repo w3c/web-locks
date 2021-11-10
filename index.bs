@@ -503,7 +503,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 1. If both |options|' `steal` dictionary member and |options|' `ifAvailable` dictionary member are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|' `steal` dictionary member is true and |options|' `mode` dictionary member is not "{{exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|' `signal` dictionary member is present, and either of |options|' `steal` dictionary member or |options|' `ifAvailable` dictionary member is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|' `signal` dictionary member is present and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
+1. If |options|' `signal` dictionary member is present and is [=AbortSignal/aborted=], then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
 1. Let |promise| be [=a new promise=].
 1. [=Request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|' `mode` dictionary member, |options|' `ifAvailable` dictionary member, |options|' `steal` dictionary member, and |options|' `signal` dictionary member.
 1. Return |promise|.
@@ -684,7 +684,7 @@ To <dfn>process the lock request queue</dfn> |queue|:
     1. [=set/Append=] |lock| to |origin|'s [=held lock set=].
     1. [=Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
         1. If |signal| is present, then run these steps:
-            1. If |signal|'s [=AbortSignal/aborted flag=] is set, then run these steps:
+            1. If |signal| is [=AbortSignal/aborted=], then run these steps:
                 1. [=Enqueue the following step=] to the [=lock task queue=]:
                     1. [=Release the lock=] |lock|.
                 1. Return.
