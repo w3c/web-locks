@@ -500,12 +500,12 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 1. Let |origin| be |environment|'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. If |name| starts with U+002D HYPHEN-MINUS (-), then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If both |options|' `steal` dictionary member and |options|' `ifAvailable` dictionary member are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|' `steal` dictionary member is true and |options|' `mode` dictionary member is not "{{exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|' `signal` dictionary member is present, and either of |options|' `steal` dictionary member or |options|' `ifAvailable` dictionary member is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|' `signal` dictionary member is present and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
+1. If both |options|["`steal`"] and |options|["`ifAvailable`"] are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If |options|["`steal`"] is true and |options|["`mode`"] is not "{{exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If |options|["`signal`"] [=map/exists=], and either of |options|["`steal`"] or |options|["`ifAvailable`"] is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If |options|["`signal`"] [=map/exists=] and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
 1. Let |promise| be [=a new promise=].
-1. [=Request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|' `mode` dictionary member, |options|' `ifAvailable` dictionary member, |options|' `steal` dictionary member, and |options|' `signal` dictionary member.
+1. [=Request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|, |callback|, |name|, |options|["`mode`"], |options|["`ifAvailable`"], |options|["`steal`"], and |options|["`signal`"].
 1. Return |promise|.
 
 </div>
