@@ -11,6 +11,7 @@ Test Suite: https://github.com/web-platform-tests/wpt/tree/master/web-locks
 Favicon: logo-lock.svg
 Complain About: accidental-2119 yes, missing-example-ids yes
 Markup Shorthands: css no, markdown yes
+Assume Explicit For: yes
 </pre>
 
 <pre class=anchors>
@@ -143,7 +144,7 @@ For the purposes of this specification:
 
 A user agent has a <dfn>lock task queue</dfn> which is the result of [=starting a new parallel queue=].
 
-The [=task source=] for [=enqueue steps|steps enqueued=] below is the <dfn export>web locks tasks source</dfn>.
+The [=task source=] for [=parallel queue/enqueue steps|steps enqueued=] below is the <dfn export>web locks tasks source</dfn>.
 
 
 <!-- ====================================================================== -->
@@ -191,7 +192,7 @@ Migrate this definition to [[HTML]] or [[Storage]] so it can be referenced by ot
 ## Modes and Scheduling ## {#modes-scheduling}
 <!-- ====================================================================== -->
 
-A <dfn>mode</dfn> is either "{{exclusive}}" or "{{shared}}". Modes can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If an "{{exclusive}}" lock is held, then no other locks with that name can be granted. If a "{{shared}}" lock is held, other "{{shared}}" locks with that name can be granted &mdash; but not any "{{exclusive}}" locks. The default mode in the API is "{{exclusive}}".
+A <dfn>mode</dfn> is either "{{LockMode/exclusive}}" or "{{LockMode/shared}}". Modes can be used to model the common [readers-writer lock](http://en.wikipedia.org/wiki/Readers%E2%80%93writer_lock) pattern. If an "{{LockMode/exclusive}}" lock is held, then no other locks with that name can be granted. If a "{{LockMode/shared}}" lock is held, other "{{LockMode/shared}}" locks with that name can be granted &mdash; but not any "{{LockMode/exclusive}}" locks. The default mode in the API is "{{LockMode/exclusive}}".
 
 Additional properties may influence scheduling, such as timeouts, fairness, and so on.
 
@@ -212,7 +213,7 @@ A [=lock-concept|lock=] has a <dfn>manager</dfn> which is a [=/lock manager=].
 
 A [=lock-concept|lock=] has a <dfn>name</dfn> which is a [=resource name=].
 
-A [=lock-concept|lock=] has a <dfn>mode</dfn> which is one of "{{exclusive}}" or "{{shared}}".
+A [=lock-concept|lock=] has a <dfn>mode</dfn> which is one of "{{LockMode/exclusive}}" or "{{LockMode/shared}}".
 
 A [=lock-concept|lock=] has a <dfn>waiting promise</dfn> which is a Promise.
 
@@ -250,7 +251,7 @@ Each [=/lock manager=] has a <dfn for="lock manager">held lock set</dfn> which i
 
 <div algorithm="waiting promise settles">
 
-When [=lock-concept|lock=] |lock|'s [=lock-concept/waiting promise=] settles (fulfills or rejects), [=enqueue the following steps=] on the [=lock task queue=]:
+When [=lock-concept|lock=] |lock|'s [=lock-concept/waiting promise=] settles (fulfills or rejects), [=parallel queue/enqueue the following steps=] on the [=lock task queue=]:
 
 1. [=Release the lock=] |lock|.
 1. [=/Resolve=] |lock|'s [=lock-concept/released promise=] with |lock|'s [=lock-concept/waiting promise=].
@@ -296,8 +297,8 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 1. Let |held| be |manager|'s [=lock manager/held lock set=]
 1. Let |mode| be |request|'s [=lock request/mode=]
 1. If |queue| [=queue/is empty|is not empty=] and |request| is not the first [=queue/item=] in |queue|, then return false.
-1. If |mode| is "{{exclusive}}", then return true if no [=lock-concept|lock=] in |held| has [=lock-concept/name=] equal to |name|, and false otherwise.
-1. Otherwise, |mode| is "{{shared}}"; return true if no [=lock-concept|lock=] in |held| has [=lock-concept/mode=] "{{exclusive}}" and has [=lock-concept/name=] equal to |name|, and false otherwise.
+1. If |mode| is "{{LockMode/exclusive}}", then return true if no [=lock-concept|lock=] in |held| has [=lock-concept/name=] equal to |name|, and false otherwise.
+1. Otherwise, |mode| is "{{LockMode/shared}}"; return true if no [=lock-concept|lock=] in |held| has [=lock-concept/mode=] "{{LockMode/exclusive}}" and has [=lock-concept/name=] equal to |name|, and false otherwise.
 
 </div>
 
@@ -306,7 +307,7 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 <!-- ====================================================================== -->
 
 <div algorithm="agent termination">
-When an [=/agent=] terminates, [=enqueue the following steps=] on the [=lock task queue=]:
+When an [=/agent=] terminates, [=parallel queue/enqueue the following steps=] on the [=lock task queue=]:
 
 <aside class=issue>
     Identify a normative reference for <i>terminates</i>.
@@ -422,8 +423,8 @@ try {
 
     : |options| . mode
 
-    ::  The {{LockOptions/mode}} option can be "{{exclusive}}" (the default if not specified) or "{{shared}}".
-        Multiple tabs/workers can hold a lock for the same resource in "{{shared}}" mode, but only one tab/worker can hold a lock for the resource in "{{exclusive}}" mode.
+    ::  The {{LockOptions/mode}} option can be "{{LockMode/exclusive}}" (the default if not specified) or "{{LockMode/shared}}".
+        Multiple tabs/workers can hold a lock for the same resource in "{{LockMode/shared}}" mode, but only one tab/worker can hold a lock for the resource in "{{LockMode/exclusive}}" mode.
 
         The most common use for this is to allow multiple readers to access a resource simultaneously but prevent changes.
         Once reader locks are released a single exclusive writer can acquire the lock to make changes, followed by another exclusive writer or more shared readers.
@@ -476,7 +477,7 @@ try {
 
     : |options| . steal
 
-    ::  If the {{LockOptions/steal}} option is `true`, then any held locks for the resource will be released (and the [=released promise=] of such locks will resolve with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
+    ::  If the {{LockOptions/steal}} option is `true`, then any held locks for the resource will be released (and the [=lock-concept/released promise=] of such locks will resolve with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
 
         If a web application detects an unrecoverable state &mdash; for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding &mdash; then it can "steal" a lock using this option.
 
@@ -496,12 +497,12 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 
 1. If |options| was not passed, then let |options| be a new {{LockOptions}} dictionary with default members.
 1. Let |environment| be [=/this=]'s [=/relevant settings object=].
-1. If |environment|'s [=responsible document=] is not [=fully active=], then return [=a promise rejected with=] a "{{InvalidStateError}}" {{DOMException}}.
+1. If |environment|'s [=environment settings object/responsible document=] is not [=Document/fully active=], then return [=a promise rejected with=] a "{{InvalidStateError}}" {{DOMException}}.
 1. Let |origin| be |environment|'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. If |name| starts with U+002D HYPHEN-MINUS (-), then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If both |options|["`steal`"] and |options|["`ifAvailable`"] are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|["`steal`"] is true and |options|["`mode`"] is not "{{exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
+1. If |options|["`steal`"] is true and |options|["`mode`"] is not "{{LockMode/exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|["`signal`"] [=map/exists=], and either of |options|["`steal`"] or |options|["`ifAvailable`"] is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|["`signal`"] [=map/exists=] and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
 1. Let |promise| be [=a new promise=].
@@ -555,11 +556,11 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 The <dfn method for=LockManager>query()</dfn> method steps are:
 
 1. Let |environment| be [=/this=]'s [=relevant settings object=].
-1. If |environment|'s [=responsible document=] is not [=fully active=], then return [=a promise rejected with=] a "{{InvalidStateError}}" {{DOMException}}.
+1. If |environment|'s [=environment settings object/responsible document=] is not [=Document/fully active=], then return [=a promise rejected with=] a "{{InvalidStateError}}" {{DOMException}}.
 1. Let |origin| be |environment|'s [=/origin=].
 1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. Let |promise| be [=a new promise=].
-1. [=enqueue the following steps|Enqueue the steps=] to [=snapshot the lock state=] for |origin|'s [=/lock manager=] with |promise| to the [=lock task queue=].
+1. [=parallel queue/enqueue the following steps|Enqueue the steps=] to [=snapshot the lock state=] for |origin|'s [=/lock manager=] with |promise| to the [=lock task queue=].
 1. Return |promise|.
 
 </div>
@@ -595,7 +596,7 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |manager|, |ca
 
 1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |manager|, |name|, |mode|, |callback|, |promise|, |signal|).
 1. If |signal| is present, then [=AbortSignal/add=] the algorithm [=signal to abort the request=] |request| to |signal|.
-1. [=Enqueue the following steps=] to the [=lock task queue=]:
+1. [=parallel queue/Enqueue the following steps=] to the [=lock task queue=]:
     1. Let |queueMap| be |manager|'s [=lock manager/lock request queue map=].
     1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
     1. Let |held| be |manager|'s [=lock manager/held lock set=].
@@ -607,7 +608,7 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |manager|, |ca
         1. [=list/Prepend=] |request| in |queue|.
     1. Otherwise, run these steps:
         1. If |ifAvailable| is true and |request| is not [=grantable=],
-             then [=enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
+             then [=parallel queue/enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=environment settings object/responsible event loop=]:
             1. Let |r| be the result of [=invoking=] |callback| with `null` as the only argument.
             1. [=/Resolve=] |promise| with |r| and abort these steps.
         1. [=queue/Enqueue=] |request| in |queue|.
@@ -653,7 +654,7 @@ To <dfn>abort the request</dfn> |request|:
 <div algorithm>
 To <dfn>signal to abort the request</dfn> |request|:
 
-1. [=enqueue the following steps|Enqueue the steps=] to [=abort the request=] |request| to the [=lock task queue=].
+1. [=parallel queue/enqueue the following steps|Enqueue the steps=] to [=abort the request=] |request| to the [=lock task queue=].
 1. [=Reject=] |request|'s [=lock request/promise=] with an "{{AbortError}}" {{DOMException}}.
 
 </div>
@@ -683,10 +684,10 @@ To <dfn>process the lock request queue</dfn> |queue|:
     1. Let |waiting| be [=a new promise=].
     1. Let |lock| be a new [=lock-concept|lock=] with [=lock-concept/agent=] |agent|, [=lock-concept/clientId=] |clientId|, [=lock-concept/manager=] |manager|, [=lock-concept/mode=] |mode|, [=lock-concept/name=] |name|, [=lock-concept/released promise=] |p|, and [=lock-concept/waiting promise=] |waiting|.
     1. [=set/Append=] |lock| to |manager|'s [=lock manager/held lock set=].
-    1. [=Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=responsible event loop=]:
+    1. [=parallel queue/Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=environment settings object/responsible event loop=]:
         1. If |signal| is present, then run these steps:
             1. If |signal|'s [=AbortSignal/aborted flag=] is set, then run these steps:
-                1. [=Enqueue the following step=] to the [=lock task queue=]:
+                1. [=parallel queue/Enqueue the following step=] to the [=lock task queue=]:
                     1. [=Release the lock=] |lock|.
                 1. Return.
             1. [=AbortSignal/Remove=] the algorithm [=signal to abort the request=] |request| from |signal|.
