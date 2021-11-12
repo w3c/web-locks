@@ -7,7 +7,7 @@
   <meta content="Bikeshed version dfbc2b297, updated Thu Nov 11 15:52:32 2021 -0800" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="05d79667defc072cdaf4c1354ac5e6d320b2df74" name="document-revision">
+  <meta content="c32971654c0915244d3c482d314ddfe17d1dbb3b" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -881,7 +881,7 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]<
    <div>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept②">lock</a> has an <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-agent">agent</dfn> which is an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent③">agent</a>.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept③">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-clientid">clientId</dfn> which is an opaque string.</p>
-    <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept④">lock</a> has an <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-origin">origin</dfn> which is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin③">origin</a>.</p>
+    <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept④">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-manager">manager</dfn> which is a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a>.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑤">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-name">name</dfn> which is a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name②">resource name</a>.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑥">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-mode">mode</dfn> which is one of "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive④">exclusive</a></code>" or "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared③">shared</a></code>".</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑦">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-waiting-promise">waiting promise</dfn> which is a Promise.</p>
@@ -910,7 +910,7 @@ Note that in most code the callback would be implemented as an <code>async</code
      <p>The <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise②">waiting promise</a> is not named in the above code, but is still present as the return value from the anonymous <code>async</code> callback.
 Further note that if the callback is not <code>async</code> and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; the lock will be released in an upcoming microtask, and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise②">released promise</a> will also resolve in a subsequent microtask.</p>
     </aside>
-    <p>Each origin has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-held-lock-set">held lock set</dfn> which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a> of <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑨">locks</a>.</p>
+    <p>Each <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> has a <dfn class="dfn-paneled" data-dfn-for="lock manager" data-dfn-type="dfn" data-noexport id="lock-manager-held-lock-set">held lock set</dfn> which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a> of <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑨">locks</a>.</p>
     <div class="algorithm" data-algorithm="waiting promise settles">
      <p>When <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⓪">lock</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise③">waiting promise</a> settles (fulfills or rejects), <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps①">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue">lock task queue</a>:</p>
      <ol>
@@ -924,12 +924,12 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
    <h3 class="heading settled" data-level="2.5" id="concept-lock-request"><span class="secno">2.5. </span><span class="content">Lock Requests</span><a class="self-link" href="#concept-lock-request"></a></h3>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-request">lock request</dfn> represents a pending request for a <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①①">lock</a>.</p>
    <div>
-    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request②">lock request</a> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> with <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item">items</a> <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-agent">agent</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-clientid">clientId</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-origin">origin</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-name">name</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-mode">mode</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-callback">callback</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-promise">promise</dfn>, and <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-signal">signal</dfn>.</p>
+    <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request②">lock request</a> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> with <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item">items</a> <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-agent">agent</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-clientid">clientId</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-manager">manager</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-name">name</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-mode">mode</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-callback">callback</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-promise">promise</dfn>, and <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-signal">signal</dfn>.</p>
    </div>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-request-queue">lock request queue</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#queue" id="ref-for-queue">queue</a> of <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request③">lock requests</a>.</p>
-   <p>Each origin has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-request-queue-map">lock request queue map</dfn>, which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">map</a> of <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource names</a> to <a data-link-type="dfn" href="#lock-request-queue" id="ref-for-lock-request-queue">lock request queues</a>.</p>
+   <p>Each <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager③">lock manager</a> has a <dfn class="dfn-paneled" data-dfn-for="lock manager" data-dfn-type="dfn" data-noexport id="lock-manager-lock-request-queue-map">lock request queue map</dfn>, which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">map</a> of <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource names</a> to <a data-link-type="dfn" href="#lock-request-queue" id="ref-for-lock-request-queue">lock request queues</a>.</p>
    <div class="algorithm" data-algorithm="get the lock request queue">
-    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="get-the-lock-request-queue">get the lock request queue</dfn> from <a data-link-type="dfn" href="#lock-request-queue-map" id="ref-for-lock-request-queue-map">lock request queue map</a> <var>queueMap</var> from <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name④">resource name</a> <var>name</var>, run these steps:</p>
+    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="get-the-lock-request-queue">get the lock request queue</dfn> from <a data-link-type="dfn" href="#lock-manager-lock-request-queue-map" id="ref-for-lock-manager-lock-request-queue-map">lock request queue map</a> <var>queueMap</var> from <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name④">resource name</a> <var>name</var>, run these steps:</p>
     <ol>
      <li data-md>
       <p>If <var>queueMap</var>[<var>name</var>] does not <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">exist</a>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-set" id="ref-for-map-set">set</a> <var>queueMap</var>[<var>name</var>] to a new empty <a data-link-type="dfn" href="#lock-request-queue" id="ref-for-lock-request-queue①">lock request queue</a>.</p>
@@ -941,15 +941,15 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
     <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request④">lock request</a> <var>request</var> is said to be <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="grantable">grantable</dfn> if the following steps return true:</p>
     <ol>
      <li data-md>
-      <p>Let <var>origin</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-origin" id="ref-for-lock-request-origin">origin</a>.</p>
+      <p>Let <var>manager</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-manager" id="ref-for-lock-request-manager">manager</a>.</p>
      <li data-md>
-      <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-queue-map" id="ref-for-lock-request-queue-map①">lock request queue map</a>.</p>
+      <p>Let <var>queueMap</var> be <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-lock-request-queue-map" id="ref-for-lock-manager-lock-request-queue-map①">lock request queue map</a>.</p>
      <li data-md>
       <p>Let <var>name</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name">name</a>.</p>
      <li data-md>
       <p>Let <var>queue</var> be the result of <a data-link-type="dfn" href="#get-the-lock-request-queue" id="ref-for-get-the-lock-request-queue">getting the lock request queue</a> from <var>queueMap</var> for <var>name</var>.</p>
      <li data-md>
-      <p>Let <var>held</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set">held lock set</a></p>
+      <p>Let <var>held</var> be <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-held-lock-set" id="ref-for-lock-manager-held-lock-set">held lock set</a></p>
      <li data-md>
       <p>Let <var>mode</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-mode" id="ref-for-lock-request-mode">mode</a></p>
      <li data-md>
@@ -1057,7 +1057,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
 };
 </pre>
    <p>A <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager⑤">LockManager</a></code> instance allows script to make <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑥">lock requests</a> and query
-the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a>.</p>
+the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager④">lock manager</a>.</p>
    <h4 class="heading settled" data-level="3.2.1" id="api-lock-manager-request"><span class="secno">3.2.1. </span><span class="content">The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request②">request()</a></code> method</span><a class="self-link" href="#api-lock-manager-request"></a></h4>
    <div class="mdn-anno wrapped after">
     <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
@@ -1168,7 +1168,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>If <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document">responsible document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active">fully active</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException">DOMException</a></code>.</p>
      <li data-md>
-      <p>Let <var>origin</var> be <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin④">origin</a>.</p>
+      <p>Let <var>origin</var> be <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin③">origin</a>.</p>
      <li data-md>
       <p>If <var>origin</var> is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque" id="ref-for-concept-origin-opaque">opaque origin</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with①">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#securityerror" id="ref-for-securityerror">SecurityError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
      <li data-md>
@@ -1184,7 +1184,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>promise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise">a new promise</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#request-a-lock" id="ref-for-request-a-lock">Request a lock</a> with <var>promise</var>, the current <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent⑤">agent</a>, <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id" id="ref-for-concept-environment-id">id</a>, <var>origin</var>, <var>callback</var>, <var>name</var>, <var>options</var>["<code>mode</code>"], <var>options</var>["<code>ifAvailable</code>"], <var>options</var>["<code>steal</code>"], and <var>options</var>["<code>signal</code>"].</p>
+      <p><a data-link-type="dfn" href="#request-a-lock" id="ref-for-request-a-lock">Request a lock</a> with <var>promise</var>, the current <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent⑤">agent</a>, <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id" id="ref-for-concept-environment-id">id</a>, <var>origin</var>’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑤">lock manager</a>, <var>callback</var>, <var>name</var>, <var>options</var>["<code>mode</code>"], <var>options</var>["<code>ifAvailable</code>"], <var>options</var>["<code>steal</code>"], and <var>options</var>["<code>signal</code>"].</p>
      <li data-md>
       <p>Return <var>promise</var>.</p>
     </ol>
@@ -1210,7 +1210,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     <dl>
      <dt data-md><var>state</var> = await navigator . locks . <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query②">query</a></code>()
      <dd data-md>
-      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query③">query()</a></code> method can be used to produce a snapshot of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.</p>
+      <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query③">query()</a></code> method can be used to produce a snapshot of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑥">lock manager</a> state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.</p>
       <p>The returned promise resolves to <var>state</var>, a plain-old-data structure (i.e. JSON-like data) with this form:</p>
     </dl>
 <pre class="language-js highlight"><c- p>{</c->
@@ -1232,7 +1232,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
 </pre>
     <p>The <code>clientId</code> field corresponds to a unique context (frame or worker), and is the same value returned by <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#client" id="ref-for-client">Client</a></code>'s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#dom-client-id" id="ref-for-dom-client-id">id</a></code> attribute.</p>
    </div>
-   <aside class="advisement"> This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager③">lock manager</a> state at some point in time. By the time the data is returned to script, the actual lock state might have changed. </aside>
+   <aside class="advisement"> This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑦">lock manager</a> state at some point in time. By the time the data is returned to script, the actual lock state might have changed. </aside>
    <div class="algorithm" data-algorithm="query()" data-algorithm-for="LockManager">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export id="dom-lockmanager-query"><code>query()</code></dfn> method steps are:</p>
     <ol>
@@ -1241,13 +1241,13 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>If <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document①">responsible document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active①">fully active</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑦">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror①">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code>.</p>
      <li data-md>
-      <p>Let <var>origin</var> be <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin⑤">origin</a>.</p>
+      <p>Let <var>origin</var> be <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin④">origin</a>.</p>
      <li data-md>
       <p>If <var>origin</var> is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque" id="ref-for-concept-origin-opaque①">opaque origin</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑧">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#securityerror" id="ref-for-securityerror①">SecurityError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
      <li data-md>
       <p>Let <var>promise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①">a new promise</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps③">Enqueue the steps</a> to <a data-link-type="dfn" href="#snapshot-the-lock-state" id="ref-for-snapshot-the-lock-state">snapshot the lock state</a> for <var>origin</var> with <var>promise</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue②">lock task queue</a>.</p>
+      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps③">Enqueue the steps</a> to <a data-link-type="dfn" href="#snapshot-the-lock-state" id="ref-for-snapshot-the-lock-state">snapshot the lock state</a> for <var>origin</var>’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑧">lock manager</a> with <var>promise</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue②">lock task queue</a>.</p>
      <li data-md>
       <p>Return <var>promise</var>.</p>
     </ol>
@@ -1313,21 +1313,21 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    <h2 class="heading settled" data-level="4" id="algorithms"><span class="secno">4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
    <h3 class="heading settled" data-level="4.1" id="algorithm-request-lock"><span class="secno">4.1. </span><span class="content">Request a lock</span><a class="self-link" href="#algorithm-request-lock"></a></h3>
    <div class="algorithm" data-algorithm="request a lock">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="request-a-lock">request a lock</dfn> with <var>promise</var>, <var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>callback</var>, <var>name</var>, <var>mode</var>, <var>ifAvailable</var>, <var>steal</var>, and <var>signal</var>: 
+     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="request-a-lock">request a lock</dfn> with <var>promise</var>, <var>agent</var>, <var>clientId</var>, <var>manager</var>, <var>callback</var>, <var>name</var>, <var>mode</var>, <var>ifAvailable</var>, <var>steal</var>, and <var>signal</var>: 
     <ol>
      <li data-md>
-      <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑦">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>origin</var>, <var>name</var>, <var>mode</var>, <var>callback</var>, <var>promise</var>, <var>signal</var>).</p>
+      <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑦">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>manager</var>, <var>name</var>, <var>mode</var>, <var>callback</var>, <var>promise</var>, <var>signal</var>).</p>
      <li data-md>
       <p>If <var>signal</var> is present, then <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-add" id="ref-for-abortsignal-add">add</a> the algorithm <a data-link-type="dfn" href="#signal-to-abort-the-request" id="ref-for-signal-to-abort-the-request">signal to abort the request</a> <var>request</var> to <var>signal</var>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps④">Enqueue the following steps</a> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue③">lock task queue</a>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-queue-map" id="ref-for-lock-request-queue-map②">lock request queue map</a>.</p>
+        <p>Let <var>queueMap</var> be <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-lock-request-queue-map" id="ref-for-lock-manager-lock-request-queue-map②">lock request queue map</a>.</p>
        <li data-md>
         <p>Let <var>queue</var> be the result of <a data-link-type="dfn" href="#get-the-lock-request-queue" id="ref-for-get-the-lock-request-queue①">getting the lock request queue</a> from <var>queueMap</var> for <var>name</var>.</p>
        <li data-md>
-        <p>Let <var>held</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set①">held lock set</a>.</p>
+        <p>Let <var>held</var> be <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-held-lock-set" id="ref-for-lock-manager-held-lock-set①">held lock set</a>.</p>
        <li data-md>
         <p>If <var>steal</var> is true, then run these steps:</p>
         <ol>
@@ -1375,15 +1375,15 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert">Assert</a>: these steps are running on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue④">lock task queue</a>.</p>
      <li data-md>
-      <p>Let <var>origin</var> be <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-origin" id="ref-for-lock-concept-origin">origin</a>.</p>
+      <p>Let <var>manager</var> be <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-manager" id="ref-for-lock-concept-manager">manager</a>.</p>
      <li data-md>
-      <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-queue-map" id="ref-for-lock-request-queue-map③">lock request queue map</a>.</p>
+      <p>Let <var>queueMap</var> be <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-lock-request-queue-map" id="ref-for-lock-manager-lock-request-queue-map③">lock request queue map</a>.</p>
      <li data-md>
       <p>Let <var>name</var> be <var>lock</var>’s <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name⑥">resource name</a>.</p>
      <li data-md>
       <p>Let <var>queue</var> be the result of <a data-link-type="dfn" href="#get-the-lock-request-queue" id="ref-for-get-the-lock-request-queue②">getting the lock request queue</a> from <var>queueMap</var> for <var>name</var>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove①">Remove</a> <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑨">lock</a> from the <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set②">held lock set</a>.</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove①">Remove</a> <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑨">lock</a> from the <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-held-lock-set" id="ref-for-lock-manager-held-lock-set②">held lock set</a>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="#process-the-lock-request-queue" id="ref-for-process-the-lock-request-queue①">Process the lock request queue</a> <var>queue</var>.</p>
     </ol>
@@ -1395,11 +1395,11 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert①">Assert</a>: these steps are running on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue⑤">lock task queue</a>.</p>
      <li data-md>
-      <p>Let <var>origin</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-origin" id="ref-for-lock-request-origin①">origin</a>.</p>
+      <p>Let <var>manager</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-manager" id="ref-for-lock-request-manager①">manager</a>.</p>
      <li data-md>
       <p>Let <var>name</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-name" id="ref-for-lock-request-name①">name</a>.</p>
      <li data-md>
-      <p>Let <var>queueMap</var> be <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-queue-map" id="ref-for-lock-request-queue-map④">lock request queue map</a>.</p>
+      <p>Let <var>queueMap</var> be <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-lock-request-queue-map" id="ref-for-lock-manager-lock-request-queue-map④">lock request queue map</a>.</p>
      <li data-md>
       <p>Let <var>queue</var> be the result of <a data-link-type="dfn" href="#get-the-lock-request-queue" id="ref-for-get-the-lock-request-queue③">getting the lock request queue</a> from <var>queueMap</var> for <var>name</var>.</p>
      <li data-md>
@@ -1432,7 +1432,9 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove③">Remove</a> <var>request</var> from <var>queue</var>.</p>
        <li data-md>
-        <p>Let <var>agent</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-concept-agent" id="ref-for-lock-concept-agent①">agent</a></p>
+        <p>Let <var>agent</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-concept-agent" id="ref-for-lock-concept-agent①">agent</a>.</p>
+       <li data-md>
+        <p>Let <var>manager</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-manager" id="ref-for-lock-request-manager②">manager</a>.</p>
        <li data-md>
         <p>Let <var>clientId</var> be <var>request</var>’s <a data-link-type="dfn" href="#lock-request-clientid" id="ref-for-lock-request-clientid">clientId</a>.</p>
        <li data-md>
@@ -1448,9 +1450,9 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
        <li data-md>
         <p>Let <var>waiting</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise②">a new promise</a>.</p>
        <li data-md>
-        <p>Let <var>lock</var> be a new <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept②⓪">lock</a> with <a data-link-type="dfn" href="#lock-concept-agent" id="ref-for-lock-concept-agent②">agent</a> <var>agent</var>, <a data-link-type="dfn" href="#lock-concept-clientid" id="ref-for-lock-concept-clientid">clientId</a> <var>clientId</var>, <a data-link-type="dfn" href="#lock-concept-origin" id="ref-for-lock-concept-origin①">origin</a> <var>origin</var>, <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode②">mode</a> <var>mode</var>, <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name④">name</a> <var>name</var>, <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise⑥">released promise</a> <var>p</var>, and <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise⑤">waiting promise</a> <var>waiting</var>.</p>
+        <p>Let <var>lock</var> be a new <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept②⓪">lock</a> with <a data-link-type="dfn" href="#lock-concept-agent" id="ref-for-lock-concept-agent②">agent</a> <var>agent</var>, <a data-link-type="dfn" href="#lock-concept-clientid" id="ref-for-lock-concept-clientid">clientId</a> <var>clientId</var>, <a data-link-type="dfn" href="#lock-concept-manager" id="ref-for-lock-concept-manager①">manager</a> <var>manager</var>, <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode②">mode</a> <var>mode</var>, <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name④">name</a> <var>name</var>, <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise⑥">released promise</a> <var>p</var>, and <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise⑤">waiting promise</a> <var>waiting</var>.</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>lock</var> to <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set③">held lock set</a>.</p>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>lock</var> to <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-held-lock-set" id="ref-for-lock-manager-held-lock-set③">held lock set</a>.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑦">Enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object④">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop①">responsible event loop</a>:</p>
         <ol>
@@ -1482,14 +1484,14 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    </div>
    <h3 class="heading settled" data-level="4.5" id="algorithm-snapshot-state"><span class="secno">4.5. </span><span class="content">Snapshot the lock state</span><a class="self-link" href="#algorithm-snapshot-state"></a></h3>
    <div class="algorithm" data-algorithm="snapshot the lock state">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="snapshot-the-lock-state">snapshot the lock state</dfn> for <var>origin</var> with <var>promise</var>: 
+     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="snapshot-the-lock-state">snapshot the lock state</dfn> for <var>manager</var> with <var>promise</var>: 
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert③">Assert</a>: these steps are running on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue⑨">lock task queue</a>.</p>
      <li data-md>
       <p>Let <var>pending</var> be a new <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list">list</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>queue</var> of <var>origin</var>’s <a data-link-type="dfn" href="#lock-request-queue-map" id="ref-for-lock-request-queue-map⑤">lock request queue map</a>'s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values">values</a>:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>queue</var> of <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-lock-request-queue-map" id="ref-for-lock-manager-lock-request-queue-map⑤">lock request queue map</a>'s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values">values</a>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">For each</a> <var>request</var> of <var>queue</var>:</p>
@@ -1501,7 +1503,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>held</var> be a new <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list①">list</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate③">For each</a> <var>lock</var> of <var>origin</var>’s <a data-link-type="dfn" href="#lock-concept-held-lock-set" id="ref-for-lock-concept-held-lock-set④">held lock set</a>:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate③">For each</a> <var>lock</var> of <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-held-lock-set" id="ref-for-lock-manager-held-lock-set④">held lock set</a>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-append" id="ref-for-list-append①">Append</a> «[ "name" → <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name⑤">name</a>, "mode" → <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode③">mode</a>, "clientId" → <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-clientid" id="ref-for-lock-concept-clientid①">clientId</a> ]» to <var>held</var>.</p>
@@ -1524,7 +1526,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    <h2 class="heading settled" data-level="5" id="usage-considerations"><span class="secno">5. </span><span class="content">Usage Considerations</span><a class="self-link" href="#usage-considerations"></a></h2>
    <p><em>This section is non-normative.</em></p>
    <h3 class="heading settled" data-level="5.1" id="deadlocks"><span class="secno">5.1. </span><span class="content">Deadlocks</span><a class="self-link" href="#deadlocks"></a></h3>
-   <p><a href="https://en.wikipedia.org/wiki/Deadlock">Deadlocks</a> are a concept in concurrent computing, and deadlocks scoped to a particular <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager④">lock manager</a> can be introduced by this API.</p>
+   <p><a href="https://en.wikipedia.org/wiki/Deadlock">Deadlocks</a> are a concept in concurrent computing, and deadlocks scoped to a particular <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑨">lock manager</a> can be introduced by this API.</p>
    <aside class="example" id="example-deadlocks">
     <a class="self-link" href="#example-deadlocks"></a> An example of how deadlocks can be encountered through the use of this API is as follows. 
     <p>Script 1:</p>
@@ -1573,7 +1575,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    </aside>
    <h2 class="heading settled" data-level="6" id="security-privacy"><span class="secno">6. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-privacy"></a></h2>
    <h3 class="heading settled" data-level="6.1" id="security-scope"><span class="secno">6.1. </span><span class="content">Lock Scope</span><a class="self-link" href="#security-scope"></a></h3>
-   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑤">lock manager</a>'s scope is important as it defines a privacy boundary. Locks can be used as an ephemeral state retention mechanism and, like storage APIs, can be used as a communication mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page (first-party) and a cross-origin iframe (third-party) in the same origin for privacy reasons must similarly partition locking.</p>
+   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①⓪">lock manager</a>'s scope is important as it defines a privacy boundary. Locks can be used as an ephemeral state retention mechanism and, like storage APIs, can be used as a communication mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page (first-party) and a cross-origin iframe (third-party) in the same origin for privacy reasons must similarly partition locking.</p>
    <p>This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, all same-origin browsing contexts must observe the same state.</p>
    <h3 class="heading settled" data-level="6.2" id="private-browsing"><span class="secno">6.2. </span><span class="content">Private Browsing</span><a class="self-link" href="#private-browsing"></a></h3>
    <p>Every <a href="https://github.com/w3ctag/private-mode">private mode</a> browsing session is considered a separate user agent for the purposes of this API. That is, locks requested/held outside such a session have no affect on requested/held inside such a session, and vice versa. This prevents a website from determining that a session is "incognito" while also not allowing a communication mechanism between such sessions.</p>
@@ -1706,7 +1708,7 @@ authoring advice.</p>
    <li><a href="#get-the-lock-request-queue">get the lock request queue</a><span>, in § 2.5</span>
    <li><a href="#grantable">grantable</a><span>, in § 2.5</span>
    <li><a href="#dom-lockmanagersnapshot-held">held</a><span>, in § 3.2</span>
-   <li><a href="#lock-concept-held-lock-set">held lock set</a><span>, in § 2.4</span>
+   <li><a href="#lock-manager-held-lock-set">held lock set</a><span>, in § 2.4</span>
    <li><a href="#dom-lockoptions-ifavailable">ifAvailable</a><span>, in § 3.2</span>
    <li><a href="#lock">Lock</a><span>, in § 3.3</span>
    <li><a href="#lock-concept">lock-concept</a><span>, in § 2.4</span>
@@ -1719,9 +1721,15 @@ authoring advice.</p>
    <li><a href="#dictdef-lockoptions">LockOptions</a><span>, in § 3.2</span>
    <li><a href="#lock-request">lock request</a><span>, in § 2.5</span>
    <li><a href="#lock-request-queue">lock request queue</a><span>, in § 2.5</span>
-   <li><a href="#lock-request-queue-map">lock request queue map</a><span>, in § 2.5</span>
+   <li><a href="#lock-manager-lock-request-queue-map">lock request queue map</a><span>, in § 2.5</span>
    <li><a href="#dom-navigatorlocks-locks">locks</a><span>, in § 3.1</span>
    <li><a href="#lock-task-queue">lock task queue</a><span>, in § 2</span>
+   <li>
+    manager
+    <ul>
+     <li><a href="#lock-request-manager">dfn for lock request</a><span>, in § 2.5</span>
+     <li><a href="#lock-concept-manager">dfn for lock-concept</a><span>, in § 2.4</span>
+    </ul>
    <li>
     mode
     <ul>
@@ -1741,12 +1749,6 @@ authoring advice.</p>
      <li><a href="#dom-lockinfo-name">dict-member for LockInfo</a><span>, in § 3.2</span>
     </ul>
    <li><a href="#navigatorlocks">NavigatorLocks</a><span>, in § 3.1</span>
-   <li>
-    origin
-    <ul>
-     <li><a href="#lock-request-origin">dfn for lock request</a><span>, in § 2.5</span>
-     <li><a href="#lock-concept-origin">dfn for lock-concept</a><span>, in § 2.4</span>
-    </ul>
    <li><a href="#dom-lockmanagersnapshot-pending">pending</a><span>, in § 3.2</span>
    <li><a href="#process-the-lock-request-queue">process the lock request queue</a><span>, in § 4.4</span>
    <li><a href="#lock-request-promise">promise</a><span>, in § 2.5</span>
@@ -1885,9 +1887,8 @@ authoring advice.</p>
    <ul>
     <li><a href="#ref-for-concept-origin">2.1. Resources Names</a>
     <li><a href="#ref-for-concept-origin①">2.2. Lock Managers</a> <a href="#ref-for-concept-origin②">(2)</a>
-    <li><a href="#ref-for-concept-origin③">2.4. Locks</a>
-    <li><a href="#ref-for-concept-origin④">3.2.1. The request() method</a>
-    <li><a href="#ref-for-concept-origin⑤">3.2.2. The query() method</a>
+    <li><a href="#ref-for-concept-origin③">3.2.1. The request() method</a>
+    <li><a href="#ref-for-concept-origin④">3.2.2. The query() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-relevant-settings-object">
@@ -2376,10 +2377,13 @@ authoring advice.</p>
    <b><a href="#lock-manager">#lock-manager</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-lock-manager">2.2. Lock Managers</a>
-    <li><a href="#ref-for-lock-manager①">3.2. LockManager class</a>
-    <li><a href="#ref-for-lock-manager②">3.2.2. The query() method</a> <a href="#ref-for-lock-manager③">(2)</a>
-    <li><a href="#ref-for-lock-manager④">5.1. Deadlocks</a>
-    <li><a href="#ref-for-lock-manager⑤">6.1. Lock Scope</a>
+    <li><a href="#ref-for-lock-manager①">2.4. Locks</a> <a href="#ref-for-lock-manager②">(2)</a>
+    <li><a href="#ref-for-lock-manager③">2.5. Lock Requests</a>
+    <li><a href="#ref-for-lock-manager④">3.2. LockManager class</a>
+    <li><a href="#ref-for-lock-manager⑤">3.2.1. The request() method</a>
+    <li><a href="#ref-for-lock-manager⑥">3.2.2. The query() method</a> <a href="#ref-for-lock-manager⑦">(2)</a> <a href="#ref-for-lock-manager⑧">(3)</a>
+    <li><a href="#ref-for-lock-manager⑨">5.1. Deadlocks</a>
+    <li><a href="#ref-for-lock-manager①⓪">6.1. Lock Scope</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="mode">
@@ -2416,11 +2420,11 @@ authoring advice.</p>
     <li><a href="#ref-for-lock-concept-clientid①">4.5. Snapshot the lock state</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="lock-concept-origin">
-   <b><a href="#lock-concept-origin">#lock-concept-origin</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="lock-concept-manager">
+   <b><a href="#lock-concept-manager">#lock-concept-manager</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-lock-concept-origin">4.2. Release a lock</a>
-    <li><a href="#ref-for-lock-concept-origin①">4.4. Process a lock request queue for a given resource name</a>
+    <li><a href="#ref-for-lock-concept-manager">4.2. Release a lock</a>
+    <li><a href="#ref-for-lock-concept-manager①">4.4. Process a lock request queue for a given resource name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock-concept-name">
@@ -2458,14 +2462,14 @@ authoring advice.</p>
     <li><a href="#ref-for-lock-concept-released-promise⑥">4.4. Process a lock request queue for a given resource name</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="lock-concept-held-lock-set">
-   <b><a href="#lock-concept-held-lock-set">#lock-concept-held-lock-set</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="lock-manager-held-lock-set">
+   <b><a href="#lock-manager-held-lock-set">#lock-manager-held-lock-set</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-lock-concept-held-lock-set">2.5. Lock Requests</a>
-    <li><a href="#ref-for-lock-concept-held-lock-set①">4.1. Request a lock</a>
-    <li><a href="#ref-for-lock-concept-held-lock-set②">4.2. Release a lock</a>
-    <li><a href="#ref-for-lock-concept-held-lock-set③">4.4. Process a lock request queue for a given resource name</a>
-    <li><a href="#ref-for-lock-concept-held-lock-set④">4.5. Snapshot the lock state</a>
+    <li><a href="#ref-for-lock-manager-held-lock-set">2.5. Lock Requests</a>
+    <li><a href="#ref-for-lock-manager-held-lock-set①">4.1. Request a lock</a>
+    <li><a href="#ref-for-lock-manager-held-lock-set②">4.2. Release a lock</a>
+    <li><a href="#ref-for-lock-manager-held-lock-set③">4.4. Process a lock request queue for a given resource name</a>
+    <li><a href="#ref-for-lock-manager-held-lock-set④">4.5. Snapshot the lock state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock-request">
@@ -2492,11 +2496,12 @@ authoring advice.</p>
     <li><a href="#ref-for-lock-request-clientid①">4.5. Snapshot the lock state</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="lock-request-origin">
-   <b><a href="#lock-request-origin">#lock-request-origin</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="lock-request-manager">
+   <b><a href="#lock-request-manager">#lock-request-manager</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-lock-request-origin">2.5. Lock Requests</a>
-    <li><a href="#ref-for-lock-request-origin①">4.3. Abort a request</a>
+    <li><a href="#ref-for-lock-request-manager">2.5. Lock Requests</a>
+    <li><a href="#ref-for-lock-request-manager①">4.3. Abort a request</a>
+    <li><a href="#ref-for-lock-request-manager②">4.4. Process a lock request queue for a given resource name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock-request-name">
@@ -2541,14 +2546,14 @@ authoring advice.</p>
     <li><a href="#ref-for-lock-request-queue">2.5. Lock Requests</a> <a href="#ref-for-lock-request-queue①">(2)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="lock-request-queue-map">
-   <b><a href="#lock-request-queue-map">#lock-request-queue-map</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="lock-manager-lock-request-queue-map">
+   <b><a href="#lock-manager-lock-request-queue-map">#lock-manager-lock-request-queue-map</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-lock-request-queue-map">2.5. Lock Requests</a> <a href="#ref-for-lock-request-queue-map①">(2)</a>
-    <li><a href="#ref-for-lock-request-queue-map②">4.1. Request a lock</a>
-    <li><a href="#ref-for-lock-request-queue-map③">4.2. Release a lock</a>
-    <li><a href="#ref-for-lock-request-queue-map④">4.3. Abort a request</a>
-    <li><a href="#ref-for-lock-request-queue-map⑤">4.5. Snapshot the lock state</a>
+    <li><a href="#ref-for-lock-manager-lock-request-queue-map">2.5. Lock Requests</a> <a href="#ref-for-lock-manager-lock-request-queue-map①">(2)</a>
+    <li><a href="#ref-for-lock-manager-lock-request-queue-map②">4.1. Request a lock</a>
+    <li><a href="#ref-for-lock-manager-lock-request-queue-map③">4.2. Release a lock</a>
+    <li><a href="#ref-for-lock-manager-lock-request-queue-map④">4.3. Abort a request</a>
+    <li><a href="#ref-for-lock-manager-lock-request-queue-map⑤">4.5. Snapshot the lock state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="get-the-lock-request-queue">
