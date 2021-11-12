@@ -7,7 +7,7 @@
   <meta content="Bikeshed version dfbc2b297, updated Thu Nov 11 15:52:32 2021 -0800" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="e017adc92a590ed5e6de467c56d8a73300a79f31" name="document-revision">
+  <meta content="0d1d24e7b0bd85145ee6e0b6561557576b032c1c" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -799,7 +799,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li data-md>
      <p>conditional acquisition,</p>
     <li data-md>
-     <p>diagnostics to query the state of locks in an origin, and</p>
+     <p>diagnostics to query the state of locks, and</p>
     <li data-md>
      <p>an escape hatch to protect against deadlocks.</p>
    </ul>
@@ -847,7 +847,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
     <li data-md>
      <p>Every <a href="https://github.com/w3ctag/private-mode">private mode</a> browsing session is considered a separate user agent.</p>
    </ul>
-   <p>A user agent has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-task-queue">lock task queue</dfn> which is the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue" id="ref-for-starting-a-new-parallel-queue">starting a new parallel queue</a>.</p>
+   <p>A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#user-agent" id="ref-for-user-agent">user agent</a> has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-task-queue">lock task queue</dfn> which is the result of <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue" id="ref-for-starting-a-new-parallel-queue">starting a new parallel queue</a>.</p>
    <p>The <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source" id="ref-for-task-source">task source</a> for <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps">steps enqueued</a> below is the <dfn data-dfn-type="dfn" data-export id="web-locks-tasks-source">web locks tasks source<a class="self-link" href="#web-locks-tasks-source"></a></dfn>.</p>
    <h3 class="heading settled" data-level="2.1" id="resource-names"><span class="secno">2.1. </span><span class="content">Resources Names</span><a class="self-link" href="#resource-names"></a></h3>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="resource-name">resource name</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string" id="ref-for-string">JavaScript string</a> chosen by the web application to represent an abstract resource.</p>
@@ -855,19 +855,30 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
 across <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context">browsing contexts</a> within an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin">origin</a>. Web applications are free to use any resource naming scheme.</p>
    <aside class="example" id="example-indexeddb-transactions">
     <a class="self-link" href="#example-indexeddb-transactions"></a> To mimic transaction locking over named stores within a named
-database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]</a>, an origin might compose resource names as: 
+database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]</a>, a script might compose resource names as: 
 <pre class="language-js highlight">encodeURIComponent<c- p>(</c->db_name<c- p>)</c-> <c- o>+</c-> <c- t>'/'</c-> <c- o>+</c-> encodeURIComponent<c- p>(</c->store_name<c- p>)</c->
 </pre>
    </aside>
    <p>Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting these will cause an exception.</p>
    <h3 class="heading settled" data-level="2.2" id="lock-managers"><span class="secno">2.2. </span><span class="content">Lock Managers</span><a class="self-link" href="#lock-managers"></a></h3>
-   <p>A user agent has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-manager">lock manager</dfn> for each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①">origin</a>, which encapsulates the state of all <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①">locks</a> and <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request①">lock requests</a> for that origin.</p>
-   <p>Pages and workers (<a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent②">agents</a>) on a single <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin②">origin</a> opened in the same user agent share a lock manager even if they are in unrelated <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context①">browsing contexts</a>.</p>
+   <p>A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#user-agent" id="ref-for-user-agent①">user agent</a> has a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-manager">lock manager</dfn> for each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①">origin</a>, which encapsulates the state of all <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①">locks</a> and <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request①">lock requests</a> for that origin.</p>
+   <p class="note" role="note"><span>Note:</span> Pages and workers (<a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent②">agents</a>) on a single <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin②">origin</a> opened in the same user agent share a lock manager even if they are in unrelated <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#browsing-context" id="ref-for-browsing-context①">browsing contexts</a>.</p>
+   <div class="algorithm" data-algorithm="obtain a lock manager">
+     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="obtain-a-lock-manager">obtain a lock manager</dfn>, given an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> <var>environment</var>, run these steps: 
+    <ol>
+     <li data-md>
+      <p>Let <var>origin</var> be <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin③">origin</a>.</p>
+     <li data-md>
+      <p>If <var>origin</var> is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque" id="ref-for-concept-origin-opaque">opaque origin</a>, then return failure.</p>
+     <li data-md>
+      <p>Return <var>origin</var>’s associated <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager">lock manager</a>.</p>
+    </ol>
+   </div>
    <aside class="note">
     <p>There is an equivalence between the following:</p>
     <ul>
      <li data-md>
-      <p>Agents that share a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager">lock manager</a>.</p>
+      <p>Agents that share a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a>.</p>
      <li data-md>
       <p>Agents that share a <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#storage-shelf" id="ref-for-storage-shelf">storage shelf</a>, i.e. a per-origin <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webstorage.html#dom-localstorage" id="ref-for-dom-localstorage">local storage area</a> <a data-link-type="biblio" href="#biblio-html">[HTML]</a>, set of <a href="https://w3c.github.io/IndexedDB/#database-construct">databases</a> <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]</a>, or <a href="https://www.w3.org/TR/service-workers-1/#cache-objects">caches</a> <a data-link-type="biblio" href="#biblio-service-workers">[Service-Workers]</a>.</p>
     </ul>
@@ -881,7 +892,7 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2">[IndexedDB-2]<
    <div>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept②">lock</a> has an <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-agent">agent</dfn> which is an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent③">agent</a>.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept③">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-clientid">clientId</dfn> which is an opaque string.</p>
-    <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept④">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-manager">manager</dfn> which is a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a>.</p>
+    <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept④">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-manager">manager</dfn> which is a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a>.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑤">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-name">name</dfn> which is a <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name②">resource name</a>.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑥">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-mode">mode</dfn> which is one of "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive④">exclusive</a></code>" or "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared③">shared</a></code>".</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑦">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-waiting-promise">waiting promise</dfn> which is a Promise.</p>
@@ -910,7 +921,7 @@ Note that in most code the callback would be implemented as an <code>async</code
      <p>The <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise②">waiting promise</a> is not named in the above code, but is still present as the return value from the anonymous <code>async</code> callback.
 Further note that if the callback is not <code>async</code> and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; the lock will be released in an upcoming microtask, and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise②">released promise</a> will also resolve in a subsequent microtask.</p>
     </aside>
-    <p>Each <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager②">lock manager</a> has a <dfn class="dfn-paneled" data-dfn-for="lock manager" data-dfn-type="dfn" data-noexport id="lock-manager-held-lock-set">held lock set</dfn> which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a> of <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑨">locks</a>.</p>
+    <p>Each <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager③">lock manager</a> has a <dfn class="dfn-paneled" data-dfn-for="lock manager" data-dfn-type="dfn" data-noexport id="lock-manager-held-lock-set">held lock set</dfn> which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a> of <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑨">locks</a>.</p>
     <div class="algorithm" data-algorithm="waiting promise settles">
      <p>When <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⓪">lock</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise③">waiting promise</a> settles (fulfills or rejects), <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps①">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue">lock task queue</a>:</p>
      <ol>
@@ -927,7 +938,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
     <p>A <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request②">lock request</a> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> with <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item">items</a> <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-agent">agent</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-clientid">clientId</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-manager">manager</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-name">name</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-mode">mode</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-callback">callback</dfn>, <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-promise">promise</dfn>, and <dfn class="dfn-paneled" data-dfn-for="lock request" data-dfn-type="dfn" data-noexport id="lock-request-signal">signal</dfn>.</p>
    </div>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-request-queue">lock request queue</dfn> is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#queue" id="ref-for-queue">queue</a> of <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request③">lock requests</a>.</p>
-   <p>Each <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager③">lock manager</a> has a <dfn class="dfn-paneled" data-dfn-for="lock manager" data-dfn-type="dfn" data-noexport id="lock-manager-lock-request-queue-map">lock request queue map</dfn>, which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">map</a> of <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource names</a> to <a data-link-type="dfn" href="#lock-request-queue" id="ref-for-lock-request-queue">lock request queues</a>.</p>
+   <p>Each <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager④">lock manager</a> has a <dfn class="dfn-paneled" data-dfn-for="lock manager" data-dfn-type="dfn" data-noexport id="lock-manager-lock-request-queue-map">lock request queue map</dfn>, which is a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-map" id="ref-for-ordered-map">map</a> of <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name③">resource names</a> to <a data-link-type="dfn" href="#lock-request-queue" id="ref-for-lock-request-queue">lock request queues</a>.</p>
    <div class="algorithm" data-algorithm="get the lock request queue">
     <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="get-the-lock-request-queue">get the lock request queue</dfn> from <a data-link-type="dfn" href="#lock-manager-lock-request-queue-map" id="ref-for-lock-manager-lock-request-queue-map">lock request queue map</a> <var>queueMap</var> from <a data-link-type="dfn" href="#resource-name" id="ref-for-resource-name④">resource name</a> <var>name</var>, run these steps:</p>
     <ol>
@@ -963,7 +974,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
    <h3 class="heading settled" data-level="2.6" id="agent-integration"><span class="secno">2.6. </span><span class="content">Agent Integration</span><a class="self-link" href="#agent-integration"></a></h3>
    <div class="algorithm" data-algorithm="agent termination">
      When an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent④">agent</a> terminates, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps②">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue①">lock task queue</a>: 
-    <aside class="issue" id="issue-77a47106"><a class="self-link" href="#issue-77a47106"></a> Identify a normative reference for <i>terminates</i>. </aside>
+    <p class="issue" id="issue-77a47106"><a class="self-link" href="#issue-77a47106"></a> Identify a normative reference for <i>terminates</i>.</p>
     <ol>
      <li data-md>
       <p>For each <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑤">lock request</a> <var>request</var> with <a data-link-type="dfn" href="#lock-request-agent" id="ref-for-lock-request-agent">agent</a> equal to the terminating agent:</p>
@@ -988,7 +999,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
 <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/system-state.html#navigator" id="ref-for-navigator"><c- n>Navigator</c-></a> <c- b>includes</c-> <a data-link-type="idl-name" href="#navigatorlocks" id="ref-for-navigatorlocks"><c- n>NavigatorLocks</c-></a>;
 <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/workers.html#workernavigator" id="ref-for-workernavigator"><c- n>WorkerNavigator</c-></a> <c- b>includes</c-> <a data-link-type="idl-name" href="#navigatorlocks" id="ref-for-navigatorlocks①"><c- n>NavigatorLocks</c-></a>;
 </pre>
-   <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> has a <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager②">LockManager</a></code> object.</p>
+   <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object①">environment settings object</a> has a <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager②">LockManager</a></code> object.</p>
    <div class="mdn-anno wrapped">
     <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
     <div class="feature">
@@ -1057,7 +1068,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
 };
 </pre>
    <p>A <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager⑤">LockManager</a></code> instance allows script to make <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑥">lock requests</a> and query
-the state of the origin’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager④">lock manager</a>.</p>
+the state of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑤">lock manager</a>.</p>
    <h4 class="heading settled" data-level="3.2.1" id="api-lock-manager-request"><span class="secno">3.2.1. </span><span class="content">The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request②">request()</a></code> method</span><a class="self-link" href="#api-lock-manager-request"></a></h4>
    <div class="mdn-anno wrapped after">
     <button class="mdn-anno-btn"><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></button>
@@ -1168,9 +1179,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>If <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document">responsible document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active">fully active</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException">DOMException</a></code>.</p>
      <li data-md>
-      <p>Let <var>origin</var> be <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin③">origin</a>.</p>
-     <li data-md>
-      <p>If <var>origin</var> is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque" id="ref-for-concept-origin-opaque">opaque origin</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with①">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#securityerror" id="ref-for-securityerror">SecurityError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
+      <p>Let <var>manager</var> be the result of <a data-link-type="dfn" href="#obtain-a-lock-manager" id="ref-for-obtain-a-lock-manager">obtaining a lock manager</a> given <var>environment</var>. If that returned failure, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with①">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#securityerror" id="ref-for-securityerror">SecurityError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
      <li data-md>
       <p>If <var>name</var> starts with U+002D HYPHEN-MINUS (-), then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notsupportederror" id="ref-for-notsupportederror">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
      <li data-md>
@@ -1184,7 +1193,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>promise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise">a new promise</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#request-a-lock" id="ref-for-request-a-lock">Request a lock</a> with <var>promise</var>, the current <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent⑤">agent</a>, <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id" id="ref-for-concept-environment-id">id</a>, <var>origin</var>’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑤">lock manager</a>, <var>callback</var>, <var>name</var>, <var>options</var>["<code>mode</code>"], <var>options</var>["<code>ifAvailable</code>"], <var>options</var>["<code>steal</code>"], and <var>options</var>["<code>signal</code>"].</p>
+      <p><a data-link-type="dfn" href="#request-a-lock" id="ref-for-request-a-lock">Request a lock</a> with <var>promise</var>, the current <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent⑤">agent</a>, <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id" id="ref-for-concept-environment-id">id</a>, <var>manager</var>, <var>callback</var>, <var>name</var>, <var>options</var>["<code>mode</code>"], <var>options</var>["<code>ifAvailable</code>"], <var>options</var>["<code>steal</code>"], and <var>options</var>["<code>signal</code>"].</p>
      <li data-md>
       <p>Return <var>promise</var>.</p>
     </ol>
@@ -1241,13 +1250,11 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>If <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document①">responsible document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#fully-active" id="ref-for-fully-active①">fully active</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑦">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror①">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code>.</p>
      <li data-md>
-      <p>Let <var>origin</var> be <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin④">origin</a>.</p>
-     <li data-md>
-      <p>If <var>origin</var> is an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque" id="ref-for-concept-origin-opaque①">opaque origin</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑧">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#securityerror" id="ref-for-securityerror①">SecurityError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
+      <p>Let <var>manager</var> be the result of <a data-link-type="dfn" href="#obtain-a-lock-manager" id="ref-for-obtain-a-lock-manager①">obtaining a lock manager</a> given <var>environment</var>. If that returned failure, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑧">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#securityerror" id="ref-for-securityerror①">SecurityError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
      <li data-md>
       <p>Let <var>promise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①">a new promise</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps③">Enqueue the steps</a> to <a data-link-type="dfn" href="#snapshot-the-lock-state" id="ref-for-snapshot-the-lock-state">snapshot the lock state</a> for <var>origin</var>’s <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑧">lock manager</a> with <var>promise</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue②">lock task queue</a>.</p>
+      <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps③">Enqueue the steps</a> to <a data-link-type="dfn" href="#snapshot-the-lock-state" id="ref-for-snapshot-the-lock-state">snapshot the lock state</a> for <var>manager</var> with <var>promise</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue②">lock task queue</a>.</p>
      <li data-md>
       <p>Return <var>promise</var>.</p>
     </ol>
@@ -1526,7 +1533,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    <h2 class="heading settled" data-level="5" id="usage-considerations"><span class="secno">5. </span><span class="content">Usage Considerations</span><a class="self-link" href="#usage-considerations"></a></h2>
    <p><em>This section is non-normative.</em></p>
    <h3 class="heading settled" data-level="5.1" id="deadlocks"><span class="secno">5.1. </span><span class="content">Deadlocks</span><a class="self-link" href="#deadlocks"></a></h3>
-   <p><a href="https://en.wikipedia.org/wiki/Deadlock">Deadlocks</a> are a concept in concurrent computing, and deadlocks scoped to a particular <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑨">lock manager</a> can be introduced by this API.</p>
+   <p><a href="https://en.wikipedia.org/wiki/Deadlock">Deadlocks</a> are a concept in concurrent computing, and deadlocks scoped to a particular <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑧">lock manager</a> can be introduced by this API.</p>
    <aside class="example" id="example-deadlocks">
     <a class="self-link" href="#example-deadlocks"></a> An example of how deadlocks can be encountered through the use of this API is as follows. 
     <p>Script 1:</p>
@@ -1575,7 +1582,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    </aside>
    <h2 class="heading settled" data-level="6" id="security-privacy"><span class="secno">6. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-privacy"></a></h2>
    <h3 class="heading settled" data-level="6.1" id="security-scope"><span class="secno">6.1. </span><span class="content">Lock Scope</span><a class="self-link" href="#security-scope"></a></h3>
-   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①⓪">lock manager</a>'s scope is important as it defines a privacy boundary. Locks can be used as an ephemeral state retention mechanism and, like storage APIs, can be used as a communication mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page (first-party) and a cross-origin iframe (third-party) in the same origin for privacy reasons must similarly partition locking.</p>
+   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑨">lock manager</a>'s scope is important as it defines a privacy boundary. Locks can be used as an ephemeral state retention mechanism and, like storage APIs, can be used as a communication mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page (first-party) and a cross-origin iframe (third-party) in the same origin for privacy reasons must similarly partition locking.</p>
    <p>This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, all same-origin browsing contexts must observe the same state.</p>
    <h3 class="heading settled" data-level="6.2" id="private-browsing"><span class="secno">6.2. </span><span class="content">Private Browsing</span><a class="self-link" href="#private-browsing"></a></h3>
    <p>Every <a href="https://github.com/w3ctag/private-mode">private mode</a> browsing session is considered a separate user agent for the purposes of this API. That is, locks requested/held outside such a session have no affect on requested/held inside such a session, and vice versa. This prevents a website from determining that a session is "incognito" while also not allowing a communication mechanism between such sessions.</p>
@@ -1749,6 +1756,7 @@ authoring advice.</p>
      <li><a href="#dom-lockinfo-name">dict-member for LockInfo</a><span>, in § 3.2</span>
     </ul>
    <li><a href="#navigatorlocks">NavigatorLocks</a><span>, in § 3.1</span>
+   <li><a href="#obtain-a-lock-manager">obtain a lock manager</a><span>, in § 2.2</span>
    <li><a href="#dom-lockmanagersnapshot-pending">pending</a><span>, in § 3.2</span>
    <li><a href="#process-the-lock-request-queue">process the lock request queue</a><span>, in § 4.4</span>
    <li><a href="#lock-request-promise">promise</a><span>, in § 2.5</span>
@@ -1860,7 +1868,8 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-environment-settings-object">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-environment-settings-object">3.1. Navigator Mixins</a>
+    <li><a href="#ref-for-environment-settings-object">2.2. Lock Managers</a>
+    <li><a href="#ref-for-environment-settings-object①">3.1. Navigator Mixins</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-fully-active">
@@ -1885,17 +1894,14 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-concept-origin-opaque">
    <a href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque">https://html.spec.whatwg.org/multipage/origin.html#concept-origin-opaque</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-origin-opaque">3.2.1. The request() method</a>
-    <li><a href="#ref-for-concept-origin-opaque①">3.2.2. The query() method</a>
+    <li><a href="#ref-for-concept-origin-opaque">2.2. Lock Managers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-origin">
    <a href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin">https://html.spec.whatwg.org/multipage/origin.html#concept-origin</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-origin">2.1. Resources Names</a>
-    <li><a href="#ref-for-concept-origin①">2.2. Lock Managers</a> <a href="#ref-for-concept-origin②">(2)</a>
-    <li><a href="#ref-for-concept-origin③">3.2.1. The request() method</a>
-    <li><a href="#ref-for-concept-origin④">3.2.2. The query() method</a>
+    <li><a href="#ref-for-concept-origin①">2.2. Lock Managers</a> <a href="#ref-for-concept-origin②">(2)</a> <a href="#ref-for-concept-origin③">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-relevant-settings-object">
@@ -2029,6 +2035,13 @@ authoring advice.</p>
    <a href="https://infra.spec.whatwg.org/#struct">https://infra.spec.whatwg.org/#struct</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-struct">2.5. Lock Requests</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-user-agent">
+   <a href="https://infra.spec.whatwg.org/#user-agent">https://infra.spec.whatwg.org/#user-agent</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-user-agent">2. Concepts</a>
+    <li><a href="#ref-for-user-agent①">2.2. Lock Managers</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-map-getting-the-values">
@@ -2244,6 +2257,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-list-remove">remove</span>
      <li><span class="dfn-paneled" id="term-for-map-set">set <small>(for map)</small></span>
      <li><span class="dfn-paneled" id="term-for-struct">struct</span>
+     <li><span class="dfn-paneled" id="term-for-user-agent">user agent</span>
      <li><span class="dfn-paneled" id="term-for-map-getting-the-values">values</span>
     </ul>
    <li>
@@ -2384,14 +2398,20 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="lock-manager">
    <b><a href="#lock-manager">#lock-manager</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-lock-manager">2.2. Lock Managers</a>
-    <li><a href="#ref-for-lock-manager①">2.4. Locks</a> <a href="#ref-for-lock-manager②">(2)</a>
-    <li><a href="#ref-for-lock-manager③">2.5. Lock Requests</a>
-    <li><a href="#ref-for-lock-manager④">3.2. LockManager class</a>
-    <li><a href="#ref-for-lock-manager⑤">3.2.1. The request() method</a>
-    <li><a href="#ref-for-lock-manager⑥">3.2.2. The query() method</a> <a href="#ref-for-lock-manager⑦">(2)</a> <a href="#ref-for-lock-manager⑧">(3)</a>
-    <li><a href="#ref-for-lock-manager⑨">5.1. Deadlocks</a>
-    <li><a href="#ref-for-lock-manager①⓪">6.1. Lock Scope</a>
+    <li><a href="#ref-for-lock-manager">2.2. Lock Managers</a> <a href="#ref-for-lock-manager①">(2)</a>
+    <li><a href="#ref-for-lock-manager②">2.4. Locks</a> <a href="#ref-for-lock-manager③">(2)</a>
+    <li><a href="#ref-for-lock-manager④">2.5. Lock Requests</a>
+    <li><a href="#ref-for-lock-manager⑤">3.2. LockManager class</a>
+    <li><a href="#ref-for-lock-manager⑥">3.2.2. The query() method</a> <a href="#ref-for-lock-manager⑦">(2)</a>
+    <li><a href="#ref-for-lock-manager⑧">5.1. Deadlocks</a>
+    <li><a href="#ref-for-lock-manager⑨">6.1. Lock Scope</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="obtain-a-lock-manager">
+   <b><a href="#obtain-a-lock-manager">#obtain-a-lock-manager</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-obtain-a-lock-manager">3.2.1. The request() method</a>
+    <li><a href="#ref-for-obtain-a-lock-manager①">3.2.2. The query() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="mode">
