@@ -76,7 +76,7 @@ The API provides optional functionality that may be used as needed, including:
 * returning values from the asynchronous task,
 * shared and exclusive lock modes,
 * conditional acquisition,
-* diagnostics to query the state of locks in an origin, and
+* diagnostics to query the state of locks, and
 * an escape hatch to protect against deadlocks.
 
 Cooperative coordination takes place within the scope of same-origin [=/agents=]; this may span multiple [=/agent clusters=].
@@ -142,7 +142,7 @@ For the purposes of this specification:
  * Separate user profiles within a browser are considered separate user agents.
  * Every [private mode](https://github.com/w3ctag/private-mode) browsing session is considered a separate user agent.
 
-A user agent has a <dfn>lock task queue</dfn> which is the result of [=starting a new parallel queue=].
+A [=/user agent=] has a <dfn>lock task queue</dfn> which is the result of [=starting a new parallel queue=].
 
 The [=task source=] for [=parallel queue/enqueue steps|steps enqueued=] below is the <dfn export>web locks tasks source</dfn>.
 
@@ -158,7 +158,7 @@ across [=/browsing contexts=] within an [=/origin=]. Web applications are free t
 
 <aside class=example id=example-indexeddb-transactions>
 To mimic transaction locking over named stores within a named
-database in [[IndexedDB-2]], an origin might compose resource names as:
+database in [[IndexedDB-2]], a script might compose resource names as:
 ```js
 encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)
 ```
@@ -170,9 +170,18 @@ Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting th
 ## Lock Managers ## {#lock-managers}
 <!-- ====================================================================== -->
 
-A user agent has a <dfn>lock manager</dfn> for each [=/origin=], which encapsulates the state of all [=lock-concept|locks=] and [=lock requests=] for that origin.
+A [=/user agent=] has a <dfn>lock manager</dfn> for each [=/origin=], which encapsulates the state of all [=lock-concept|locks=] and [=lock requests=] for that origin.
 
-Pages and workers ([=/agents=]) on a single [=/origin=] opened in the same user agent share a lock manager even if they are in unrelated [=/browsing contexts=].
+Note: Pages and workers ([=/agents=]) on a single [=/origin=] opened in the same user agent share a lock manager even if they are in unrelated [=/browsing contexts=].
+
+<div algorithm>
+To <dfn>obtain a lock manager</dfn>, given an [=/environment settings object=] |environment|, run these steps:
+
+1. Let |origin| be |environment|'s [=/origin=].
+1. If |origin| is an [=/opaque origin=], then return failure.
+1. Return |origin|'s associated [=/lock manager=].
+
+</div>
 
 <aside class=note>
 
@@ -309,10 +318,7 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 <div algorithm="agent termination">
 When an [=/agent=] terminates, [=parallel queue/enqueue the following steps=] on the [=lock task queue=]:
 
-<aside class=issue>
-    Identify a normative reference for <i>terminates</i>.
-</aside>
-
+Issue: Identify a normative reference for <i>terminates</i>.
 
 1. For each [=lock request=] |request| with [=lock request/agent=] equal to the terminating agent:
     1. [=Abort the request=] |request|.
@@ -340,7 +346,7 @@ WorkerNavigator includes NavigatorLocks;
 
 Each [=environment settings object=] has a {{LockManager}} object.
 
-The <dfn attribute for=NavigatorLocks>locks</dfn> getter's steps are to return [=/this=]'s [=relevant settings object=]'s {{LockManager}} object.
+The <dfn attribute for=NavigatorLocks>locks</dfn> getter's steps are to return [=/this=]'s [=/relevant settings object=]'s {{LockManager}} object.
 
 <!-- ====================================================================== -->
 ## {{LockManager}} class ## {#api-lock-manager}
@@ -382,7 +388,7 @@ dictionary LockInfo {
 </xmp>
 
 A {{LockManager}} instance allows script to make [=lock requests=] and query
-the state of the origin's [=lock manager=].
+the state of the [=lock manager=].
 
 <!-- ====================================================================== -->
 ### The {{LockManager/request(name, callback)|request()}} method ### {#api-lock-manager-request}
@@ -498,15 +504,14 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 1. If |options| was not passed, then let |options| be a new {{LockOptions}} dictionary with default members.
 1. Let |environment| be [=/this=]'s [=/relevant settings object=].
 1. If |environment|'s [=environment settings object/responsible document=] is not [=Document/fully active=], then return [=a promise rejected with=] a "{{InvalidStateError}}" {{DOMException}}.
-1. Let |origin| be |environment|'s [=/origin=].
-1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
+1. Let |manager| be the result of [=/obtaining a lock manager=] given |environment|. If that returned failure, then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. If |name| starts with U+002D HYPHEN-MINUS (-), then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If both |options|["`steal`"] and |options|["`ifAvailable`"] are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|["`steal`"] is true and |options|["`mode`"] is not "{{LockMode/exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|["`signal`"] [=map/exists=], and either of |options|["`steal`"] or |options|["`ifAvailable`"] is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|["`signal`"] [=map/exists=] and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
 1. Let |promise| be [=a new promise=].
-1. [=Request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|'s [=/lock manager=], |callback|, |name|, |options|["`mode`"], |options|["`ifAvailable`"], |options|["`steal`"], and |options|["`signal`"].
+1. [=Request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |manager|, |callback|, |name|, |options|["`mode`"], |options|["`ifAvailable`"], |options|["`steal`"], and |options|["`signal`"].
 1. Return |promise|.
 
 </div>
@@ -555,12 +560,11 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 
 The <dfn method for=LockManager>query()</dfn> method steps are:
 
-1. Let |environment| be [=/this=]'s [=relevant settings object=].
+1. Let |environment| be [=/this=]'s [=/relevant settings object=].
 1. If |environment|'s [=environment settings object/responsible document=] is not [=Document/fully active=], then return [=a promise rejected with=] a "{{InvalidStateError}}" {{DOMException}}.
-1. Let |origin| be |environment|'s [=/origin=].
-1. If |origin| is an [=opaque origin=], then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
+1. Let |manager| be the result of [=/obtaining a lock manager=] given |environment|. If that returned failure, then return [=a promise rejected with=] a "{{SecurityError}}" {{DOMException}}.
 1. Let |promise| be [=a new promise=].
-1. [=parallel queue/enqueue the following steps|Enqueue the steps=] to [=snapshot the lock state=] for |origin|'s [=/lock manager=] with |promise| to the [=lock task queue=].
+1. [=parallel queue/enqueue the following steps|Enqueue the steps=] to [=snapshot the lock state=] for |manager| with |promise| to the [=lock task queue=].
 1. Return |promise|.
 
 </div>
@@ -608,7 +612,7 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |manager|, |ca
         1. [=list/Prepend=] |request| in |queue|.
     1. Otherwise, run these steps:
         1. If |ifAvailable| is true and |request| is not [=grantable=],
-             then [=parallel queue/enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=environment settings object/responsible event loop=]:
+             then [=parallel queue/enqueue the following steps=] on |callback|'s [=/relevant settings object=]'s [=environment settings object/responsible event loop=]:
             1. Let |r| be the result of [=invoking=] |callback| with `null` as the only argument.
             1. [=/Resolve=] |promise| with |r| and abort these steps.
         1. [=queue/Enqueue=] |request| in |queue|.
@@ -684,7 +688,7 @@ To <dfn>process the lock request queue</dfn> |queue|:
     1. Let |waiting| be [=a new promise=].
     1. Let |lock| be a new [=lock-concept|lock=] with [=lock-concept/agent=] |agent|, [=lock-concept/clientId=] |clientId|, [=lock-concept/manager=] |manager|, [=lock-concept/mode=] |mode|, [=lock-concept/name=] |name|, [=lock-concept/released promise=] |p|, and [=lock-concept/waiting promise=] |waiting|.
     1. [=set/Append=] |lock| to |manager|'s [=lock manager/held lock set=].
-    1. [=parallel queue/Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=environment settings object/responsible event loop=]:
+    1. [=parallel queue/Enqueue the following steps=] on |callback|'s [=/relevant settings object=]'s [=environment settings object/responsible event loop=]:
         1. If |signal| is present, then run these steps:
             1. If |signal|'s [=AbortSignal/aborted flag=] is set, then run these steps:
                 1. [=parallel queue/Enqueue the following step=] to the [=lock task queue=]:
