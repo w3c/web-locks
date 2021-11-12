@@ -156,7 +156,7 @@ The [=task source=] for [=parallel queue/enqueue steps|steps enqueued=] below is
 A <dfn>resource name</dfn> is a [=JavaScript string=] chosen by the web application to represent an abstract resource.
 
 A resource name has no external meaning beyond the scheduling algorithm, but is global
-across [=/browsing contexts=] sharing a [=/storage bucket=]. Web applications are free to use any resource naming scheme.
+across [=/agents=] sharing a [=/storage bucket=]. Web applications are free to use any resource naming scheme.
 
 <aside class=example id=example-indexeddb-transactions>
 To mimic transaction locking over named stores within a named
@@ -172,7 +172,7 @@ Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting th
 ## Lock Managers ## {#lock-managers}
 <!-- ====================================================================== -->
 
-A [=/user agent=] has a <dfn>lock manager</dfn> for each [=/storage bottle=], which encapsulates the state of all [=lock-concept|locks=] and [=lock requests=] associated with a [=/storage bucket=].
+A [=/user agent=] has a <dfn>lock manager</dfn> for each [=/storage bucket=], which encapsulates the state of all [=lock-concept|locks=] and [=lock requests=] associated with a [=/storage bucket=].
 
 Note: Pages and workers ([=/agents=]) sharing a [=/storage bucket=] opened in the same user agent share a [=/lock manager=] even if they are in unrelated [=/browsing contexts=].
 
