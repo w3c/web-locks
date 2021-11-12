@@ -276,14 +276,14 @@ See issues for further discussion:
 
 ## FAQ
 
-*Why can't [Atomics](https://tc39.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject) be used for this?*
+### *Why can't [Atomics](https://tc39.github.io/ecmascript_sharedmem/shmem.html#AtomicsObject) be used for this?*
 
 The use cases for this API require coordination across multiple
 [agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism);
  whereas Atomics operations operate on [SharedArrayBuffers](https://tc39.github.io/ecmascript_sharedmem/shmem.html#StructuredData.SharedArrayBuffer) which are constrained to a single agent cluster. (Informally: tabs/workers can be multi-process and atomics only work same-process.)
 
 
-*Why is the _options_ argument not the last argument?*
+### *Why is the _options_ argument not the last argument?*
 
 Since both callbacks and options are typically made the last argument, the best ordering is not obvious. Based on trying both, placing the options closer to the call site makes reading/writing the code much clearer, so the options dictionary is placed before the callback. Compare (a) and (b):
 
@@ -307,7 +307,7 @@ navigator.locks.request('resource', {ifAvailable: true}, async lock => {
 It's much clearer in (b) that the request will not wait if the lock is not available. In (a) you need to read all the way through the lock handling code (artificially short/simple here) before noting the very different behavior of the two requests.
 
 
-*What happens if a tab is throttled/suspended?*
+### *What happens if a tab is throttled/suspended?*
 
 If a tab holds a lock and stops running code it can inhibit work done by other tabs. If this is because tabs are not appropriately breaking up work it's an application problem. But browsers could throttle or even suspend tabs (e.g.
 background background tabs) to reduce power and/or memory consumption. With an API like this &mdash; or with IndexedDB
@@ -319,7 +319,7 @@ suspended. See [A Lifecycle for the Web](https://github.com/spanicker/web-lifecy
 around formalizing these states and notifications.
 
 
-*How do you _compose_ IndexedDB transactions with these locks?*
+### *How do you _compose_ IndexedDB transactions with these locks?*
 
  * To wrap a lock around a transaction:
 
@@ -345,7 +345,7 @@ around formalizing these states and notifications.
 
 Note that we don't want to _force_ IDBTransactions into this model of waiting for a resource before you can use it: in IDB you can open a transaction and schedule work against it immediately, even though that work will be delayed until the transaction is running.
 
-*Can we _define_ IndexedDB transactions in terms of this primitive?*
+### *Can we _define_ IndexedDB transactions in terms of this primitive?*
 
 Roughly:
 
@@ -359,7 +359,7 @@ Roughly:
 This doesn't precisely capture the "active" vs "inactive" semantics and several other details. We may want to go through the exercise of defining this more rigorously.
 
 
-*Why does a shared lock request need to wait until a previous exclusive lock request be granted/released?*
+### *Why does a shared lock request need to wait until a previous exclusive lock request be granted/released?*
 
 This comes from developer expectations about file and database processing; if a write is scheduled
 before a read, the usual expectation is that the read will see the results of the write. When this
@@ -367,7 +367,7 @@ was not enforced by IndexedDB implementations, developers expressed significant 
 demand, we could add an option/mode to allow opting into the more subtle behavior.
 
 
-*Does this leak information from e.g. Incognito/Private Browsing/etc mode?*
+### *Does this leak information from e.g. Incognito/Private Browsing/etc mode?*
 
 No - like storage APIs, browsers treat such anonymous sessions as if they were a completely separate
 user agent from the point of view of specs; the data is in a separate partition. This is similar
@@ -376,7 +376,7 @@ are all separated. Locks held in one user profile or anonymous session have no r
 locks in another session, as if they in a distinct application or on another device.
 
 
-*Can you hold a lock for the lifetime of a tab?*
+### *Can you hold a lock for the lifetime of a tab?*
 
 Yes. Using the API, just pass in a promise that never resolves:
 ```js
@@ -385,7 +385,7 @@ navigator.locks.request(name, lock => new Promise(r => {}));
 In practice, you may want to reserve some ability to resolve the promise, e.g. in response to a "sign out" event or indication that the tab has become inactive. But in some scenarios (e.g. primary election) then never releasing the lock until the page is terminated is entirely reasonable.
 
 
-*If a tab is holding an exclusive lock, what happens if another lock request for the same resource is made?*
+### *If a tab is holding an exclusive lock, what happens if another lock request for the same resource is made?*
 
 The second request will block. A lock corresponds to a granted request, and each request is considered regardless of context. This allows libraries running in the same page to coordinate the use of a shared resource. As a consequence, nested requests for the same resource will deadlock:
 ```js
