@@ -504,7 +504,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 1. If both |options|["`steal`"] and |options|["`ifAvailable`"] are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|["`steal`"] is true and |options|["`mode`"] is not "{{LockMode/exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|["`signal`"] [=map/exists=], and either of |options|["`steal`"] or |options|["`ifAvailable`"] is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|["`signal`"] [=map/exists=] and its [=AbortSignal/aborted flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
+1. If |options|["`signal`"] [=map/exists=] and is [=AbortSignal/aborted=], then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
 1. Let |promise| be [=a new promise=].
 1. [=Request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |origin|'s [=/lock manager=], |callback|, |name|, |options|["`mode`"], |options|["`ifAvailable`"], |options|["`steal`"], and |options|["`signal`"].
 1. Return |promise|.
@@ -686,7 +686,7 @@ To <dfn>process the lock request queue</dfn> |queue|:
     1. [=set/Append=] |lock| to |manager|'s [=lock manager/held lock set=].
     1. [=parallel queue/Enqueue the following steps=] on |callback|'s [=relevant settings object=]'s [=environment settings object/responsible event loop=]:
         1. If |signal| is present, then run these steps:
-            1. If |signal|'s [=AbortSignal/aborted flag=] is set, then run these steps:
+            1. If |signal| is [=AbortSignal/aborted=], then run these steps:
                 1. [=parallel queue/Enqueue the following step=] to the [=lock task queue=]:
                     1. [=Release the lock=] |lock|.
                 1. Return.
