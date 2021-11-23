@@ -312,17 +312,22 @@ A [=lock request=] |request| is said to be <dfn>grantable</dfn> if the following
 </div>
 
 <!-- ====================================================================== -->
-## Agent Integration ## {#agent-integration}
+## Termination of Locks ## {#termination-of-locks}
 <!-- ====================================================================== -->
 
-<div algorithm="agent termination">
-When an [=/agent=] terminates, [=parallel queue/enqueue the following steps=] on the [=lock task queue=]:
+Whenever the [=/unloading document cleanup steps=] run with a [=/document=], [=/terminate remaining locks and requests=] with its [=/agent=].
 
-Issue: Identify a normative reference for <i>terminates</i>.
+When an [=/agent=] terminates, [=/terminate remaining locks and requests=] with the agent.
 
-1. For each [=lock request=] |request| with [=lock request/agent=] equal to the terminating agent:
+Issue: This is currently only for workers and is vaguely defined, since there is no normative way to run steps on worker termination.
+
+<div algorithm>
+
+To <dfn>terminate remaining locks and requests</dfn> with |agent|, [=parallel queue/enqueue the following steps=] on the [=lock task queue=]:
+
+1. For each [=lock request=] |request| with [=lock request/agent=] equal to |agent|:
     1. [=Abort the request=] |request|.
-1. For each [=lock-concept|lock=] |lock| with [=lock-concept/agent=] equal to the terminating agent:
+1. For each [=lock-concept|lock=] |lock| with [=lock-concept/agent=] equal to |agent|:
     1. [=Release the lock=] |lock|.
 
 </div>
