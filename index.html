@@ -4,10 +4,10 @@
   <title>Web Locks API</title>
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <link href="https://www.w3.org/StyleSheets/TR/2021/cg-draft" rel="stylesheet">
-  <meta content="Bikeshed version dfbc2b297, updated Thu Nov 11 15:52:32 2021 -0800" name="generator">
+  <meta content="Bikeshed version bbc364800, updated Mon Nov 15 13:57:55 2021 -0800" name="generator">
   <link href="https://wicg.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="0d1d24e7b0bd85145ee6e0b6561557576b032c1c" name="document-revision">
+  <meta content="5b756df1bbfcb53968296a8fe5704be87843ac73" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -668,7 +668,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2021-11-12">12 November 2021</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#CG-DRAFT">Draft Community Group Report</a>, <time class="dt-updated" datetime="2021-11-23">23 November 2021</time></p>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -720,7 +720,7 @@ A human-readable <a href="http://www.w3.org/community/about/agreements/cla-deed/
       <li><a href="#modes-scheduling"><span class="secno">2.3</span> <span class="content">Modes and Scheduling</span></a>
       <li><a href="#concept-lock"><span class="secno">2.4</span> <span class="content">Locks</span></a>
       <li><a href="#concept-lock-request"><span class="secno">2.5</span> <span class="content">Lock Requests</span></a>
-      <li><a href="#agent-integration"><span class="secno">2.6</span> <span class="content">Agent Integration</span></a>
+      <li><a href="#termination-of-locks"><span class="secno">2.6</span> <span class="content">Termination of Locks</span></a>
      </ol>
     <li>
      <a href="#api"><span class="secno">3</span> <span class="content">API</span></a>
@@ -971,19 +971,21 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
       <p>Otherwise, <var>mode</var> is "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-shared" id="ref-for-dom-lockmode-shared④">shared</a></code>"; return true if no <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①③">lock</a> in <var>held</var> has <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode">mode</a> "<code class="idl"><a data-link-type="idl" href="#dom-lockmode-exclusive" id="ref-for-dom-lockmode-exclusive⑥">exclusive</a></code>" and has <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name①">name</a> equal to <var>name</var>, and false otherwise.</p>
     </ol>
    </div>
-   <h3 class="heading settled" data-level="2.6" id="agent-integration"><span class="secno">2.6. </span><span class="content">Agent Integration</span><a class="self-link" href="#agent-integration"></a></h3>
-   <div class="algorithm" data-algorithm="agent termination">
-     When an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent④">agent</a> terminates, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps②">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue①">lock task queue</a>: 
-    <p class="issue" id="issue-77a47106"><a class="self-link" href="#issue-77a47106"></a> Identify a normative reference for <i>terminates</i>.</p>
+   <h3 class="heading settled" data-level="2.6" id="termination-of-locks"><span class="secno">2.6. </span><span class="content">Termination of Locks</span><a class="self-link" href="#termination-of-locks"></a></h3>
+   <p>Whenever the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#unloading-document-cleanup-steps" id="ref-for-unloading-document-cleanup-steps">unloading document cleanup steps</a> run with a <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#concept-document" id="ref-for-concept-document">document</a>, <a data-link-type="dfn" href="#terminate-remaining-locks-and-requests" id="ref-for-terminate-remaining-locks-and-requests">terminate remaining locks and requests</a> with its <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent④">agent</a>.</p>
+   <p>When an <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent⑤">agent</a> terminates, <a data-link-type="dfn" href="#terminate-remaining-locks-and-requests" id="ref-for-terminate-remaining-locks-and-requests①">terminate remaining locks and requests</a> with the agent.</p>
+   <p class="issue" id="issue-9062c3e0"><a class="self-link" href="#issue-9062c3e0"></a> This is currently only for workers and is vaguely defined, since there is no normative way to run steps on worker termination.</p>
+   <div class="algorithm" data-algorithm="terminate remaining locks and requests">
+    <p>To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="terminate-remaining-locks-and-requests">terminate remaining locks and requests</dfn> with <var>agent</var>, <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps②">enqueue the following steps</a> on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue①">lock task queue</a>:</p>
     <ol>
      <li data-md>
-      <p>For each <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑤">lock request</a> <var>request</var> with <a data-link-type="dfn" href="#lock-request-agent" id="ref-for-lock-request-agent">agent</a> equal to the terminating agent:</p>
+      <p>For each <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑤">lock request</a> <var>request</var> with <a data-link-type="dfn" href="#lock-request-agent" id="ref-for-lock-request-agent">agent</a> equal to <var>agent</var>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="#abort-the-request" id="ref-for-abort-the-request">Abort the request</a> <var>request</var>.</p>
       </ol>
      <li data-md>
-      <p>For each <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①④">lock</a> <var>lock</var> with <a data-link-type="dfn" href="#lock-concept-agent" id="ref-for-lock-concept-agent">agent</a> equal to the terminating agent:</p>
+      <p>For each <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①④">lock</a> <var>lock</var> with <a data-link-type="dfn" href="#lock-concept-agent" id="ref-for-lock-concept-agent">agent</a> equal to <var>agent</var>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="#release-the-lock" id="ref-for-release-the-lock①">Release the lock</a> <var>lock</var>.</p>
@@ -1193,7 +1195,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>promise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise">a new promise</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="#request-a-lock" id="ref-for-request-a-lock">Request a lock</a> with <var>promise</var>, the current <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent⑤">agent</a>, <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id" id="ref-for-concept-environment-id">id</a>, <var>manager</var>, <var>callback</var>, <var>name</var>, <var>options</var>["<code>mode</code>"], <var>options</var>["<code>ifAvailable</code>"], <var>options</var>["<code>steal</code>"], and <var>options</var>["<code>signal</code>"].</p>
+      <p><a data-link-type="dfn" href="#request-a-lock" id="ref-for-request-a-lock">Request a lock</a> with <var>promise</var>, the current <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent⑥">agent</a>, <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id" id="ref-for-concept-environment-id">id</a>, <var>manager</var>, <var>callback</var>, <var>name</var>, <var>options</var>["<code>mode</code>"], <var>options</var>["<code>ifAvailable</code>"], <var>options</var>["<code>steal</code>"], and <var>options</var>["<code>signal</code>"].</p>
      <li data-md>
       <p>Return <var>promise</var>.</p>
     </ol>
@@ -1777,6 +1779,7 @@ authoring advice.</p>
    <li><a href="#signal-to-abort-the-request">signal to abort the request</a><span>, in § 4.3</span>
    <li><a href="#snapshot-the-lock-state">snapshot the lock state</a><span>, in § 4.5</span>
    <li><a href="#dom-lockoptions-steal">steal</a><span>, in § 3.2</span>
+   <li><a href="#terminate-remaining-locks-and-requests">terminate remaining locks and requests</a><span>, in § 2.6</span>
    <li><a href="#lock-concept-waiting-promise">waiting promise</a><span>, in § 2.4</span>
    <li><a href="#web-locks-tasks-source">web locks tasks source</a><span>, in § 2</span>
   </ul>
@@ -1800,6 +1803,12 @@ authoring advice.</p>
     <li><a href="#ref-for-abortsignal-add">4.1. Request a lock</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-document">
+   <a href="https://dom.spec.whatwg.org/#concept-document">https://dom.spec.whatwg.org/#concept-document</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-document">2.6. Termination of Locks</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-abortsignal-remove">
    <a href="https://dom.spec.whatwg.org/#abortsignal-remove">https://dom.spec.whatwg.org/#abortsignal-remove</a><b>Referenced in:</b>
    <ul>
@@ -1812,8 +1821,8 @@ authoring advice.</p>
     <li><a href="#ref-for-agent">1. Introduction</a> <a href="#ref-for-agent①">(2)</a>
     <li><a href="#ref-for-agent②">2.2. Lock Managers</a>
     <li><a href="#ref-for-agent③">2.4. Locks</a>
-    <li><a href="#ref-for-agent④">2.6. Agent Integration</a>
-    <li><a href="#ref-for-agent⑤">3.2.1. The request() method</a>
+    <li><a href="#ref-for-agent④">2.6. Termination of Locks</a> <a href="#ref-for-agent⑤">(2)</a>
+    <li><a href="#ref-for-agent⑥">3.2.1. The request() method</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-navigator">
@@ -1846,7 +1855,7 @@ authoring advice.</p>
    <ul>
     <li><a href="#ref-for-enqueue-the-following-steps">2. Concepts</a>
     <li><a href="#ref-for-enqueue-the-following-steps①">2.4. Locks</a>
-    <li><a href="#ref-for-enqueue-the-following-steps②">2.6. Agent Integration</a>
+    <li><a href="#ref-for-enqueue-the-following-steps②">2.6. Termination of Locks</a>
     <li><a href="#ref-for-enqueue-the-following-steps③">3.2.2. The query() method</a>
     <li><a href="#ref-for-enqueue-the-following-steps④">4.1. Request a lock</a> <a href="#ref-for-enqueue-the-following-steps⑤">(2)</a>
     <li><a href="#ref-for-enqueue-the-following-steps⑥">4.3. Abort a request</a>
@@ -1858,7 +1867,7 @@ authoring advice.</p>
    <ul>
     <li><a href="#ref-for-enqueue-the-following-steps">2. Concepts</a>
     <li><a href="#ref-for-enqueue-the-following-steps①">2.4. Locks</a>
-    <li><a href="#ref-for-enqueue-the-following-steps②">2.6. Agent Integration</a>
+    <li><a href="#ref-for-enqueue-the-following-steps②">2.6. Termination of Locks</a>
     <li><a href="#ref-for-enqueue-the-following-steps③">3.2.2. The query() method</a>
     <li><a href="#ref-for-enqueue-the-following-steps④">4.1. Request a lock</a> <a href="#ref-for-enqueue-the-following-steps⑤">(2)</a>
     <li><a href="#ref-for-enqueue-the-following-steps⑥">4.3. Abort a request</a>
@@ -1938,6 +1947,12 @@ authoring advice.</p>
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source">https://html.spec.whatwg.org/multipage/webappapis.html#task-source</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-task-source">2. Concepts</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-unloading-document-cleanup-steps">
+   <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#unloading-document-cleanup-steps">https://html.spec.whatwg.org/multipage/browsing-the-web.html#unloading-document-cleanup-steps</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-unloading-document-cleanup-steps">2.6. Termination of Locks</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-set-append">
@@ -2211,6 +2226,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-abortsignal">AbortSignal</span>
      <li><span class="dfn-paneled" id="term-for-abortsignal-aborted">aborted</span>
      <li><span class="dfn-paneled" id="term-for-abortsignal-add">add</span>
+     <li><span class="dfn-paneled" id="term-for-concept-document">document</span>
      <li><span class="dfn-paneled" id="term-for-abortsignal-remove">remove</span>
     </ul>
    <li>
@@ -2238,6 +2254,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="term-for-responsible-event-loop">responsible event loop</span>
      <li><span class="dfn-paneled" id="term-for-starting-a-new-parallel-queue">starting a new parallel queue</span>
      <li><span class="dfn-paneled" id="term-for-task-source">task source</span>
+     <li><span class="dfn-paneled" id="term-for-unloading-document-cleanup-steps">unloading document cleanup steps</span>
     </ul>
    <li>
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
@@ -2369,13 +2386,13 @@ authoring advice.</p>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Migrate this definition to <a data-link-type="biblio" href="#biblio-html">[HTML]</a> or <a data-link-type="biblio" href="#biblio-storage">[Storage]</a> so it can be referenced by other standards. <a class="issue-return" href="#issue-fb27f9c9" title="Jump to section">↵</a></div>
-   <div class="issue"> Identify a normative reference for <i>terminates</i>. <a class="issue-return" href="#issue-77a47106" title="Jump to section">↵</a></div>
+   <div class="issue"> This is currently only for workers and is vaguely defined, since there is no normative way to run steps on worker termination. <a class="issue-return" href="#issue-9062c3e0" title="Jump to section">↵</a></div>
   </div>
   <aside class="dfn-panel" data-for="lock-task-queue">
    <b><a href="#lock-task-queue">#lock-task-queue</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-lock-task-queue">2.4. Locks</a>
-    <li><a href="#ref-for-lock-task-queue①">2.6. Agent Integration</a>
+    <li><a href="#ref-for-lock-task-queue①">2.6. Termination of Locks</a>
     <li><a href="#ref-for-lock-task-queue②">3.2.2. The query() method</a>
     <li><a href="#ref-for-lock-task-queue③">4.1. Request a lock</a>
     <li><a href="#ref-for-lock-task-queue④">4.2. Release a lock</a>
@@ -2427,7 +2444,7 @@ authoring advice.</p>
     <li><a href="#ref-for-lock-concept①">2.2. Lock Managers</a>
     <li><a href="#ref-for-lock-concept②">2.4. Locks</a> <a href="#ref-for-lock-concept③">(2)</a> <a href="#ref-for-lock-concept④">(3)</a> <a href="#ref-for-lock-concept⑤">(4)</a> <a href="#ref-for-lock-concept⑥">(5)</a> <a href="#ref-for-lock-concept⑦">(6)</a> <a href="#ref-for-lock-concept⑧">(7)</a> <a href="#ref-for-lock-concept⑨">(8)</a> <a href="#ref-for-lock-concept①⓪">(9)</a>
     <li><a href="#ref-for-lock-concept①①">2.5. Lock Requests</a> <a href="#ref-for-lock-concept①②">(2)</a> <a href="#ref-for-lock-concept①③">(3)</a>
-    <li><a href="#ref-for-lock-concept①④">2.6. Agent Integration</a>
+    <li><a href="#ref-for-lock-concept①④">2.6. Termination of Locks</a>
     <li><a href="#ref-for-lock-concept①⑤">3.3. Lock class</a> <a href="#ref-for-lock-concept①⑥">(2)</a> <a href="#ref-for-lock-concept①⑦">(3)</a>
     <li><a href="#ref-for-lock-concept①⑧">4.1. Request a lock</a>
     <li><a href="#ref-for-lock-concept①⑨">4.2. Release a lock</a>
@@ -2437,7 +2454,7 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="lock-concept-agent">
    <b><a href="#lock-concept-agent">#lock-concept-agent</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-lock-concept-agent">2.6. Agent Integration</a>
+    <li><a href="#ref-for-lock-concept-agent">2.6. Termination of Locks</a>
     <li><a href="#ref-for-lock-concept-agent①">4.4. Process a lock request queue for a given resource name</a> <a href="#ref-for-lock-concept-agent②">(2)</a>
    </ul>
   </aside>
@@ -2506,7 +2523,7 @@ authoring advice.</p>
     <li><a href="#ref-for-lock-request">1. Introduction</a>
     <li><a href="#ref-for-lock-request①">2.2. Lock Managers</a>
     <li><a href="#ref-for-lock-request②">2.5. Lock Requests</a> <a href="#ref-for-lock-request③">(2)</a> <a href="#ref-for-lock-request④">(3)</a>
-    <li><a href="#ref-for-lock-request⑤">2.6. Agent Integration</a>
+    <li><a href="#ref-for-lock-request⑤">2.6. Termination of Locks</a>
     <li><a href="#ref-for-lock-request⑥">3.2. LockManager class</a>
     <li><a href="#ref-for-lock-request⑦">4.1. Request a lock</a>
    </ul>
@@ -2514,7 +2531,7 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="lock-request-agent">
    <b><a href="#lock-request-agent">#lock-request-agent</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-lock-request-agent">2.6. Agent Integration</a>
+    <li><a href="#ref-for-lock-request-agent">2.6. Termination of Locks</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="lock-request-clientid">
@@ -2598,6 +2615,12 @@ authoring advice.</p>
    <ul>
     <li><a href="#ref-for-grantable">4.1. Request a lock</a>
     <li><a href="#ref-for-grantable①">4.4. Process a lock request queue for a given resource name</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="terminate-remaining-locks-and-requests">
+   <b><a href="#terminate-remaining-locks-and-requests">#terminate-remaining-locks-and-requests</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-terminate-remaining-locks-and-requests">2.6. Termination of Locks</a> <a href="#ref-for-terminate-remaining-locks-and-requests①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="navigatorlocks">
@@ -2747,14 +2770,14 @@ authoring advice.</p>
    <b><a href="#release-the-lock">#release-the-lock</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-release-the-lock">2.4. Locks</a>
-    <li><a href="#ref-for-release-the-lock①">2.6. Agent Integration</a>
+    <li><a href="#ref-for-release-the-lock①">2.6. Termination of Locks</a>
     <li><a href="#ref-for-release-the-lock②">4.4. Process a lock request queue for a given resource name</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="abort-the-request">
    <b><a href="#abort-the-request">#abort-the-request</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abort-the-request">2.6. Agent Integration</a>
+    <li><a href="#ref-for-abort-the-request">2.6. Termination of Locks</a>
     <li><a href="#ref-for-abort-the-request①">4.3. Abort a request</a>
    </ul>
   </aside>
