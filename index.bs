@@ -6,6 +6,7 @@ Status: CG-DRAFT
 ED: https://wicg.github.io/web-locks/
 Level: 1
 Editor: Joshua Bell, Google Inc. https://google.com, jsbell@google.com
+Editor: Kagami Rosylight, Mozilla, krosylight@mozilla.com, w3cid 107856
 Group: WICG
 Test Suite: https://github.com/web-platform-tests/wpt/tree/master/web-locks
 Favicon: logo-lock.svg
