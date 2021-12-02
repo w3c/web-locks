@@ -52,7 +52,7 @@ spec: storage; urlPrefix: https://storage.spec.whatwg.org/
 
 <img id="speclogo" src="logo-lock.svg" alt="logo" width="100" height="100">
 <style>
-#speclogo { height: 100px; width: 100px; }
+#speclogo { height: 100px; width: 100px; background-color: transparent; }
 main #speclogo { position: absolute; right: 20px; top: 30px; }
 .logo #speclogo { margin-top: 20px; }
 </style>
