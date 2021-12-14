@@ -9,7 +9,7 @@
   <meta content="Bikeshed version cace53f8c, updated Tue Dec 7 12:12:54 2021 -0800" name="generator">
   <link href="https://w3c.github.io/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="91f9f69b0c9d30bdb19a49f31841862bfc8cf2e0" name="document-revision">
+  <meta content="526a0fe22baceca415d0b327774f0f0e400a92fb" name="document-revision">
 <style>
 .domintro::before {
     content: 'For web developers (non-normative)';
@@ -670,7 +670,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#UD">Unofficial Proposal Draft</a>, <time class="dt-updated" datetime="2021-12-07">7 December 2021</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#UD">Unofficial Proposal Draft</a>, <time class="dt-updated" datetime="2021-12-14">14 December 2021</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1189,7 +1189,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>If <var>options</var>["<code>signal</code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exists</a>, and either of <var>options</var>["<code>steal</code>"] or <var>options</var>["<code>ifAvailable</code>"] is true, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑤">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notsupportederror" id="ref-for-notsupportederror③">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code>.</p>
      <li data-md>
-      <p>If <var>options</var>["<code>signal</code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exists</a> and is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-aborted" id="ref-for-abortsignal-aborted">aborted</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑥">a promise rejected with</a> an "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror②">AbortError</a></code>" {{DOMException}.</p>
+      <p>If <var>options</var>["<code>signal</code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exists</a> and is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-aborted" id="ref-for-abortsignal-aborted">aborted</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑥">a promise rejected with</a> <var>signal</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason">abort reason</a>.</p>
      <li data-md>
       <p>Let <var>promise</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise">a new promise</a>.</p>
      <li data-md>
@@ -1325,7 +1325,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑦">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>manager</var>, <var>name</var>, <var>mode</var>, <var>callback</var>, <var>promise</var>, <var>signal</var>).</p>
      <li data-md>
-      <p>If <var>signal</var> is present, then <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-add" id="ref-for-abortsignal-add">add</a> the algorithm <a data-link-type="dfn" href="#signal-to-abort-the-request" id="ref-for-signal-to-abort-the-request">signal to abort the request</a> <var>request</var> to <var>signal</var>.</p>
+      <p>If <var>signal</var> is present, then <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-add" id="ref-for-abortsignal-add">add</a> the algorithm <a data-link-type="dfn" href="#signal-to-abort-the-request" id="ref-for-signal-to-abort-the-request">signal to abort the request</a> <var>request</var> with <var>signal</var> to <var>signal</var>.</p>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps④">Enqueue the following steps</a> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue③">lock task queue</a>:</p>
       <ol>
@@ -1347,7 +1347,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
              <li data-md>
               <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove">Remove</a> <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑧">lock</a> from <var>held</var>.</p>
              <li data-md>
-              <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject">Reject</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise⑤">released promise</a> with an "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror③">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑧">DOMException</a></code>.</p>
+              <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject">Reject</a> <var>lock</var>’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise⑤">released promise</a> with an "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror②">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑧">DOMException</a></code>.</p>
             </ol>
           </ol>
          <li data-md>
@@ -1416,12 +1416,12 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     </ol>
    </div>
    <div class="algorithm" data-algorithm="signal to abort the request">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="signal-to-abort-the-request">signal to abort the request</dfn> <var>request</var>: 
+     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="signal-to-abort-the-request">signal to abort the request</dfn> <var>request</var> with <var>signal</var>: 
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑥">Enqueue the steps</a> to <a data-link-type="dfn" href="#abort-the-request" id="ref-for-abort-the-request①">abort the request</a> <var>request</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue⑥">lock task queue</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject①">Reject</a> <var>request</var>’s <a data-link-type="dfn" href="#lock-request-promise" id="ref-for-lock-request-promise">promise</a> with an "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror④">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑨">DOMException</a></code>.</p>
+      <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject①">Reject</a> <var>request</var>’s <a data-link-type="dfn" href="#lock-request-promise" id="ref-for-lock-request-promise">promise</a> with <var>signal</var>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason①">abort reason</a>.</p>
     </ol>
    </div>
    <h3 class="heading settled" data-level="4.4" id="algorithm-process-request"><span class="secno">4.4. </span><span class="content">Process a lock request queue for a given resource name</span><a class="self-link" href="#algorithm-process-request"></a></h3>
@@ -1788,6 +1788,13 @@ authoring advice.</p>
     <li><a href="#ref-for-abortsignal①">3.2.1. The request() method</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-abortsignal-abort-reason">
+   <a href="https://dom.spec.whatwg.org/#abortsignal-abort-reason">https://dom.spec.whatwg.org/#abortsignal-abort-reason</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-abortsignal-abort-reason">3.2.1. The request() method</a>
+    <li><a href="#ref-for-abortsignal-abort-reason①">4.3. Abort a request</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-abortsignal-aborted">
    <a href="https://dom.spec.whatwg.org/#abortsignal-aborted">https://dom.spec.whatwg.org/#abortsignal-aborted</a><b>Referenced in:</b>
    <ul>
@@ -2084,9 +2091,8 @@ authoring advice.</p>
   <aside class="dfn-panel" data-for="term-for-aborterror">
    <a href="https://webidl.spec.whatwg.org/#aborterror">https://webidl.spec.whatwg.org/#aborterror</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-aborterror">3.2.1. The request() method</a> <a href="#ref-for-aborterror①">(2)</a> <a href="#ref-for-aborterror②">(3)</a>
-    <li><a href="#ref-for-aborterror③">4.1. Request a lock</a>
-    <li><a href="#ref-for-aborterror④">4.3. Abort a request</a>
+    <li><a href="#ref-for-aborterror">3.2.1. The request() method</a> <a href="#ref-for-aborterror①">(2)</a>
+    <li><a href="#ref-for-aborterror②">4.1. Request a lock</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMException">
@@ -2095,7 +2101,6 @@ authoring advice.</p>
     <li><a href="#ref-for-idl-DOMException">3.2.1. The request() method</a> <a href="#ref-for-idl-DOMException①">(2)</a> <a href="#ref-for-idl-DOMException②">(3)</a> <a href="#ref-for-idl-DOMException③">(4)</a> <a href="#ref-for-idl-DOMException④">(5)</a> <a href="#ref-for-idl-DOMException⑤">(6)</a>
     <li><a href="#ref-for-idl-DOMException⑥">3.2.2. The query() method</a> <a href="#ref-for-idl-DOMException⑦">(2)</a>
     <li><a href="#ref-for-idl-DOMException⑧">4.1. Request a lock</a>
-    <li><a href="#ref-for-idl-DOMException⑨">4.3. Abort a request</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMString">
@@ -2222,6 +2227,7 @@ authoring advice.</p>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-abortsignal">AbortSignal</span>
+     <li><span class="dfn-paneled" id="term-for-abortsignal-abort-reason">abort reason</span>
      <li><span class="dfn-paneled" id="term-for-abortsignal-aborted">aborted</span>
      <li><span class="dfn-paneled" id="term-for-abortsignal-add">add</span>
      <li><span class="dfn-paneled" id="term-for-concept-document">document</span>
