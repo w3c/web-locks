@@ -515,7 +515,7 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 1. If both |options|["`steal`"] and |options|["`ifAvailable`"] are true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|["`steal`"] is true and |options|["`mode`"] is not "{{LockMode/exclusive}}", then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
 1. If |options|["`signal`"] [=map/exists=], and either of |options|["`steal`"] or |options|["`ifAvailable`"] is true, then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}.
-1. If |options|["`signal`"] [=map/exists=] and is [=AbortSignal/aborted=], then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}.
+1. If |options|["`signal`"] [=map/exists=] and is [=AbortSignal/aborted=], then return [=a promise rejected with=] |signal|'s [=AbortSignal/abort reason=].
 1. Let |promise| be [=a new promise=].
 1. [=Request a lock=] with |promise|, the current [=/agent=], |environment|'s [=environment/id=], |manager|, |callback|, |name|, |options|["`mode`"], |options|["`ifAvailable`"], |options|["`steal`"], and |options|["`signal`"].
 1. Return |promise|.
@@ -605,7 +605,7 @@ The <dfn attribute for=Lock>mode</dfn> getter's steps are to return the associat
 To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |manager|, |callback|, |name|, |mode|, |ifAvailable|, |steal|, and |signal|:
 
 1. Let |request| be a new [=lock request=] (|agent|, |clientId|, |manager|, |name|, |mode|, |callback|, |promise|, |signal|).
-1. If |signal| is present, then [=AbortSignal/add=] the algorithm [=signal to abort the request=] |request| to |signal|.
+1. If |signal| is present, then [=AbortSignal/add=] the algorithm [=signal to abort the request=] |request| with |signal| to |signal|.
 1. [=parallel queue/Enqueue the following steps=] to the [=lock task queue=]:
     1. Let |queueMap| be |manager|'s [=lock manager/lock request queue map=].
     1. Let |queue| be the result of [=/getting the lock request queue=] from |queueMap| for |name|.
@@ -662,10 +662,10 @@ To <dfn>abort the request</dfn> |request|:
 </div>
 
 <div algorithm>
-To <dfn>signal to abort the request</dfn> |request|:
+To <dfn>signal to abort the request</dfn> |request| with |signal|:
 
 1. [=parallel queue/enqueue the following steps|Enqueue the steps=] to [=abort the request=] |request| to the [=lock task queue=].
-1. [=Reject=] |request|'s [=lock request/promise=] with an "{{AbortError}}" {{DOMException}}.
+1. [=Reject=] |request|'s [=lock request/promise=] with |signal|'s [=AbortSignal/abort reason=].
 
 </div>
 
