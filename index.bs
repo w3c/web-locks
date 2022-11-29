@@ -172,18 +172,21 @@ Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting th
 ## Lock Managers ## {#lock-managers}
 <!-- ====================================================================== -->
 
-A [=/user agent=] has a <dfn>lock manager</dfn> for each [=/storage bucket=], which encapsulates the state of all [=lock-concept|locks=] and [=lock requests=] associated with a [=/storage bucket=].
+A <dfn>lock manager</dfn> encapsulates the state of [=lock-concept|locks=] and [=lock requests=]. Each [=/storage bucket=] includes one [=/lock manager=] through an associated [=/storage bottle=] for the Web Locks API.
 
 Note: Pages and workers ([=/agents=]) sharing a [=/storage bucket=] opened in the same user agent share a [=/lock manager=] even if they are in unrelated [=/browsing contexts=].
 
 <div algorithm>
 To <dfn>obtain a lock manager</dfn>, given an [=/environment settings object=] |environment|, run these steps:
 
-1. Let |bottle| be the result of [=/obtaining a local storage bottle map=] given |environment| and "`web-locks`".
-1. If |bottle| is failure, then return failure.
+1. Let |map| be the result of [=/obtaining a local storage bottle map=] given |environment| and "`web-locks`".
+1. If |map| is failure, then return failure.
+1. Let |bottle| be |map|'s associated [=/storage bottle=].
 1. Return |bottle|'s associated [=/lock manager=].
 
 </div>
+
+Issue: Refine the integration with [[Storage]] here, including how to get the lock manager properly from the given environment.
 
 
 <!-- ====================================================================== -->
