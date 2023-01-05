@@ -1,13 +1,15 @@
 <pre class=metadata>
 Title: Web Locks API
-Shortname: Web-Locks
+Shortname: web-locks
 Abstract: This document defines a web platform API that allows script to asynchronously acquire a lock over a resource, hold it while work is performed, then release it. While held, no other script in the origin can acquire a lock over the same resource. This allows contexts (windows, workers) within a web application to coordinate the usage of resources.
-Status: UD
+Status: ED
 ED: https://w3c.github.io/web-locks/
 Level: 1
-Editor: Joshua Bell, Google Inc. https://google.com, jsbell@google.com
+TR: https://www.w3.org/TR/web-locks/
+Editor: Joshua Bell, Google Inc. https://google.com, jsbell@google.com, w3cid 61302
 Editor: Kagami Rosylight, Mozilla https://www.mozilla.org/, krosylight@mozilla.com, w3cid 107856
 Group: webapps
+Repository: w3c/web-locks
 Test Suite: https://github.com/web-platform-tests/wpt/tree/master/web-locks
 Favicon: logo-lock.svg
 Complain About: accidental-2119 yes, missing-example-ids yes
