@@ -6,7 +6,7 @@
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="Bikeshed version 26e85e599, updated Thu Dec 8 15:29:31 2022 -0800" name="generator">
+  <meta content="Bikeshed version d6f2d6445, updated Tue Jan 17 11:25:25 2023 -0800" name="generator">
   <link href="https://www.w3.org/TR/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
   <meta content="3141c24ad8db4168e70b3d544b41f657067fd692" name="document-revision">
@@ -849,7 +849,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2023-01-07">7 January 2023</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2023-01-23">23 January 2023</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -870,7 +870,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </div>
    </details>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2023 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>, <a href="https://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document" rel="license">permissive document license</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2023 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document" rel="license">permissive document license</a> rules apply. </p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
@@ -1051,7 +1051,7 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed
    <p>Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting these will cause an exception.</p>
    <h3 class="heading settled" data-level="2.2" id="lock-managers"><span class="secno">2.2. </span><span class="content">Lock Managers</span><a class="self-link" href="#lock-managers"></a></h3>
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-manager">lock manager</dfn> encapsulates the state of <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①">locks</a> and <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request①">lock requests</a>. Each <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#storage-bucket" id="ref-for-storage-bucket②">storage bucket</a> includes one <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager">lock manager</a> through an associated <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#storage-bottle" id="ref-for-storage-bottle">storage bottle</a> for the Web Locks API.</p>
-   <p class="note" role="note"><span>Note:</span> Pages and workers (<a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent③">agents</a>) sharing a <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#storage-bucket" id="ref-for-storage-bucket③">storage bucket</a> opened in the same user agent share a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a> even if they are in unrelated <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#browsing-context" id="ref-for-browsing-context">browsing contexts</a>.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> Pages and workers (<a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent③">agents</a>) sharing a <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#storage-bucket" id="ref-for-storage-bucket③">storage bucket</a> opened in the same user agent share a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a> even if they are in unrelated <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#browsing-context" id="ref-for-browsing-context">browsing contexts</a>.</p>
    <div class="algorithm" data-algorithm="obtain a lock manager">
      To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="obtain-a-lock-manager">obtain a lock manager</dfn>, given an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> <var>environment</var>, run these steps: 
     <ol>
@@ -1619,7 +1619,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
       <ol>
        <li data-md>
         <p>If <var>request</var> is not <a data-link-type="dfn" href="#grantable" id="ref-for-grantable①">grantable</a>, then return.</p>
-        <p class="note" role="note"><span>Note:</span> Only the first item in a queue is grantable. Therefore, if something is not grantable then all the following items are automatically not grantable.</p>
+        <p class="note" role="note"><span class="marker">Note:</span> Only the first item in a queue is grantable. Therefore, if something is not grantable then all the following items are automatically not grantable.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove③">Remove</a> <var>request</var> from <var>queue</var>.</p>
        <li data-md>
