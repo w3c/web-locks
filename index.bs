@@ -17,6 +17,10 @@ Markup Shorthands: css no, markdown yes
 Assume Explicit For: yes
 </pre>
 
+<pre class=link-defaults>
+spec:infra; type:dfn; text:user agent
+</pre>
+
 <pre class=anchors>
 spec: ecma262; urlPrefix: https://tc39.github.io/ecma262/
     type: dfn
@@ -85,9 +89,7 @@ The API provides optional functionality that may be used as needed, including:
 
 Cooperative coordination takes place within the scope of [=/agents=] sharing a [=/storage bucket=]; this may span multiple [=/agent clusters=].
 
-<aside class=note>
-[=/Agents=] roughly correspond to windows (tabs), iframes, and workers. [=/Agent clusters=] correspond to independent processes in some user agent implementations.
-</aside>
+NOTE: [=/Agents=] roughly correspond to windows (tabs), iframes, and workers. [=/Agent clusters=] correspond to independent processes in some user agent implementations.
 
 <!-- ====================================================================== -->
 ## Usage Overview ## {#usage-overview}
@@ -99,7 +101,7 @@ The API is used as follows:
 1. Work is done while holding the lock in an asynchronous task.
 1. The lock is automatically released when the task completes.
 
-<aside class=example id=example-basic-usage>
+<div class=example id=example-basic-usage>
 
 A basic example of the API usage is as follows:
 
@@ -124,7 +126,7 @@ await navigator.locks.request('my_resource', async lock => {
 // After the lock has been released
 ```
 
-</aside>
+</div>
 
 <!-- ====================================================================== -->
 ## Motivating Use Cases ## {#motivations}
@@ -160,13 +162,13 @@ A <dfn>resource name</dfn> is a [=JavaScript string=] chosen by the web applicat
 A resource name has no external meaning beyond the scheduling algorithm, but is global
 across [=/agents=] sharing a [=/storage bucket=]. Web applications are free to use any resource naming scheme.
 
-<aside class=example id=example-indexeddb-transactions>
+<div class=example id=example-indexeddb-transactions>
 To mimic transaction locking over named stores within a named
 database in [[IndexedDB-2]], a script might compose resource names as:
 ```js
 encodeURIComponent(db_name) + '/' + encodeURIComponent(store_name)
 ```
-</aside>
+</div>
 
 Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting these will cause an exception.
 
@@ -176,7 +178,7 @@ Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting th
 
 A <dfn>lock manager</dfn> encapsulates the state of [=lock-concept|locks=] and [=lock requests=]. Each [=/storage bucket=] includes one [=/lock manager=] through an associated [=/storage bottle=] for the Web Locks API.
 
-Note: Pages and workers ([=/agents=]) sharing a [=/storage bucket=] opened in the same user agent share a [=/lock manager=] even if they are in unrelated [=/browsing contexts=].
+NOTE: Pages and workers ([=/agents=]) sharing a [=/storage bucket=] opened in the same user agent share a [=/lock manager=] even if they are in unrelated [=/browsing contexts=].
 
 <div algorithm>
 To <dfn>obtain a lock manager</dfn>, given an [=/environment settings object=] |environment|, run these steps:
@@ -222,7 +224,7 @@ A [=lock-concept|lock=] has a <dfn>waiting promise</dfn> which is a Promise.
 
 A [=lock-concept|lock=] has a <dfn>released promise</dfn> which is a Promise.
 
-<aside class=note>
+<div class=note>
 There are two promises associated with a lock's lifecycle:
 
 * A promise provided either implicitly or explicitly by the callback when the lock is granted which determines how long the lock is held. When this promise settles, the lock is released. This is known as the lock's [=lock-concept/waiting promise=].
@@ -248,7 +250,7 @@ const p1 = navigator.locks.request('resource', async lock => {
 
 The [=lock-concept/waiting promise=] is not named in the above code, but is still present as the return value from the anonymous `async` callback.
 Further note that if the callback is not `async` and returns a non-promise, the return value is wrapped in a promise that is immediately resolved; the lock will be released in an upcoming microtask, and the [=lock-concept/released promise=] will also resolve in a subsequent microtask.
-</aside>
+</div>
 
 Each [=/lock manager=] has a <dfn for="lock manager">held lock set</dfn> which is a [=/set=] of [=lock-concept|locks=].
 
@@ -488,12 +490,12 @@ try {
 
 </div>
 
-<aside class=advisement>
+<div class=advisement>
     Use the {{LockOptions/steal}} option with caution.
     When used, code previously holding a lock will now be executing without guarantees that it is the sole context with access to the resource.
     Similarly, the code that used the option has no guarantees that other contexts will not still be executing as if they have access to the abstract resource.
     It is intended for use by web applications that need to attempt recovery in the face of application and/or user-agent defects, where behavior is already unpredictable.
-</aside>
+</div>
 
 <div algorithm="LockManager request method">
 
@@ -550,9 +552,9 @@ The <dfn method for=LockManager>request(|name|, |callback|)</dfn> and
 
 </div>
 
-<aside class=advisement>
+<div class=advisement>
     This data is just a *snapshot* of the [=lock manager=] state at some point in time. By the time the data is returned to script, the actual lock state might have changed.
-</aside>
+</div>
 
 
 <div algorithm>
@@ -673,7 +675,7 @@ To <dfn>process the lock request queue</dfn> |queue|:
 1. [=list/For each=] |request| of |queue|:
     1. If |request| is not [=grantable=], then return.
 
-        Note: Only the first item in a queue is grantable. Therefore, if something is not grantable then all the following items are automatically not grantable.
+        NOTE: Only the first item in a queue is grantable. Therefore, if something is not grantable then all the following items are automatically not grantable.
 
     1. [=list/Remove=] |request| from |queue|.
     1. Let |agent| be |request|'s [=lock-concept/agent=].
@@ -718,21 +720,18 @@ To <dfn>snapshot the lock state</dfn> for |manager| with |promise|:
 
 </div>
 
-<aside class=note>
-<p>
+<div class=note>
     For any given resource, the snapshot of the pending lock requests
     will return the requests in the order in which they were made;
     however, no guarantees are made with respect to the relative
     ordering of requests across different resources. For example, if
     pending lock requests A1 and A2 are made against resource A in
     that order, and pending lock requests B1 and B2 are made against
-    resource B in that order, than both «A1, A2, B1, B2» and «A1, B1,
+    resource B in that order, then both «A1, A2, B1, B2» and «A1, B1,
     A2, B2» would be possible orderings for a snapshot's pending list.
-</p>
-<p>
+
     No ordering guarantees exist for the snapshot of the held lock state.
-</p>
-</aside>
+</div>
 
 <!-- ====================================================================== -->
 # Usage Considerations # {#usage-considerations}
@@ -746,7 +745,7 @@ To <dfn>snapshot the lock state</dfn> for |manager| with |promise|:
 
 [Deadlocks](https://en.wikipedia.org/wiki/Deadlock) are a concept in concurrent computing, and deadlocks scoped to a particular [=lock manager=] can be introduced by this API.
 
-<aside class=example id=example-deadlocks>
+<div class=example id=example-deadlocks>
 An example of how deadlocks can be encountered through the use of this API is as follows.
 
 Script 1:
@@ -768,11 +767,11 @@ navigator.locks.request('B', async b => {
 ```
 
 If script 1 and script 2 run close to the same time, there is a chance that script 1 will hold lock A and script 2 will hold lock B and neither can make further progress - a deadlock. This will not affect the user agent as a whole, pause the tab, or affect other script in the origin, but this particular functionality will be blocked.
-</aside>
+</div>
 
 Preventing deadlocks requires care. One approach is to always acquire multiple locks in a strict order.
 
-<aside class=example id=example-request-multiple-locks>
+<div class=example id=example-request-multiple-locks>
 
 A helper function such as the following could be used to request multiple locks in a consistent order.
 
@@ -801,7 +800,7 @@ async function requestMultiple(resources, callback) {
 ```
 
 In practice, the use of multiple locks is rarely as straightforward &mdash; libraries and other utilities can often unintentionally obfuscate their use.
-</aside>
+</div>
 
 
 <!-- ====================================================================== -->
