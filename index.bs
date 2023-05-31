@@ -87,7 +87,7 @@ The API provides optional functionality that may be used as needed, including:
 
 Cooperative coordination takes place within the scope of [=/agents=] sharing a [=/storage bucket=]; this may span multiple [=/agent clusters=].
 
-note: [=/Agents=] roughly correspond to windows (tabs), iframes, and workers. [=/Agent clusters=] correspond to independent processes in some user agent implementations.
+NOTE: [=/Agents=] roughly correspond to windows (tabs), iframes, and workers. [=/Agent clusters=] correspond to independent processes in some user agent implementations.
 
 <!-- ====================================================================== -->
 ## Usage Overview ## {#usage-overview}
@@ -176,7 +176,7 @@ Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting th
 
 A <dfn>lock manager</dfn> encapsulates the state of [=lock-concept|locks=] and [=lock requests=]. Each [=/storage bucket=] includes one [=/lock manager=] through an associated [=/storage bottle=] for the Web Locks API.
 
-Note: Pages and workers ([=/agents=]) sharing a [=/storage bucket=] opened in the same user agent share a [=/lock manager=] even if they are in unrelated [=/browsing contexts=].
+NOTE: Pages and workers ([=/agents=]) sharing a [=/storage bucket=] opened in the same user agent share a [=/lock manager=] even if they are in unrelated [=/browsing contexts=].
 
 <div algorithm>
 To <dfn>obtain a lock manager</dfn>, given an [=/environment settings object=] |environment|, run these steps:
@@ -673,7 +673,7 @@ To <dfn>process the lock request queue</dfn> |queue|:
 1. [=list/For each=] |request| of |queue|:
     1. If |request| is not [=grantable=], then return.
 
-        Note: Only the first item in a queue is grantable. Therefore, if something is not grantable then all the following items are automatically not grantable.
+        NOTE: Only the first item in a queue is grantable. Therefore, if something is not grantable then all the following items are automatically not grantable.
 
     1. [=list/Remove=] |request| from |queue|.
     1. Let |agent| be |request|'s [=lock-concept/agent=].
