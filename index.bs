@@ -6,8 +6,8 @@ Status: ED
 ED: https://w3c.github.io/web-locks/
 Level: 1
 TR: https://www.w3.org/TR/web-locks/
-Editor: Joshua Bell, Google Inc. https://google.com, jsbell@google.com, w3cid 61302
 Editor: Kagami Rosylight, Mozilla https://www.mozilla.org/, krosylight@mozilla.com, w3cid 107856
+Former Editor: Joshua Bell, Google Inc. https://google.com, jsbell@google.com, w3cid 61302
 Group: webapps
 Repository: w3c/web-locks
 Test Suite: https://github.com/web-platform-tests/wpt/tree/master/web-locks
