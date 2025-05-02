@@ -5,10 +5,10 @@
   <title>Web Locks API</title>
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version 4afc1fdf9, updated Tue May 28 15:43:17 2024 -0700" name="generator">
+  <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
   <link href="https://www.w3.org/TR/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="c1afe5d1bebbea24634d3357ca60428102c7c84a" name="revision">
+  <meta content="293e38bf57a1f70825a7622188e89588b51ce063" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -680,7 +680,7 @@ a[href].issue-return {
 	background-image: url(https://resources.whatwg.org/browser-logos/safari-ios.svg);
 }
 .mdn-anno > .feature > .support > .nodejs::before {
-	background-image: url(https://nodejs.org/static/images/favicons/favicon.ico);
+	background-image: url(https://nodejs.org/favicon.ico);
 }
 .mdn-anno > .feature > .support > .opera_android::before {
 	background-image: url(https://resources.whatwg.org/browser-logos/opera.svg);
@@ -950,21 +950,43 @@ D50 2deg illuminant, L in [0,100], a and b in [-128, 128]
 4 = lab(85,5,15)
 5 = lab(85,-10,-50)
 6 = lab(85,35,-15)
+
+For darkmode:
+0 = oklab(50%   0%  108%)
+1 = oklab(50% -51%   51%)
+2 = oklab(50% -64%  -20%)
+3 = oklab(50%   6%   19%)
+4 = oklab(50% -12%  -64%)
+5 = oklab(50%  44%  -19%)  
+6 = oklab(50% 102%   38%)
 */
+
 [data-algorithm] var { cursor: pointer; }
-var[data-var-color="0"] { background-color: #F4D200; box-shadow: 0 0 0 2px #F4D200; }
-var[data-var-color="1"] { background-color: #FF87A2; box-shadow: 0 0 0 2px #FF87A2; }
-var[data-var-color="2"] { background-color: #96E885; box-shadow: 0 0 0 2px #96E885; }
-var[data-var-color="3"] { background-color: #3EEED2; box-shadow: 0 0 0 2px #3EEED2; }
-var[data-var-color="4"] { background-color: #EACFB6; box-shadow: 0 0 0 2px #EACFB6; }
-var[data-var-color="5"] { background-color: #82DDFF; box-shadow: 0 0 0 2px #82DDFF; }
-var[data-var-color="6"] { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
+var[data-var-color] { background-color: var(--var-bg); box-shadow: 0 0 0 2px var(--var-bg); }
+
+var[data-var-color] { --var-bg: #F4D200; }
+var[data-var-color="1"] { --var-bg: #FF87A2; }
+var[data-var-color="2"] { --var-bg: #96E885; }
+var[data-var-color="3"] { --var-bg: #3EEED2; }
+var[data-var-color="4"] { --var-bg: #EACFB6; }
+var[data-var-color="5"] { --var-bg: #82DDFF; }
+var[data-var-color="6"] { --var-vg: #FFBCF2; }
+
+@media (prefers-color-scheme: dark) {
+	var[data-var-color] { --var-bg: #bc1a00; }
+	var[data-var-color="1"] { --var-bg: #007f00; }
+	var[data-var-color="2"] { --var-bg: #008698; }
+	var[data-var-color="3"] { --var-bg: #7f5b2b; }
+	var[data-var-color="4"] { --var-bg: #004df3; }
+	var[data-var-color="5"] { --var-bg: #a1248a; }
+	var[data-var-color="6"] { --var-vg: #ff0000; }
+}
 </style>
  <body class="h-entry">
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2024-06-07">7 June 2024</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2025-05-02">2 May 2025</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -978,14 +1000,15 @@ var[data-var-color="6"] { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBC
       <dt>Feedback:
       <dd><a href="https://github.com/w3c/web-locks/issues/">GitHub</a>
       <dd><a href="#issues-index">Inline In Spec</a>
-      <dt class="editor">Editors:
-      <dd class="editor p-author h-card vcard" data-editor-id="61302"><a class="p-name fn u-email email" href="mailto:jsbell@google.com">Joshua Bell</a> (<a class="p-org org" href="https://google.com">Google Inc.</a>)
+      <dt class="editor">Editor:
       <dd class="editor p-author h-card vcard" data-editor-id="107856"><a class="p-name fn u-email email" href="mailto:krosylight@mozilla.com">Kagami Rosylight</a> (<a class="p-org org" href="https://www.mozilla.org/">Mozilla</a>)
+      <dt class="editor">Former Editor:
+      <dd class="editor p-author h-card vcard" data-editor-id="61302"><a class="p-name fn u-email email" href="mailto:jsbell@google.com">Joshua Bell</a> (<a class="p-org org" href="https://google.com">Google Inc.</a>)
      </dl>
     </div>
    </details>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2024 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply. </p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
@@ -994,17 +1017,14 @@ var[data-var-color="6"] { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBC
   </div>
   <h2 class="no-num no-toc no-ref heading settled" id="sotd"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
-   <p> <em>This section describes the status of this document at the time of its publication. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this technical report can be found in the <a href="https://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at https://www.w3.org/TR/.</em> </p>
-   <p> This document was published by the <a href="https://www.w3.org/groups/wg/webapps">Web Applications Working Group</a> as an Editors Draft. This document is intended to become a W3C Recommendation. </p>
-   <p></p>
-   <p> This document was published by the <a href="https://www.w3.org/groups/wg/webapps">Web Applications Working Group</a> as a Working Draft.
-
-    Feedback and comments on this specification are welcome. Please use <a href="https://github.com/w3c/web-locks/issues">GitHub issues</a> Historical discussions can be found in the <a href="https://lists.w3.org/Archives/Public/public-webapps/">public-webapps@w3.org archives</a>. </p>
-   <p> Publication as an Editors Draft does not imply endorsement by <abbr title="World Wide Web Consortium">W3C</abbr> and its Members. This is a draft document and may
-    be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite
-    this document as other than work in progress. </p>
-   <p> This document was produced by a group operating under the <a href="https://www.w3.org/Consortium/Patent-Policy-20200915/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/2004/01/pp-impl/114929/status" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/Consortium/Patent-Policy-20200915/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy-20200915/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. </p>
-   <p>This document is governed by the <a href="https://www.w3.org/2023/Process-20231103/" id="w3c_process_revision">03 November 2023 W3C Process Document</a>. </p>
+   <p> This document was published by the <a href="https://www.w3.org/groups/wg/webapps">Web Applications Working Group</a> as an Editor’s Draft. </p>
+   <p> Publication as an Editor’s Draft does not imply endorsement by <abbr title="World Wide Web Consortium">W3C</abbr> and its Members. </p>
+   <p> This is a draft document
+	and may be updated, replaced
+	or obsoleted by other documents at any time.
+	It is inappropriate to cite this document as other than work in progress. </p>
+   <p>This document was produced by a group operating under the <a href="https://www.w3.org/policies/patent-policy/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/groups/wg/webapps/ipr" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/policies/patent-policy/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/policies/patent-policy/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. </p>
+   <p>This document is governed by the <a href="https://www.w3.org/policies/process/20231103/" id="w3c_process_revision">03 November 2023 W3C Process Document</a>. </p>
   </div>
   <div data-fill-with="at-risk"></div>
   <nav data-fill-with="table-of-contents" id="toc">
@@ -1200,7 +1220,7 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed
       <li data-md>
        <p>A promise provided either implicitly or explicitly by the callback when the lock is granted which determines how long the lock is held. When this promise settles, the lock is released. This is known as the lock’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise">waiting promise</a>.</p>
       <li data-md>
-       <p>A promise returned by <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager">LockManager</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request">request()</a></code> method that settles when the lock is released or the request is aborted. This is known as the lock’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise">released promise</a>.</p>
+       <p>A promise returned by <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager">LockManager</a></code>’s <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request">request()</a></code> method that settles when the lock is released or the request is aborted. This is known as the lock’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise">released promise</a>.</p>
      </ul>
 <pre class="language-js highlight"><c- a>const</c-> p1 <c- o>=</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> lock <c- p>=></c-> <c- p>{</c->
   <c- a>const</c-> p2 <c- o>=</c-> <c- ow>new</c-> Promise<c- p>(</c->r <c- p>=></c-> <c- p>{</c->
@@ -1299,7 +1319,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
 <a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/workers.html#workernavigator" id="ref-for-workernavigator"><c- n>WorkerNavigator</c-></a> <c- b>includes</c-> <a data-link-type="idl-name" href="#navigatorlocks" id="ref-for-navigatorlocks①"><c- n>NavigatorLocks</c-></a>;
 </pre>
    <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object①">environment settings object</a> has a <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager②">LockManager</a></code> object.</p>
-   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="NavigatorLocks" data-dfn-type="attribute" data-export id="dom-navigatorlocks-locks"><code>locks</code></dfn> getter’s steps are to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object">relevant settings object</a>'s <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager③">LockManager</a></code> object.</p>
+   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="NavigatorLocks" data-dfn-type="attribute" data-export id="dom-navigatorlocks-locks"><code>locks</code></dfn> getter’s steps are to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object">relevant settings object</a>’s <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager③">LockManager</a></code> object.</p>
    <h3 class="heading settled" data-level="3.2" id="api-lock-manager"><span class="secno">3.2. </span><span class="content"><code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager④">LockManager</a></code> class</span><a class="self-link" href="#api-lock-manager"></a></h3>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext①"><c- g>SecureContext</c-></a>, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="lockmanager"><code><c- g>LockManager</c-></code></dfn> {
@@ -1426,9 +1446,9 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>If <var>options</var> was not passed, then let <var>options</var> be a new <code class="idl"><a data-link-type="idl" href="#dictdef-lockoptions" id="ref-for-dictdef-lockoptions①">LockOptions</a></code> dictionary with default members.</p>
      <li data-md>
-      <p>Let <var>environment</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①">this</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object①">relevant settings object</a>.</p>
+      <p>Let <var>environment</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this①">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object①">relevant settings object</a>.</p>
      <li data-md>
-      <p>If <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window" id="ref-for-concept-document-window">associated Document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active" id="ref-for-fully-active">fully active</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException">DOMException</a></code>.</p>
+      <p>If <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window" id="ref-for-concept-document-window">associated Document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active" id="ref-for-fully-active">fully active</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException">DOMException</a></code>.</p>
      <li data-md>
       <p>Let <var>manager</var> be the result of <a data-link-type="dfn" href="#obtain-a-lock-manager" id="ref-for-obtain-a-lock-manager">obtaining a lock manager</a> given <var>environment</var>. If that returned failure, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with①">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#securityerror" id="ref-for-securityerror">SecurityError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
      <li data-md>
@@ -1474,16 +1494,16 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
   <c- p>]</c->
 <c- p>}</c->
 </pre>
-    <p>The <code>clientId</code> field corresponds to a unique context (frame or worker), and is the same value returned by <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#client" id="ref-for-client">Client</a></code>'s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#dom-client-id" id="ref-for-dom-client-id">id</a></code> attribute.</p>
+    <p>The <code>clientId</code> field corresponds to a unique context (frame or worker), and is the same value returned by <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#client" id="ref-for-client">Client</a></code>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#dom-client-id" id="ref-for-dom-client-id">id</a></code> attribute.</p>
    </div>
    <div class="advisement"> This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑧">lock manager</a> state at some point in time. By the time the data is returned to script, the actual lock state might have changed. </div>
    <div class="algorithm" data-algorithm="query()" data-algorithm-for="LockManager">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export id="dom-lockmanager-query"><code>query()</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
-      <p>Let <var>environment</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②">this</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object②">relevant settings object</a>.</p>
+      <p>Let <var>environment</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this②">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object②">relevant settings object</a>.</p>
      <li data-md>
-      <p>If <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global①">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window" id="ref-for-concept-document-window①">associated Document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active" id="ref-for-fully-active①">fully active</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑦">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror①">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code>.</p>
+      <p>If <var>environment</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global①">relevant global object</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window" id="ref-for-concept-document-window①">associated Document</a> is not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active" id="ref-for-fully-active①">fully active</a>, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑦">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#invalidstateerror" id="ref-for-invalidstateerror①">InvalidStateError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code>.</p>
      <li data-md>
       <p>Let <var>manager</var> be the result of <a data-link-type="dfn" href="#obtain-a-lock-manager" id="ref-for-obtain-a-lock-manager①">obtaining a lock manager</a> given <var>environment</var>. If that returned failure, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑧">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#securityerror" id="ref-for-securityerror①">SecurityError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
      <li data-md>
@@ -1502,8 +1522,8 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
 };
 </pre>
    <p>A <code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock③">Lock</a></code> object has an associated <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑤">lock</a>.</p>
-   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Lock" data-dfn-type="attribute" data-export id="dom-lock-name"><code>name</code></dfn> getter’s steps are to return the associated <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑥">lock</a>'s <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name②">name</a>.</p>
-   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Lock" data-dfn-type="attribute" data-export id="dom-lock-mode"><code>mode</code></dfn> getter’s steps are to return the associated <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑦">lock</a>'s <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode①">mode</a>.</p>
+   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Lock" data-dfn-type="attribute" data-export id="dom-lock-name"><code>name</code></dfn> getter’s steps are to return the associated <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑥">lock</a>’s <a data-link-type="dfn" href="#lock-concept-name" id="ref-for-lock-concept-name②">name</a>.</p>
+   <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Lock" data-dfn-type="attribute" data-export id="dom-lock-mode"><code>mode</code></dfn> getter’s steps are to return the associated <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①⑦">lock</a>’s <a data-link-type="dfn" href="#lock-concept-mode" id="ref-for-lock-concept-mode①">mode</a>.</p>
    <h2 class="heading settled" data-level="4" id="algorithms"><span class="secno">4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
    <h3 class="heading settled" data-level="4.1" id="algorithm-request-lock"><span class="secno">4.1. </span><span class="content">Request a lock</span><a class="self-link" href="#algorithm-request-lock"></a></h3>
    <div class="algorithm" data-algorithm="request a lock">
@@ -1545,7 +1565,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
         <ol>
          <li data-md>
           <p>If <var>ifAvailable</var> is true and <var>request</var> is not <a data-link-type="dfn" href="#grantable" id="ref-for-grantable">grantable</a>,
- then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
+ then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
           <ol>
            <li data-md>
             <p>Let <var>r</var> be the result of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#invoke-a-callback-function" id="ref-for-invoke-a-callback-function">invoking</a> <var>callback</var> with <code>null</code> as the only argument.</p>
@@ -1648,7 +1668,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>lock</var> to <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-held-lock-set" id="ref-for-lock-manager-held-lock-set③">held lock set</a>.</p>
        <li data-md>
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑦">Enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object④">relevant settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop①">responsible event loop</a>:</p>
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑦">Enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object④">relevant settings object</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop①">responsible event loop</a>:</p>
         <ol>
          <li data-md>
           <p>If <var>signal</var> is present, then run these steps:</p>
@@ -1685,7 +1705,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
      <li data-md>
       <p>Let <var>pending</var> be a new <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list" id="ref-for-list">list</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>queue</var> of <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-lock-request-queue-map" id="ref-for-lock-manager-lock-request-queue-map⑤">lock request queue map</a>'s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values">values</a>:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>queue</var> of <var>manager</var>’s <a data-link-type="dfn" href="#lock-manager-lock-request-queue-map" id="ref-for-lock-manager-lock-request-queue-map⑤">lock request queue map</a>’s <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-values" id="ref-for-map-getting-the-values">values</a>:</p>
       <ol>
        <li data-md>
         <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate②">For each</a> <var>request</var> of <var>queue</var>:</p>
@@ -1769,7 +1789,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    </div>
    <h2 class="heading settled" data-level="6" id="security-privacy"><span class="secno">6. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-privacy"></a></h2>
    <h3 class="heading settled" data-level="6.1" id="security-scope"><span class="secno">6.1. </span><span class="content">Lock Scope</span><a class="self-link" href="#security-scope"></a></h3>
-   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①⓪">lock manager</a>'s scope is important as it defines a privacy boundary. Locks can be used as an ephemeral state retention mechanism and, like storage APIs, can be used as a communication mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page (first-party) and a cross-origin iframe (third-party) in the same origin for privacy reasons must similarly partition locking.</p>
+   <p>The definition of a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①⓪">lock manager</a>’s scope is important as it defines a privacy boundary. Locks can be used as an ephemeral state retention mechanism and, like storage APIs, can be used as a communication mechanism, and must be no more privileged than storage facilities. User agents that impose finer granularity on one of these services must impose it on others; for example, a user agent that exposes different storage partitions to a top-level page (first-party) and a cross-origin iframe (third-party) in the same origin for privacy reasons must similarly partition locking.</p>
    <p>This also provides reasonable expectations for web application authors; if a lock is acquired over a storage resource, all same-origin browsing contexts must observe the same state.</p>
    <h3 class="heading settled" data-level="6.2" id="private-browsing"><span class="secno">6.2. </span><span class="content">Private Browsing</span><a class="self-link" href="#private-browsing"></a></h3>
    <p>Every <a href="https://github.com/w3ctag/private-mode">private mode</a> browsing session is considered a separate user agent for the purposes of this API. That is, locks requested/held outside such a session have no affect on requested/held inside such a session, and vice versa. This prevents a website from determining that a session is "incognito" while also not allowing a communication mechanism between such sessions.</p>
@@ -1994,7 +2014,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="be0c27b2">Navigator</span>
      <li><span class="dfn-paneled" id="a4785085">WorkerNavigator</span>
      <li><span class="dfn-paneled" id="474cbfcb">agent cluster</span>
-     <li><span class="dfn-paneled" id="3349d69f">associated document</span>
+     <li><span class="dfn-paneled" id="3349d69f">associated Document</span>
      <li><span class="dfn-paneled" id="0d0390b4">browsing context</span>
      <li><span class="dfn-paneled" id="e4d92278">enqueue steps</span>
      <li><span class="dfn-paneled" id="102df61f">enqueue the following steps</span>
@@ -2021,7 +2041,7 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="6b815fdd">is empty</span>
      <li><span class="dfn-paneled" id="5afbefcd">item <small>(for list)</small></span>
      <li><span class="dfn-paneled" id="c88f3887">item <small>(for struct)</small></span>
-     <li><span class="dfn-paneled" id="b38d7ca1">javascript string</span>
+     <li><span class="dfn-paneled" id="b38d7ca1">JavaScript string</span>
      <li><span class="dfn-paneled" id="649608b9">list</span>
      <li><span class="dfn-paneled" id="3fca5a9e">map</span>
      <li><span class="dfn-paneled" id="e2fc6023">prepend</span>
@@ -2091,7 +2111,7 @@ authoring advice.</p>
    <dt id="biblio-indexeddb-2">[IndexedDB-2]
    <dd>Ali Alabbas; Joshua Bell. <a href="https://w3c.github.io/IndexedDB/"><cite>Indexed Database API 2.0</cite></a>. URL: <a href="https://w3c.github.io/IndexedDB/">https://w3c.github.io/IndexedDB/</a>
    <dt id="biblio-service-workers">[Service-Workers]
-   <dd>Jake Archibald; Marijn Kruisselbrink. <a href="https://w3c.github.io/ServiceWorker/"><cite>Service Workers</cite></a>. URL: <a href="https://w3c.github.io/ServiceWorker/">https://w3c.github.io/ServiceWorker/</a>
+   <dd>Yoshisato Yanagisawa; Monica CHINTALA. <a href="https://w3c.github.io/ServiceWorker/"><cite>Service Workers</cite></a>. URL: <a href="https://w3c.github.io/ServiceWorker/">https://w3c.github.io/ServiceWorker/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>]
@@ -2484,7 +2504,7 @@ let dfnPanelData = {
 "26e4aa12": {"dfnID":"26e4aa12","dfnText":"agent","external":true,"refSections":[{"refs":[{"id":"ref-for-agent"},{"id":"ref-for-agent\u2460"}],"title":"1. Introduction"},{"refs":[{"id":"ref-for-agent\u2461"}],"title":"2.1. Resources Names"},{"refs":[{"id":"ref-for-agent\u2462"}],"title":"2.2. Lock Managers"},{"refs":[{"id":"ref-for-agent\u2463"}],"title":"2.4. Locks"},{"refs":[{"id":"ref-for-agent\u2464"},{"id":"ref-for-agent\u2465"}],"title":"2.6. Termination of Locks"},{"refs":[{"id":"ref-for-agent\u2466"}],"title":"3.2.1. The request() method"}],"url":"https://tc39.github.io/ecma262/#agent"},
 "28e64574": {"dfnID":"28e64574","dfnText":"abort reason","external":true,"refSections":[{"refs":[{"id":"ref-for-abortsignal-abort-reason"}],"title":"3.2.1. The request() method"},{"refs":[{"id":"ref-for-abortsignal-abort-reason\u2460"}],"title":"4.3. Abort a request"}],"url":"https://dom.spec.whatwg.org/#abortsignal-abort-reason"},
 "3182eb71": {"dfnID":"3182eb71","dfnText":"NotSupportedError","external":true,"refSections":[{"refs":[{"id":"ref-for-notsupportederror"},{"id":"ref-for-notsupportederror\u2460"},{"id":"ref-for-notsupportederror\u2461"},{"id":"ref-for-notsupportederror\u2462"}],"title":"3.2.1. The request() method"}],"url":"https://webidl.spec.whatwg.org/#notsupportederror"},
-"3349d69f": {"dfnID":"3349d69f","dfnText":"associated document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document-window"}],"title":"3.2.1. The request() method"},{"refs":[{"id":"ref-for-concept-document-window\u2460"}],"title":"3.2.2. The query() method"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window"},
+"3349d69f": {"dfnID":"3349d69f","dfnText":"associated Document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document-window"}],"title":"3.2.1. The request() method"},{"refs":[{"id":"ref-for-concept-document-window\u2460"}],"title":"3.2.2. The query() method"}],"url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window"},
 "3ab7bf79": {"dfnID":"3ab7bf79","dfnText":"callback function","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-callback-function"}],"title":"3.2.1. The request() method"}],"url":"https://webidl.spec.whatwg.org/#dfn-callback-function"},
 "3b7e827f": {"dfnID":"3b7e827f","dfnText":"Client","external":true,"refSections":[{"refs":[{"id":"ref-for-client"}],"title":"3.2.2. The query() method"}],"url":"https://w3c.github.io/ServiceWorker/#client"},
 "3b90bdcd": {"dfnID":"3b90bdcd","dfnText":"resolve","external":true,"refSections":[{"refs":[{"id":"ref-for-resolve"}],"title":"2.4. Locks"},{"refs":[{"id":"ref-for-resolve\u2460"}],"title":"4.1. Request a lock"},{"refs":[{"id":"ref-for-resolve\u2461"}],"title":"4.4. Process a lock request queue for a given resource name"},{"refs":[{"id":"ref-for-resolve\u2462"}],"title":"4.5. Snapshot the lock state"}],"url":"https://webidl.spec.whatwg.org/#resolve"},
@@ -2523,7 +2543,7 @@ let dfnPanelData = {
 "a973e0fe": {"dfnID":"a973e0fe","dfnText":"document","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document"}],"title":"2.6. Termination of Locks"}],"url":"https://dom.spec.whatwg.org/#concept-document"},
 "abort-the-request": {"dfnID":"abort-the-request","dfnText":"abort the request","external":false,"refSections":[{"refs":[{"id":"ref-for-abort-the-request"}],"title":"2.6. Termination of Locks"},{"refs":[{"id":"ref-for-abort-the-request\u2460"}],"title":"4.3. Abort a request"}],"url":"#abort-the-request"},
 "b262501e": {"dfnID":"b262501e","dfnText":"reject","external":true,"refSections":[{"refs":[{"id":"ref-for-reject"}],"title":"4.1. Request a lock"},{"refs":[{"id":"ref-for-reject\u2460"}],"title":"4.3. Abort a request"}],"url":"https://webidl.spec.whatwg.org/#reject"},
-"b38d7ca1": {"dfnID":"b38d7ca1","dfnText":"javascript string","external":true,"refSections":[{"refs":[{"id":"ref-for-string"}],"title":"2.1. Resources Names"}],"url":"https://infra.spec.whatwg.org/#string"},
+"b38d7ca1": {"dfnID":"b38d7ca1","dfnText":"JavaScript string","external":true,"refSections":[{"refs":[{"id":"ref-for-string"}],"title":"2.1. Resources Names"}],"url":"https://infra.spec.whatwg.org/#string"},
 "b75bb3bd": {"dfnID":"b75bb3bd","dfnText":"SecureContext","external":true,"refSections":[{"refs":[{"id":"ref-for-SecureContext"}],"title":"3.1. Navigator Mixins"},{"refs":[{"id":"ref-for-SecureContext\u2460"}],"title":"3.2. LockManager class"},{"refs":[{"id":"ref-for-SecureContext\u2461"}],"title":"3.3. Lock class"}],"url":"https://webidl.spec.whatwg.org/#SecureContext"},
 "bdbd19d1": {"dfnID":"bdbd19d1","dfnText":"Promise","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-promise"},{"id":"ref-for-idl-promise\u2460"},{"id":"ref-for-idl-promise\u2461"},{"id":"ref-for-idl-promise\u2462"}],"title":"3.2. LockManager class"}],"url":"https://webidl.spec.whatwg.org/#idl-promise"},
 "be0c27b2": {"dfnID":"be0c27b2","dfnText":"Navigator","external":true,"refSections":[{"refs":[{"id":"ref-for-navigator"}],"title":"3.1. Navigator Mixins"}],"url":"https://html.spec.whatwg.org/multipage/system-state.html#navigator"},
@@ -3050,137 +3070,139 @@ window.addEventListener("resize", repositionAnnoPanels);
 "use strict";
 {
 let refsData = {
-"#abort-the-request": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"abort the request","type":"dfn","url":"#abort-the-request"},
-"#callbackdef-lockgrantedcallback": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockGrantedCallback","type":"callback","url":"#callbackdef-lockgrantedcallback"},
-"#dictdef-lockinfo": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockInfo","type":"dictionary","url":"#dictdef-lockinfo"},
-"#dictdef-lockmanagersnapshot": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockManagerSnapshot","type":"dictionary","url":"#dictdef-lockmanagersnapshot"},
-"#dictdef-lockoptions": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockOptions","type":"dictionary","url":"#dictdef-lockoptions"},
-"#dom-lock-mode": {"export":true,"for_":["Lock"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"attribute","url":"#dom-lock-mode"},
-"#dom-lock-name": {"export":true,"for_":["Lock"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"name","type":"attribute","url":"#dom-lock-name"},
-"#dom-lockmanager-query": {"export":true,"for_":["LockManager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"query()","type":"method","url":"#dom-lockmanager-query"},
-"#dom-lockmanager-request": {"export":true,"for_":["LockManager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"request(name, callback)","type":"method","url":"#dom-lockmanager-request"},
-"#dom-lockmanager-request-name-options-callback": {"export":true,"for_":["LockManager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"request(name, options, callback)","type":"method","url":"#dom-lockmanager-request-name-options-callback"},
-"#dom-lockmode-exclusive": {"export":true,"for_":["LockMode"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"\"exclusive\"","type":"enum-value","url":"#dom-lockmode-exclusive"},
-"#dom-lockmode-shared": {"export":true,"for_":["LockMode"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"\"shared\"","type":"enum-value","url":"#dom-lockmode-shared"},
-"#dom-lockoptions-ifavailable": {"export":true,"for_":["LockOptions"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"ifAvailable","type":"dict-member","url":"#dom-lockoptions-ifavailable"},
-"#dom-lockoptions-mode": {"export":true,"for_":["LockOptions"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"dict-member","url":"#dom-lockoptions-mode"},
-"#dom-lockoptions-signal": {"export":true,"for_":["LockOptions"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"signal","type":"dict-member","url":"#dom-lockoptions-signal"},
-"#dom-lockoptions-steal": {"export":true,"for_":["LockOptions"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"steal","type":"dict-member","url":"#dom-lockoptions-steal"},
-"#dom-navigatorlocks-locks": {"export":true,"for_":["NavigatorLocks"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"locks","type":"attribute","url":"#dom-navigatorlocks-locks"},
-"#enumdef-lockmode": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockMode","type":"enum","url":"#enumdef-lockmode"},
-"#get-the-lock-request-queue": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"get the lock request queue","type":"dfn","url":"#get-the-lock-request-queue"},
-"#grantable": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"grantable","type":"dfn","url":"#grantable"},
-"#lock": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"Lock","type":"interface","url":"#lock"},
-"#lock-concept": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock-concept","type":"dfn","url":"#lock-concept"},
-"#lock-concept-agent": {"export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"agent","type":"dfn","url":"#lock-concept-agent"},
-"#lock-concept-clientid": {"export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"clientid","type":"dfn","url":"#lock-concept-clientid"},
-"#lock-concept-manager": {"export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"manager","type":"dfn","url":"#lock-concept-manager"},
-"#lock-concept-mode": {"export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"dfn","url":"#lock-concept-mode"},
-"#lock-concept-name": {"export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"name","type":"dfn","url":"#lock-concept-name"},
-"#lock-concept-released-promise": {"export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"released promise","type":"dfn","url":"#lock-concept-released-promise"},
-"#lock-concept-waiting-promise": {"export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"waiting promise","type":"dfn","url":"#lock-concept-waiting-promise"},
-"#lock-manager": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock manager","type":"dfn","url":"#lock-manager"},
-"#lock-manager-held-lock-set": {"export":true,"for_":["lock manager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"held lock set","type":"dfn","url":"#lock-manager-held-lock-set"},
-"#lock-manager-lock-request-queue-map": {"export":true,"for_":["lock manager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock request queue map","type":"dfn","url":"#lock-manager-lock-request-queue-map"},
-"#lock-request": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock request","type":"dfn","url":"#lock-request"},
-"#lock-request-agent": {"export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"agent","type":"dfn","url":"#lock-request-agent"},
-"#lock-request-callback": {"export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"callback","type":"dfn","url":"#lock-request-callback"},
-"#lock-request-clientid": {"export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"clientid","type":"dfn","url":"#lock-request-clientid"},
-"#lock-request-manager": {"export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"manager","type":"dfn","url":"#lock-request-manager"},
-"#lock-request-mode": {"export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"dfn","url":"#lock-request-mode"},
-"#lock-request-name": {"export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"name","type":"dfn","url":"#lock-request-name"},
-"#lock-request-promise": {"export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"promise","type":"dfn","url":"#lock-request-promise"},
-"#lock-request-queue": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock request queue","type":"dfn","url":"#lock-request-queue"},
-"#lock-request-signal": {"export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"signal","type":"dfn","url":"#lock-request-signal"},
-"#lock-task-queue": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock task queue","type":"dfn","url":"#lock-task-queue"},
-"#lockmanager": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockManager","type":"interface","url":"#lockmanager"},
-"#mode": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"dfn","url":"#mode"},
-"#navigatorlocks": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"NavigatorLocks","type":"interface","url":"#navigatorlocks"},
-"#obtain-a-lock-manager": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"obtain a lock manager","type":"dfn","url":"#obtain-a-lock-manager"},
-"#process-the-lock-request-queue": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"process the lock request queue","type":"dfn","url":"#process-the-lock-request-queue"},
-"#release-the-lock": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"release the lock","type":"dfn","url":"#release-the-lock"},
-"#request-a-lock": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"request a lock","type":"dfn","url":"#request-a-lock"},
-"#resource-name": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"resource name","type":"dfn","url":"#resource-name"},
-"#signal-to-abort-the-request": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"signal to abort the request","type":"dfn","url":"#signal-to-abort-the-request"},
-"#snapshot-the-lock-state": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"snapshot the lock state","type":"dfn","url":"#snapshot-the-lock-state"},
-"#terminate-remaining-locks-and-requests": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"terminate remaining locks and requests","type":"dfn","url":"#terminate-remaining-locks-and-requests"},
-"https://dom.spec.whatwg.org/#abortsignal": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"AbortSignal","type":"interface","url":"https://dom.spec.whatwg.org/#abortsignal"},
-"https://dom.spec.whatwg.org/#abortsignal-abort-reason": {"export":true,"for_":["AbortSignal"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"abort reason","type":"dfn","url":"https://dom.spec.whatwg.org/#abortsignal-abort-reason"},
-"https://dom.spec.whatwg.org/#abortsignal-aborted": {"export":true,"for_":["AbortSignal"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"aborted","type":"dfn","url":"https://dom.spec.whatwg.org/#abortsignal-aborted"},
-"https://dom.spec.whatwg.org/#abortsignal-add": {"export":true,"for_":["AbortSignal"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"add","type":"dfn","url":"https://dom.spec.whatwg.org/#abortsignal-add"},
-"https://dom.spec.whatwg.org/#abortsignal-remove": {"export":true,"for_":["AbortSignal"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"remove","type":"dfn","url":"https://dom.spec.whatwg.org/#abortsignal-remove"},
-"https://dom.spec.whatwg.org/#concept-document": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"document","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-document"},
-"https://html.spec.whatwg.org/multipage/document-lifecycle.html#unloading-document-cleanup-steps": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"unloading document cleanup steps","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-lifecycle.html#unloading-document-cleanup-steps"},
-"https://html.spec.whatwg.org/multipage/document-sequences.html#browsing-context": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"browsing context","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#browsing-context"},
-"https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active": {"export":true,"for_":["Document"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"fully active","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active"},
-"https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps": {"export":true,"for_":["parallel queue"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"enqueue steps","type":"dfn","url":"https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps"},
-"https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"starting a new parallel queue","type":"dfn","url":"https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue"},
-"https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"associated document","type":"dfn","url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window"},
-"https://html.spec.whatwg.org/multipage/system-state.html#navigator": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"Navigator","type":"interface","url":"https://html.spec.whatwg.org/multipage/system-state.html#navigator"},
-"https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id": {"export":true,"for_":["environment"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"id","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id"},
-"https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"relevant global object","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global"},
-"https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"environment settings object","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object"},
-"https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism": {"export":true,"for_":[],"level":"","normative":true,"shortname":"html","spec":"html","status":"anchor-block","text":"agent cluster","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism"},
-"https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"relevant settings object","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object"},
-"https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop": {"export":true,"for_":["environment settings object"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"responsible event loop","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop"},
-"https://html.spec.whatwg.org/multipage/webappapis.html#task-source": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"task source","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#task-source"},
-"https://html.spec.whatwg.org/multipage/workers.html#workernavigator": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"WorkerNavigator","type":"interface","url":"https://html.spec.whatwg.org/multipage/workers.html#workernavigator"},
-"https://infra.spec.whatwg.org/#assert": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"assert","type":"dfn","url":"https://infra.spec.whatwg.org/#assert"},
-"https://infra.spec.whatwg.org/#list": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"list","type":"dfn","url":"https://infra.spec.whatwg.org/#list"},
-"https://infra.spec.whatwg.org/#list-append": {"export":true,"for_":["list"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"append","type":"dfn","url":"https://infra.spec.whatwg.org/#list-append"},
-"https://infra.spec.whatwg.org/#list-is-empty": {"export":true,"for_":["list","stack","queue","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"is empty","type":"dfn","url":"https://infra.spec.whatwg.org/#list-is-empty"},
-"https://infra.spec.whatwg.org/#list-item": {"export":true,"for_":["list","stack","queue","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"item","type":"dfn","url":"https://infra.spec.whatwg.org/#list-item"},
-"https://infra.spec.whatwg.org/#list-iterate": {"export":true,"for_":["list","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"for each","type":"dfn","url":"https://infra.spec.whatwg.org/#list-iterate"},
-"https://infra.spec.whatwg.org/#list-prepend": {"export":true,"for_":["list"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"prepend","type":"dfn","url":"https://infra.spec.whatwg.org/#list-prepend"},
-"https://infra.spec.whatwg.org/#list-remove": {"export":true,"for_":["list","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"remove","type":"dfn","url":"https://infra.spec.whatwg.org/#list-remove"},
-"https://infra.spec.whatwg.org/#map-exists": {"export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"exist","type":"dfn","url":"https://infra.spec.whatwg.org/#map-exists"},
-"https://infra.spec.whatwg.org/#map-getting-the-values": {"export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"values","type":"dfn","url":"https://infra.spec.whatwg.org/#map-getting-the-values"},
-"https://infra.spec.whatwg.org/#map-iterate": {"export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"for each","type":"dfn","url":"https://infra.spec.whatwg.org/#map-iterate"},
-"https://infra.spec.whatwg.org/#map-set": {"export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"set","type":"dfn","url":"https://infra.spec.whatwg.org/#map-set"},
-"https://infra.spec.whatwg.org/#ordered-map": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"map","type":"dfn","url":"https://infra.spec.whatwg.org/#ordered-map"},
-"https://infra.spec.whatwg.org/#ordered-set": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"set","type":"dfn","url":"https://infra.spec.whatwg.org/#ordered-set"},
-"https://infra.spec.whatwg.org/#queue": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"queue","type":"dfn","url":"https://infra.spec.whatwg.org/#queue"},
-"https://infra.spec.whatwg.org/#queue-enqueue": {"export":true,"for_":["queue"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"enqueue","type":"dfn","url":"https://infra.spec.whatwg.org/#queue-enqueue"},
-"https://infra.spec.whatwg.org/#set-append": {"export":true,"for_":["set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"append","type":"dfn","url":"https://infra.spec.whatwg.org/#set-append"},
-"https://infra.spec.whatwg.org/#string": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"javascript string","type":"dfn","url":"https://infra.spec.whatwg.org/#string"},
-"https://infra.spec.whatwg.org/#struct": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"struct","type":"dfn","url":"https://infra.spec.whatwg.org/#struct"},
-"https://infra.spec.whatwg.org/#struct-item": {"export":true,"for_":["struct","tuple"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"item","type":"dfn","url":"https://infra.spec.whatwg.org/#struct-item"},
-"https://infra.spec.whatwg.org/#user-agent": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"user agent","type":"dfn","url":"https://infra.spec.whatwg.org/#user-agent"},
-"https://storage.spec.whatwg.org/#obtain-a-local-storage-bottle-map": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"storage","spec":"storage","status":"current","text":"obtain a local storage bottle map","type":"dfn","url":"https://storage.spec.whatwg.org/#obtain-a-local-storage-bottle-map"},
-"https://storage.spec.whatwg.org/#storage-bottle": {"export":true,"for_":[],"level":"","normative":true,"shortname":"storage","spec":"storage","status":"anchor-block","text":"storage bottle","type":"dfn","url":"https://storage.spec.whatwg.org/#storage-bottle"},
-"https://storage.spec.whatwg.org/#storage-bucket": {"export":true,"for_":[],"level":"","normative":true,"shortname":"storage","spec":"storage","status":"anchor-block","text":"storage bucket","type":"dfn","url":"https://storage.spec.whatwg.org/#storage-bucket"},
-"https://tc39.github.io/ecma262/#agent": {"export":true,"for_":[],"level":"","normative":true,"shortname":"ecma262","spec":"ecma262","status":"anchor-block","text":"agent","type":"dfn","url":"https://tc39.github.io/ecma262/#agent"},
-"https://w3c.github.io/ServiceWorker/#client": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"service-workers","spec":"service-workers","status":"current","text":"Client","type":"interface","url":"https://w3c.github.io/ServiceWorker/#client"},
-"https://w3c.github.io/ServiceWorker/#dom-client-id": {"export":true,"for_":["Client"],"level":"1","normative":true,"shortname":"service-workers","spec":"service-workers","status":"current","text":"id","type":"attribute","url":"https://w3c.github.io/ServiceWorker/#dom-client-id"},
-"https://webidl.spec.whatwg.org/#Exposed": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
-"https://webidl.spec.whatwg.org/#SecureContext": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SecureContext","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#SecureContext"},
-"https://webidl.spec.whatwg.org/#a-new-promise": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"a new promise","type":"dfn","url":"https://webidl.spec.whatwg.org/#a-new-promise"},
-"https://webidl.spec.whatwg.org/#a-promise-rejected-with": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"a promise rejected with","type":"dfn","url":"https://webidl.spec.whatwg.org/#a-promise-rejected-with"},
-"https://webidl.spec.whatwg.org/#aborterror": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"AbortError","type":"exception","url":"https://webidl.spec.whatwg.org/#aborterror"},
-"https://webidl.spec.whatwg.org/#dfn-callback-function": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"callback function","type":"dfn","url":"https://webidl.spec.whatwg.org/#dfn-callback-function"},
-"https://webidl.spec.whatwg.org/#idl-DOMException": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMException","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMException"},
-"https://webidl.spec.whatwg.org/#idl-DOMString": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
-"https://webidl.spec.whatwg.org/#idl-any": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"any","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-any"},
-"https://webidl.spec.whatwg.org/#idl-boolean": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"boolean","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-boolean"},
-"https://webidl.spec.whatwg.org/#idl-promise": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Promise","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-promise"},
-"https://webidl.spec.whatwg.org/#idl-sequence": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"sequence","type":"dfn","url":"https://webidl.spec.whatwg.org/#idl-sequence"},
-"https://webidl.spec.whatwg.org/#invalidstateerror": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"InvalidStateError","type":"exception","url":"https://webidl.spec.whatwg.org/#invalidstateerror"},
-"https://webidl.spec.whatwg.org/#invoke-a-callback-function": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"invoke","type":"dfn","url":"https://webidl.spec.whatwg.org/#invoke-a-callback-function"},
-"https://webidl.spec.whatwg.org/#notsupportederror": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"NotSupportedError","type":"exception","url":"https://webidl.spec.whatwg.org/#notsupportederror"},
-"https://webidl.spec.whatwg.org/#reject": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"reject","type":"dfn","url":"https://webidl.spec.whatwg.org/#reject"},
-"https://webidl.spec.whatwg.org/#resolve": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"resolve","type":"dfn","url":"https://webidl.spec.whatwg.org/#resolve"},
-"https://webidl.spec.whatwg.org/#securityerror": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SecurityError","type":"exception","url":"https://webidl.spec.whatwg.org/#securityerror"},
-"https://webidl.spec.whatwg.org/#this": {"export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"this","type":"dfn","url":"https://webidl.spec.whatwg.org/#this"},
+"#abort-the-request": {"displayText":"abort the request","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"abort the request","type":"dfn","url":"#abort-the-request"},
+"#callbackdef-lockgrantedcallback": {"displayText":"LockGrantedCallback","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockGrantedCallback","type":"callback","url":"#callbackdef-lockgrantedcallback"},
+"#dictdef-lockinfo": {"displayText":"LockInfo","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockInfo","type":"dictionary","url":"#dictdef-lockinfo"},
+"#dictdef-lockmanagersnapshot": {"displayText":"LockManagerSnapshot","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockManagerSnapshot","type":"dictionary","url":"#dictdef-lockmanagersnapshot"},
+"#dictdef-lockoptions": {"displayText":"LockOptions","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockOptions","type":"dictionary","url":"#dictdef-lockoptions"},
+"#dom-lock-mode": {"displayText":"mode","export":true,"for_":["Lock"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"attribute","url":"#dom-lock-mode"},
+"#dom-lock-name": {"displayText":"name","export":true,"for_":["Lock"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"name","type":"attribute","url":"#dom-lock-name"},
+"#dom-lockmanager-query": {"displayText":"query()","export":true,"for_":["LockManager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"query()","type":"method","url":"#dom-lockmanager-query"},
+"#dom-lockmanager-request": {"displayText":"request(name, callback)","export":true,"for_":["LockManager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"request(name, callback)","type":"method","url":"#dom-lockmanager-request"},
+"#dom-lockmanager-request-name-options-callback": {"displayText":"request(name, options, callback)","export":true,"for_":["LockManager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"request(name, options, callback)","type":"method","url":"#dom-lockmanager-request-name-options-callback"},
+"#dom-lockmode-exclusive": {"displayText":"\"exclusive\"","export":true,"for_":["LockMode"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"\"exclusive\"","type":"enum-value","url":"#dom-lockmode-exclusive"},
+"#dom-lockmode-shared": {"displayText":"\"shared\"","export":true,"for_":["LockMode"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"\"shared\"","type":"enum-value","url":"#dom-lockmode-shared"},
+"#dom-lockoptions-ifavailable": {"displayText":"ifAvailable","export":true,"for_":["LockOptions"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"ifAvailable","type":"dict-member","url":"#dom-lockoptions-ifavailable"},
+"#dom-lockoptions-mode": {"displayText":"mode","export":true,"for_":["LockOptions"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"dict-member","url":"#dom-lockoptions-mode"},
+"#dom-lockoptions-signal": {"displayText":"signal","export":true,"for_":["LockOptions"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"signal","type":"dict-member","url":"#dom-lockoptions-signal"},
+"#dom-lockoptions-steal": {"displayText":"steal","export":true,"for_":["LockOptions"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"steal","type":"dict-member","url":"#dom-lockoptions-steal"},
+"#dom-navigatorlocks-locks": {"displayText":"locks","export":true,"for_":["NavigatorLocks"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"locks","type":"attribute","url":"#dom-navigatorlocks-locks"},
+"#enumdef-lockmode": {"displayText":"LockMode","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockMode","type":"enum","url":"#enumdef-lockmode"},
+"#get-the-lock-request-queue": {"displayText":"get the lock request queue","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"get the lock request queue","type":"dfn","url":"#get-the-lock-request-queue"},
+"#grantable": {"displayText":"grantable","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"grantable","type":"dfn","url":"#grantable"},
+"#lock": {"displayText":"Lock","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"Lock","type":"interface","url":"#lock"},
+"#lock-concept": {"displayText":"lock-concept","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock-concept","type":"dfn","url":"#lock-concept"},
+"#lock-concept-agent": {"displayText":"agent","export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"agent","type":"dfn","url":"#lock-concept-agent"},
+"#lock-concept-clientid": {"displayText":"clientid","export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"clientid","type":"dfn","url":"#lock-concept-clientid"},
+"#lock-concept-manager": {"displayText":"manager","export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"manager","type":"dfn","url":"#lock-concept-manager"},
+"#lock-concept-mode": {"displayText":"mode","export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"dfn","url":"#lock-concept-mode"},
+"#lock-concept-name": {"displayText":"name","export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"name","type":"dfn","url":"#lock-concept-name"},
+"#lock-concept-released-promise": {"displayText":"released promise","export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"released promise","type":"dfn","url":"#lock-concept-released-promise"},
+"#lock-concept-waiting-promise": {"displayText":"waiting promise","export":true,"for_":["lock-concept"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"waiting promise","type":"dfn","url":"#lock-concept-waiting-promise"},
+"#lock-manager": {"displayText":"lock manager","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock manager","type":"dfn","url":"#lock-manager"},
+"#lock-manager-held-lock-set": {"displayText":"held lock set","export":true,"for_":["lock manager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"held lock set","type":"dfn","url":"#lock-manager-held-lock-set"},
+"#lock-manager-lock-request-queue-map": {"displayText":"lock request queue map","export":true,"for_":["lock manager"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock request queue map","type":"dfn","url":"#lock-manager-lock-request-queue-map"},
+"#lock-request": {"displayText":"lock request","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock request","type":"dfn","url":"#lock-request"},
+"#lock-request-agent": {"displayText":"agent","export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"agent","type":"dfn","url":"#lock-request-agent"},
+"#lock-request-callback": {"displayText":"callback","export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"callback","type":"dfn","url":"#lock-request-callback"},
+"#lock-request-clientid": {"displayText":"clientid","export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"clientid","type":"dfn","url":"#lock-request-clientid"},
+"#lock-request-manager": {"displayText":"manager","export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"manager","type":"dfn","url":"#lock-request-manager"},
+"#lock-request-mode": {"displayText":"mode","export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"dfn","url":"#lock-request-mode"},
+"#lock-request-name": {"displayText":"name","export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"name","type":"dfn","url":"#lock-request-name"},
+"#lock-request-promise": {"displayText":"promise","export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"promise","type":"dfn","url":"#lock-request-promise"},
+"#lock-request-queue": {"displayText":"lock request queue","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock request queue","type":"dfn","url":"#lock-request-queue"},
+"#lock-request-signal": {"displayText":"signal","export":true,"for_":["lock request"],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"signal","type":"dfn","url":"#lock-request-signal"},
+"#lock-task-queue": {"displayText":"lock task queue","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"lock task queue","type":"dfn","url":"#lock-task-queue"},
+"#lockmanager": {"displayText":"LockManager","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"LockManager","type":"interface","url":"#lockmanager"},
+"#mode": {"displayText":"mode","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"mode","type":"dfn","url":"#mode"},
+"#navigatorlocks": {"displayText":"NavigatorLocks","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"NavigatorLocks","type":"interface","url":"#navigatorlocks"},
+"#obtain-a-lock-manager": {"displayText":"obtain a lock manager","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"obtain a lock manager","type":"dfn","url":"#obtain-a-lock-manager"},
+"#process-the-lock-request-queue": {"displayText":"process the lock request queue","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"process the lock request queue","type":"dfn","url":"#process-the-lock-request-queue"},
+"#release-the-lock": {"displayText":"release the lock","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"release the lock","type":"dfn","url":"#release-the-lock"},
+"#request-a-lock": {"displayText":"request a lock","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"request a lock","type":"dfn","url":"#request-a-lock"},
+"#resource-name": {"displayText":"resource name","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"resource name","type":"dfn","url":"#resource-name"},
+"#signal-to-abort-the-request": {"displayText":"signal to abort the request","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"signal to abort the request","type":"dfn","url":"#signal-to-abort-the-request"},
+"#snapshot-the-lock-state": {"displayText":"snapshot the lock state","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"snapshot the lock state","type":"dfn","url":"#snapshot-the-lock-state"},
+"#terminate-remaining-locks-and-requests": {"displayText":"terminate remaining locks and requests","export":true,"for_":[],"level":"1","normative":true,"shortname":"web-locks","spec":"web-locks-1","status":"local","text":"terminate remaining locks and requests","type":"dfn","url":"#terminate-remaining-locks-and-requests"},
+"https://dom.spec.whatwg.org/#abortsignal": {"displayText":"AbortSignal","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"AbortSignal","type":"interface","url":"https://dom.spec.whatwg.org/#abortsignal"},
+"https://dom.spec.whatwg.org/#abortsignal-abort-reason": {"displayText":"abort reason","export":true,"for_":["AbortSignal"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"abort reason","type":"dfn","url":"https://dom.spec.whatwg.org/#abortsignal-abort-reason"},
+"https://dom.spec.whatwg.org/#abortsignal-aborted": {"displayText":"aborted","export":true,"for_":["AbortSignal"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"aborted","type":"dfn","url":"https://dom.spec.whatwg.org/#abortsignal-aborted"},
+"https://dom.spec.whatwg.org/#abortsignal-add": {"displayText":"add","export":true,"for_":["AbortSignal"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"add","type":"dfn","url":"https://dom.spec.whatwg.org/#abortsignal-add"},
+"https://dom.spec.whatwg.org/#abortsignal-remove": {"displayText":"remove","export":true,"for_":["AbortSignal"],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"remove","type":"dfn","url":"https://dom.spec.whatwg.org/#abortsignal-remove"},
+"https://dom.spec.whatwg.org/#concept-document": {"displayText":"document","export":true,"for_":[],"level":"1","normative":true,"shortname":"dom","spec":"dom","status":"current","text":"document","type":"dfn","url":"https://dom.spec.whatwg.org/#concept-document"},
+"https://html.spec.whatwg.org/multipage/document-lifecycle.html#unloading-document-cleanup-steps": {"displayText":"unloading document cleanup steps","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"unloading document cleanup steps","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-lifecycle.html#unloading-document-cleanup-steps"},
+"https://html.spec.whatwg.org/multipage/document-sequences.html#browsing-context": {"displayText":"browsing context","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"browsing context","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#browsing-context"},
+"https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active": {"displayText":"fully active","export":true,"for_":["Document"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"fully active","type":"dfn","url":"https://html.spec.whatwg.org/multipage/document-sequences.html#fully-active"},
+"https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps": {"displayText":"enqueue steps","export":true,"for_":["parallel queue"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"enqueue steps","type":"dfn","url":"https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps"},
+"https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue": {"displayText":"starting a new parallel queue","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"starting a new parallel queue","type":"dfn","url":"https://html.spec.whatwg.org/multipage/infrastructure.html#starting-a-new-parallel-queue"},
+"https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window": {"displayText":"associated Document","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"associated document","type":"dfn","url":"https://html.spec.whatwg.org/multipage/nav-history-apis.html#concept-document-window"},
+"https://html.spec.whatwg.org/multipage/system-state.html#navigator": {"displayText":"Navigator","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"Navigator","type":"interface","url":"https://html.spec.whatwg.org/multipage/system-state.html#navigator"},
+"https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id": {"displayText":"id","export":true,"for_":["environment"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"id","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-environment-id"},
+"https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global": {"displayText":"relevant global object","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"relevant global object","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global"},
+"https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object": {"displayText":"environment settings object","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"environment settings object","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object"},
+"https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism": {"displayText":"agent cluster","export":true,"for_":[],"level":"","normative":true,"shortname":"html","spec":"html","status":"anchor-block","text":"agent cluster","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism"},
+"https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object": {"displayText":"relevant settings object","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"relevant settings object","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object"},
+"https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop": {"displayText":"responsible event loop","export":true,"for_":["environment settings object"],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"responsible event loop","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop"},
+"https://html.spec.whatwg.org/multipage/webappapis.html#task-source": {"displayText":"task source","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"task source","type":"dfn","url":"https://html.spec.whatwg.org/multipage/webappapis.html#task-source"},
+"https://html.spec.whatwg.org/multipage/workers.html#workernavigator": {"displayText":"WorkerNavigator","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"WorkerNavigator","type":"interface","url":"https://html.spec.whatwg.org/multipage/workers.html#workernavigator"},
+"https://infra.spec.whatwg.org/#assert": {"displayText":"assert","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"assert","type":"dfn","url":"https://infra.spec.whatwg.org/#assert"},
+"https://infra.spec.whatwg.org/#list": {"displayText":"list","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"list","type":"dfn","url":"https://infra.spec.whatwg.org/#list"},
+"https://infra.spec.whatwg.org/#list-append": {"displayText":"append","export":true,"for_":["list"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"append","type":"dfn","url":"https://infra.spec.whatwg.org/#list-append"},
+"https://infra.spec.whatwg.org/#list-is-empty": {"displayText":"is empty","export":true,"for_":["list","stack","queue","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"is empty","type":"dfn","url":"https://infra.spec.whatwg.org/#list-is-empty"},
+"https://infra.spec.whatwg.org/#list-item": {"displayText":"item","export":true,"for_":["list","stack","queue","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"item","type":"dfn","url":"https://infra.spec.whatwg.org/#list-item"},
+"https://infra.spec.whatwg.org/#list-iterate": {"displayText":"for each","export":true,"for_":["list","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"for each","type":"dfn","url":"https://infra.spec.whatwg.org/#list-iterate"},
+"https://infra.spec.whatwg.org/#list-prepend": {"displayText":"prepend","export":true,"for_":["list"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"prepend","type":"dfn","url":"https://infra.spec.whatwg.org/#list-prepend"},
+"https://infra.spec.whatwg.org/#list-remove": {"displayText":"remove","export":true,"for_":["list","set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"remove","type":"dfn","url":"https://infra.spec.whatwg.org/#list-remove"},
+"https://infra.spec.whatwg.org/#map-exists": {"displayText":"exist","export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"exist","type":"dfn","url":"https://infra.spec.whatwg.org/#map-exists"},
+"https://infra.spec.whatwg.org/#map-getting-the-values": {"displayText":"values","export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"values","type":"dfn","url":"https://infra.spec.whatwg.org/#map-getting-the-values"},
+"https://infra.spec.whatwg.org/#map-iterate": {"displayText":"for each","export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"for each","type":"dfn","url":"https://infra.spec.whatwg.org/#map-iterate"},
+"https://infra.spec.whatwg.org/#map-set": {"displayText":"set","export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"set","type":"dfn","url":"https://infra.spec.whatwg.org/#map-set"},
+"https://infra.spec.whatwg.org/#ordered-map": {"displayText":"map","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"map","type":"dfn","url":"https://infra.spec.whatwg.org/#ordered-map"},
+"https://infra.spec.whatwg.org/#ordered-set": {"displayText":"set","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"set","type":"dfn","url":"https://infra.spec.whatwg.org/#ordered-set"},
+"https://infra.spec.whatwg.org/#queue": {"displayText":"queue","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"queue","type":"dfn","url":"https://infra.spec.whatwg.org/#queue"},
+"https://infra.spec.whatwg.org/#queue-enqueue": {"displayText":"enqueue","export":true,"for_":["queue"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"enqueue","type":"dfn","url":"https://infra.spec.whatwg.org/#queue-enqueue"},
+"https://infra.spec.whatwg.org/#set-append": {"displayText":"append","export":true,"for_":["set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"append","type":"dfn","url":"https://infra.spec.whatwg.org/#set-append"},
+"https://infra.spec.whatwg.org/#string": {"displayText":"JavaScript string","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"javascript string","type":"dfn","url":"https://infra.spec.whatwg.org/#string"},
+"https://infra.spec.whatwg.org/#struct": {"displayText":"struct","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"struct","type":"dfn","url":"https://infra.spec.whatwg.org/#struct"},
+"https://infra.spec.whatwg.org/#struct-item": {"displayText":"item","export":true,"for_":["struct","tuple"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"item","type":"dfn","url":"https://infra.spec.whatwg.org/#struct-item"},
+"https://infra.spec.whatwg.org/#user-agent": {"displayText":"user agent","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"user agent","type":"dfn","url":"https://infra.spec.whatwg.org/#user-agent"},
+"https://storage.spec.whatwg.org/#obtain-a-local-storage-bottle-map": {"displayText":"obtain a local storage bottle map","export":true,"for_":[],"level":"1","normative":true,"shortname":"storage","spec":"storage","status":"current","text":"obtain a local storage bottle map","type":"dfn","url":"https://storage.spec.whatwg.org/#obtain-a-local-storage-bottle-map"},
+"https://storage.spec.whatwg.org/#storage-bottle": {"displayText":"storage bottle","export":true,"for_":[],"level":"","normative":true,"shortname":"storage","spec":"storage","status":"anchor-block","text":"storage bottle","type":"dfn","url":"https://storage.spec.whatwg.org/#storage-bottle"},
+"https://storage.spec.whatwg.org/#storage-bucket": {"displayText":"storage bucket","export":true,"for_":[],"level":"","normative":true,"shortname":"storage","spec":"storage","status":"anchor-block","text":"storage bucket","type":"dfn","url":"https://storage.spec.whatwg.org/#storage-bucket"},
+"https://tc39.github.io/ecma262/#agent": {"displayText":"agent","export":true,"for_":[],"level":"","normative":true,"shortname":"ecma262","spec":"ecma262","status":"anchor-block","text":"agent","type":"dfn","url":"https://tc39.github.io/ecma262/#agent"},
+"https://w3c.github.io/ServiceWorker/#client": {"displayText":"Client","export":true,"for_":[],"level":"1","normative":true,"shortname":"service-workers","spec":"service-workers","status":"current","text":"Client","type":"interface","url":"https://w3c.github.io/ServiceWorker/#client"},
+"https://w3c.github.io/ServiceWorker/#dom-client-id": {"displayText":"id","export":true,"for_":["Client"],"level":"1","normative":true,"shortname":"service-workers","spec":"service-workers","status":"current","text":"id","type":"attribute","url":"https://w3c.github.io/ServiceWorker/#dom-client-id"},
+"https://webidl.spec.whatwg.org/#Exposed": {"displayText":"Exposed","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
+"https://webidl.spec.whatwg.org/#SecureContext": {"displayText":"SecureContext","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SecureContext","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#SecureContext"},
+"https://webidl.spec.whatwg.org/#a-new-promise": {"displayText":"a new promise","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"a new promise","type":"dfn","url":"https://webidl.spec.whatwg.org/#a-new-promise"},
+"https://webidl.spec.whatwg.org/#a-promise-rejected-with": {"displayText":"a promise rejected with","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"a promise rejected with","type":"dfn","url":"https://webidl.spec.whatwg.org/#a-promise-rejected-with"},
+"https://webidl.spec.whatwg.org/#aborterror": {"displayText":"AbortError","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"AbortError","type":"exception","url":"https://webidl.spec.whatwg.org/#aborterror"},
+"https://webidl.spec.whatwg.org/#dfn-callback-function": {"displayText":"callback function","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"callback function","type":"dfn","url":"https://webidl.spec.whatwg.org/#dfn-callback-function"},
+"https://webidl.spec.whatwg.org/#idl-DOMException": {"displayText":"DOMException","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMException","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMException"},
+"https://webidl.spec.whatwg.org/#idl-DOMString": {"displayText":"DOMString","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"DOMString","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-DOMString"},
+"https://webidl.spec.whatwg.org/#idl-any": {"displayText":"any","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"any","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-any"},
+"https://webidl.spec.whatwg.org/#idl-boolean": {"displayText":"boolean","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"boolean","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-boolean"},
+"https://webidl.spec.whatwg.org/#idl-promise": {"displayText":"Promise","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Promise","type":"interface","url":"https://webidl.spec.whatwg.org/#idl-promise"},
+"https://webidl.spec.whatwg.org/#idl-sequence": {"displayText":"sequence","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"sequence","type":"dfn","url":"https://webidl.spec.whatwg.org/#idl-sequence"},
+"https://webidl.spec.whatwg.org/#invalidstateerror": {"displayText":"InvalidStateError","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"InvalidStateError","type":"exception","url":"https://webidl.spec.whatwg.org/#invalidstateerror"},
+"https://webidl.spec.whatwg.org/#invoke-a-callback-function": {"displayText":"invoke","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"invoke","type":"dfn","url":"https://webidl.spec.whatwg.org/#invoke-a-callback-function"},
+"https://webidl.spec.whatwg.org/#notsupportederror": {"displayText":"NotSupportedError","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"NotSupportedError","type":"exception","url":"https://webidl.spec.whatwg.org/#notsupportederror"},
+"https://webidl.spec.whatwg.org/#reject": {"displayText":"reject","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"reject","type":"dfn","url":"https://webidl.spec.whatwg.org/#reject"},
+"https://webidl.spec.whatwg.org/#resolve": {"displayText":"resolve","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"resolve","type":"dfn","url":"https://webidl.spec.whatwg.org/#resolve"},
+"https://webidl.spec.whatwg.org/#securityerror": {"displayText":"SecurityError","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SecurityError","type":"exception","url":"https://webidl.spec.whatwg.org/#securityerror"},
+"https://webidl.spec.whatwg.org/#this": {"displayText":"this","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"this","type":"dfn","url":"https://webidl.spec.whatwg.org/#this"},
 };
 
 function mkRefHint(link, ref) {
     const linkText = link.textContent;
     let dfnTextElements = '';
-    if (ref.text != linkText) {
+    if (ref.displayText.toLowerCase() != linkText.toLowerCase()) {
+        // Give the original term if it's being displayed in a different way.
+        // But allow casing differences, they're insignificant.
         dfnTextElements =
             mk.li({},
                 mk.b({}, "Term: "),
-                mk.span({}, ref.text)
+                mk.span({}, ref.displayText)
             );
     }
     const forList = ref.for_;
@@ -3250,7 +3272,12 @@ function hideRefHint(refHint) {
 function showRefHint(link) {
     if(link.classList.contains("dfn-link")) return;
     const url = link.getAttribute("href");
-    const ref = refsData[url];
+    const refHintKey = link.getAttribute("data-refhint-key");
+    let key = url;
+    if(refHintKey) {
+        key = refHintKey + "_" + url;
+    }
+    const ref = refsData[key];
     if(!ref) return;
 
     hideAllRefHints(); // Only display one at this time.
