@@ -5,10 +5,10 @@
   <title>Web Locks API</title>
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version b25686b9f, updated Fri Mar 14 14:15:20 2025 -0700" name="generator">
+  <meta content="Bikeshed version 3f621ba99, updated Mon Jul 28 15:38:36 2025 -0700" name="generator">
   <link href="https://www.w3.org/TR/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="293e38bf57a1f70825a7622188e89588b51ce063" name="revision">
+  <meta content="2433441f09e607a9865b4ba88e0081f0ac854636" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -984,9 +984,13 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
 </style>
  <body class="h-entry">
   <div class="head">
-   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
+   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/">
+    <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
+</a>
+</p>
    <h1 class="p-name no-ref" id="title">Web Locks API</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2025-05-02">2 May 2025</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>,
+    <time class="dt-updated" datetime="2025-09-24">24 September 2025</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1008,7 +1012,8 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
     </div>
    </details>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply.
+</p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
@@ -1017,14 +1022,30 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   </div>
   <h2 class="no-num no-toc no-ref heading settled" id="sotd"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
-   <p> This document was published by the <a href="https://www.w3.org/groups/wg/webapps">Web Applications Working Group</a> as an Editor’s Draft. </p>
-   <p> Publication as an Editor’s Draft does not imply endorsement by <abbr title="World Wide Web Consortium">W3C</abbr> and its Members. </p>
-   <p> This is a draft document
+   <p>
+	This document was published by the <a href="https://www.w3.org/groups/wg/webapps">Web Applications Working Group</a> as an Editor’s Draft.
+
+</p>
+   <p>
+	Publication as an Editor’s Draft does not imply endorsement by <abbr title="World Wide Web Consortium">W3C</abbr> and its Members.
+
+</p>
+   <p>
+	This is a draft document
 	and may be updated, replaced
 	or obsoleted by other documents at any time.
-	It is inappropriate to cite this document as other than work in progress. </p>
-   <p>This document was produced by a group operating under the <a href="https://www.w3.org/policies/patent-policy/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/groups/wg/webapps/ipr" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/policies/patent-policy/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/policies/patent-policy/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. </p>
-   <p>This document is governed by the <a href="https://www.w3.org/policies/process/20231103/" id="w3c_process_revision">03 November 2023 W3C Process Document</a>. </p>
+	It is inappropriate to cite this document as other than a work in progress.
+
+
+
+</p>
+   <p>This document was produced by a group operating under the <a href="https://www.w3.org/policies/patent-policy/"><abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>. <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/groups/wg/webapps/ipr" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent that the individual believes contains <a href="https://www.w3.org/policies/patent-policy/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/policies/patent-policy/#sec-Disclosure">section 6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+
+</p>
+   <p>This document is governed by the
+	<a href="https://www.w3.org/policies/process/20250818/" id="w3c_process_revision">18 August 2025 W3C Process Document</a>.
+
+</p>
   </div>
   <div data-fill-with="at-risk"></div>
   <nav data-fill-with="table-of-contents" id="toc">
@@ -1140,7 +1161,9 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
      <p>The lock is automatically released when the task completes.</p>
    </ol>
    <div class="example" id="example-basic-usage">
-    <a class="self-link" href="#example-basic-usage"></a> 
+    <a class="self-link" href="#example-basic-usage"></a>
+
+
     <p>A basic example of the API usage is as follows:</p>
 <pre class="language-js highlight">navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'my_resource'</c-><c- p>,</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
    <c- c1>// The lock has been acquired.</c->
@@ -1178,8 +1201,10 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
    <p>A resource name has no external meaning beyond the scheduling algorithm, but is global
 across <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent②">agents</a> sharing a <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#storage-bucket" id="ref-for-storage-bucket①">storage bucket</a>. Web applications are free to use any resource naming scheme.</p>
    <div class="example" id="example-indexeddb-transactions">
-    <a class="self-link" href="#example-indexeddb-transactions"></a> To mimic transaction locking over named stores within a named
-database in <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed Database API 2.0">[IndexedDB-2]</a>, a script might compose resource names as: 
+    <a class="self-link" href="#example-indexeddb-transactions"></a>
+To mimic transaction locking over named stores within a named
+database in <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed Database API 2.0">[IndexedDB-2]</a>, a script might compose resource names as:
+
 <pre class="language-js highlight">encodeURIComponent<c- p>(</c->db_name<c- p>)</c-> <c- o>+</c-> <c- t>'/'</c-> <c- o>+</c-> encodeURIComponent<c- p>(</c->store_name<c- p>)</c->
 </pre>
    </div>
@@ -1188,7 +1213,10 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed
    <p>A <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="lock-manager">lock manager</dfn> encapsulates the state of <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept①">locks</a> and <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request①">lock requests</a>. Each <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#storage-bucket" id="ref-for-storage-bucket②">storage bucket</a> includes one <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager">lock manager</a> through an associated <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#storage-bottle" id="ref-for-storage-bottle">storage bottle</a> for the Web Locks API.</p>
    <p class="note" role="note"><span class="marker">NOTE:</span> Pages and workers (<a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="ref-for-agent③">agents</a>) sharing a <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#storage-bucket" id="ref-for-storage-bucket③">storage bucket</a> opened in the same user agent share a <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager①">lock manager</a> even if they are in unrelated <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/document-sequences.html#browsing-context" id="ref-for-browsing-context">browsing contexts</a>.</p>
    <div class="algorithm" data-algorithm="obtain a lock manager">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="obtain-a-lock-manager">obtain a lock manager</dfn>, given an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> <var>environment</var>, run these steps: 
+    
+To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="obtain-a-lock-manager">obtain a lock manager</dfn>, given an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> <var>environment</var>, run these steps:
+
+
     <ol>
      <li data-md>
       <p>Let <var>map</var> be the result of <a data-link-type="dfn" href="https://storage.spec.whatwg.org/#obtain-a-local-storage-bottle-map" id="ref-for-obtain-a-local-storage-bottle-map">obtaining a local storage bottle map</a> given <var>environment</var> and "<code>web-locks</code>".</p>
@@ -1215,7 +1243,10 @@ database in <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑦">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-waiting-promise">waiting promise</dfn> which is a Promise.</p>
     <p>A <a data-link-type="dfn" href="#lock-concept" id="ref-for-lock-concept⑧">lock</a> has a <dfn class="dfn-paneled" data-dfn-for="lock-concept" data-dfn-type="dfn" data-noexport id="lock-concept-released-promise">released promise</dfn> which is a Promise.</p>
     <div class="note" role="note">
-      There are two promises associated with a lock’s lifecycle: 
+     
+There are two promises associated with a lock’s lifecycle:
+
+
      <ul>
       <li data-md>
        <p>A promise provided either implicitly or explicitly by the callback when the lock is granted which determines how long the lock is held. When this promise settles, the lock is released. This is known as the lock’s <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise">waiting promise</a>.</p>
@@ -1436,12 +1467,15 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
       <p>If a web application detects an unrecoverable state — for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding — then it can "steal" a lock using this option.</p>
     </dl>
    </div>
-   <div class="advisement"> Use the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal①">steal</a></code> option with caution.
+   <div class="advisement">
+    Use the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal①">steal</a></code> option with caution.
     When used, code previously holding a lock will now be executing without guarantees that it is the sole context with access to the resource.
     Similarly, the code that used the option has no guarantees that other contexts will not still be executing as if they have access to the abstract resource.
-    It is intended for use by web applications that need to attempt recovery in the face of application and/or user-agent defects, where behavior is already unpredictable. </div>
+    It is intended for use by web applications that need to attempt recovery in the face of application and/or user-agent defects, where behavior is already unpredictable.
+</div>
    <div class="algorithm" data-algorithm="LockManager request method">
-    <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export id="dom-lockmanager-request"><code>request(<var>name</var>, <var>callback</var>)</code></dfn> and <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export id="dom-lockmanager-request-name-options-callback"><code>request(<var>name</var>, <var>options</var>, <var>callback</var>)</code></dfn> method steps are:</p>
+    <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export id="dom-lockmanager-request"><code>request(<var>name</var>, <var>callback</var>)</code></dfn> and
+<dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export id="dom-lockmanager-request-name-options-callback"><code>request(<var>name</var>, <var>options</var>, <var>callback</var>)</code></dfn> method steps are:</p>
     <ol>
      <li data-md>
       <p>If <var>options</var> was not passed, then let <var>options</var> be a new <code class="idl"><a data-link-type="idl" href="#dictdef-lockoptions" id="ref-for-dictdef-lockoptions①">LockOptions</a></code> dictionary with default members.</p>
@@ -1496,7 +1530,9 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
 </pre>
     <p>The <code>clientId</code> field corresponds to a unique context (frame or worker), and is the same value returned by <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#client" id="ref-for-client">Client</a></code>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/ServiceWorker/#dom-client-id" id="ref-for-dom-client-id">id</a></code> attribute.</p>
    </div>
-   <div class="advisement"> This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑧">lock manager</a> state at some point in time. By the time the data is returned to script, the actual lock state might have changed. </div>
+   <div class="advisement">
+    This data is just a <em>snapshot</em> of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑧">lock manager</a> state at some point in time. By the time the data is returned to script, the actual lock state might have changed.
+</div>
    <div class="algorithm" data-algorithm="query()" data-algorithm-for="LockManager">
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager" data-dfn-type="method" data-export id="dom-lockmanager-query"><code>query()</code></dfn> method steps are:</p>
     <ol>
@@ -1527,7 +1563,10 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    <h2 class="heading settled" data-level="4" id="algorithms"><span class="secno">4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
    <h3 class="heading settled" data-level="4.1" id="algorithm-request-lock"><span class="secno">4.1. </span><span class="content">Request a lock</span><a class="self-link" href="#algorithm-request-lock"></a></h3>
    <div class="algorithm" data-algorithm="request a lock">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="request-a-lock">request a lock</dfn> with <var>promise</var>, <var>agent</var>, <var>clientId</var>, <var>manager</var>, <var>callback</var>, <var>name</var>, <var>mode</var>, <var>ifAvailable</var>, <var>steal</var>, and <var>signal</var>: 
+    
+To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="request-a-lock">request a lock</dfn> with <var>promise</var>, <var>agent</var>, <var>clientId</var>, <var>manager</var>, <var>callback</var>, <var>name</var>, <var>mode</var>, <var>ifAvailable</var>, <var>steal</var>, and <var>signal</var>:
+
+
     <ol>
      <li data-md>
       <p>Let <var>request</var> be a new <a data-link-type="dfn" href="#lock-request" id="ref-for-lock-request⑦">lock request</a> (<var>agent</var>, <var>clientId</var>, <var>manager</var>, <var>name</var>, <var>mode</var>, <var>callback</var>, <var>promise</var>, <var>signal</var>).</p>
@@ -1584,7 +1623,10 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    </div>
    <h3 class="heading settled" data-level="4.2" id="algorithm-release-lock"><span class="secno">4.2. </span><span class="content">Release a lock</span><a class="self-link" href="#algorithm-release-lock"></a></h3>
    <div class="algorithm" data-algorithm="release the lock">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="release-the-lock">release the lock</dfn> <var>lock</var>: 
+    
+To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="release-the-lock">release the lock</dfn> <var>lock</var>:
+
+
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert">Assert</a>: these steps are running on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue④">lock task queue</a>.</p>
@@ -1604,7 +1646,10 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    </div>
    <h3 class="heading settled" data-level="4.3" id="algorithm-abort-request"><span class="secno">4.3. </span><span class="content">Abort a request</span><a class="self-link" href="#algorithm-abort-request"></a></h3>
    <div class="algorithm" data-algorithm="abort the request">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="abort-the-request">abort the request</dfn> <var>request</var>: 
+    
+To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="abort-the-request">abort the request</dfn> <var>request</var>:
+
+
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert①">Assert</a>: these steps are running on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue⑤">lock task queue</a>.</p>
@@ -1623,7 +1668,10 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     </ol>
    </div>
    <div class="algorithm" data-algorithm="signal to abort the request">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="signal-to-abort-the-request">signal to abort the request</dfn> <var>request</var> with <var>signal</var>: 
+    
+To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="signal-to-abort-the-request">signal to abort the request</dfn> <var>request</var> with <var>signal</var>:
+
+
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑥">Enqueue the steps</a> to <a data-link-type="dfn" href="#abort-the-request" id="ref-for-abort-the-request①">abort the request</a> <var>request</var> to the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue⑥">lock task queue</a>.</p>
@@ -1633,7 +1681,10 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    </div>
    <h3 class="heading settled" data-level="4.4" id="algorithm-process-request"><span class="secno">4.4. </span><span class="content">Process a lock request queue for a given resource name</span><a class="self-link" href="#algorithm-process-request"></a></h3>
    <div class="algorithm" data-algorithm="process the lock request queue">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-the-lock-request-queue">process the lock request queue</dfn> <var>queue</var>: 
+    
+To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="process-the-lock-request-queue">process the lock request queue</dfn> <var>queue</var>:
+
+
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert②">Assert</a>: these steps are running on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue⑦">lock task queue</a>.</p>
@@ -1698,7 +1749,10 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    </div>
    <h3 class="heading settled" data-level="4.5" id="algorithm-snapshot-state"><span class="secno">4.5. </span><span class="content">Snapshot the lock state</span><a class="self-link" href="#algorithm-snapshot-state"></a></h3>
    <div class="algorithm" data-algorithm="snapshot the lock state">
-     To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="snapshot-the-lock-state">snapshot the lock state</dfn> for <var>manager</var> with <var>promise</var>: 
+    
+To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="snapshot-the-lock-state">snapshot the lock state</dfn> for <var>manager</var> with <var>promise</var>:
+
+
     <ol>
      <li data-md>
       <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#assert" id="ref-for-assert③">Assert</a>: these steps are running on the <a data-link-type="dfn" href="#lock-task-queue" id="ref-for-lock-task-queue⑨">lock task queue</a>.</p>
@@ -1727,14 +1781,17 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     </ol>
    </div>
    <div class="note" role="note">
-     For any given resource, the snapshot of the pending lock requests
+    
+    For any given resource, the snapshot of the pending lock requests
     will return the requests in the order in which they were made;
     however, no guarantees are made with respect to the relative
     ordering of requests across different resources. For example, if
     pending lock requests A1 and A2 are made against resource A in
     that order, and pending lock requests B1 and B2 are made against
     resource B in that order, then both «A1, A2, B1, B2» and «A1, B1,
-    A2, B2» would be possible orderings for a snapshot’s pending list. 
+    A2, B2» would be possible orderings for a snapshot’s pending list.
+
+
     <p>No ordering guarantees exist for the snapshot of the held lock state.</p>
    </div>
    <h2 class="heading settled" data-level="5" id="usage-considerations"><span class="secno">5. </span><span class="content">Usage Considerations</span><a class="self-link" href="#usage-considerations"></a></h2>
@@ -1742,7 +1799,10 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    <h3 class="heading settled" data-level="5.1" id="deadlocks"><span class="secno">5.1. </span><span class="content">Deadlocks</span><a class="self-link" href="#deadlocks"></a></h3>
    <p><a href="https://en.wikipedia.org/wiki/Deadlock">Deadlocks</a> are a concept in concurrent computing, and deadlocks scoped to a particular <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑨">lock manager</a> can be introduced by this API.</p>
    <div class="example" id="example-deadlocks">
-    <a class="self-link" href="#example-deadlocks"></a> An example of how deadlocks can be encountered through the use of this API is as follows. 
+    <a class="self-link" href="#example-deadlocks"></a>
+An example of how deadlocks can be encountered through the use of this API is as follows.
+
+
     <p>Script 1:</p>
 <pre class="language-js highlight">navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'A'</c-><c- p>,</c-> <c- k>async</c-> a <c- p>=></c-> <c- p>{</c->
   <c- k>await</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'B'</c-><c- p>,</c-> <c- k>async</c-> b <c- p>=></c-> <c- p>{</c->
@@ -1761,7 +1821,9 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
    </div>
    <p>Preventing deadlocks requires care. One approach is to always acquire multiple locks in a strict order.</p>
    <div class="example" id="example-request-multiple-locks">
-    <a class="self-link" href="#example-request-multiple-locks"></a> 
+    <a class="self-link" href="#example-request-multiple-locks"></a>
+
+
     <p>A helper function such as the following could be used to request multiple locks in a consistent order.</p>
 <pre class="language-js highlight"><c- k>async</c-> <c- a>function</c-> requestMultiple<c- p>(</c->resources<c- p>,</c-> callback<c- p>)</c-> <c- p>{</c->
   <c- a>const</c-> sortedResources <c- o>=</c-> <c- p>[...</c->resources<c- p>];</c->
@@ -1855,7 +1917,8 @@ Ryan Fioravanti,
 and
 Victor Costan
 for helping craft this proposal.</p>
-   <p>Special thanks to Tab Atkins, Jr. for creating and maintaining <a href="https://github.com/tabatkins/bikeshed">Bikeshed</a>, the specification
+   <p>Special thanks to Tab Atkins, Jr. for creating and maintaining
+<a href="https://github.com/tabatkins/bikeshed">Bikeshed</a>, the specification
 authoring tool used to create this document, and for his general
 authoring advice.</p>
   </main>
@@ -1869,21 +1932,31 @@ authoring advice.</p>
     in the normative parts of this document
     are to be interpreted as described in RFC 2119.
     However, for readability,
-    these words do not appear in all uppercase letters in this specification. </p>
+    these words do not appear in all uppercase letters in this specification.
+
+    </p>
    <p>All of the text of this specification is normative
-    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a> </p>
+    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a>
+
+    </p>
    <p>Examples in this specification are introduced with the words “for example”
     or are set apart from the normative text
     with <code>class="example"</code>,
-    like this: </p>
+    like this:
+
+    </p>
    <div class="example" id="w3c-example">
-    <a class="self-link" href="#w3c-example"></a> 
-    <p>This is an example of an informative example. </p>
+    <a class="self-link" href="#w3c-example"></a>
+        
+    <p>This is an example of an informative example.
+    </p>
    </div>
    <p>Informative notes begin with the word “Note”
     and are set apart from the normative text
     with <code>class="note"</code>,
-    like this: </p>
+    like this:
+
+    </p>
    <p class="note" role="note">Note, this is an informative note.</p>
    <section>
     <h3 class="no-ref no-num heading settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
@@ -1892,14 +1965,17 @@ authoring advice.</p>
     or "return false and abort these steps")
     are to be interpreted with the meaning of the key word
     ("must", "should", "may", etc)
-    used in introducing the algorithm. </p>
+    used in introducing the algorithm.
+
+    </p>
     <p>Conformance requirements phrased as algorithms or specific steps
     can be implemented in any manner,
     so long as the end result is equivalent.
     In particular, the algorithms defined in this specification
     are intended to be easy to understand
     and are not intended to be performant.
-    Implementers are encouraged to optimize. </p>
+    Implementers are encouraged to optimize.
+</p>
    </section>
   </div>
   <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
