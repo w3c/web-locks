@@ -484,7 +484,7 @@ try {
 
     : |options| . steal
 
-    ::  If the {{LockOptions/steal}} option is `true`, then any held locks for the resource will be released (and the [=lock-concept/released promise=] of such locks will resolve with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
+    ::  If the {{LockOptions/steal}} option is `true`, then any held locks for the resource will be released (and the [=lock-concept/released promise=] of such locks will reject with {{AbortError}}), and the request will be granted, preempting any queued requests for it.
 
         If a web application detects an unrecoverable state &mdash; for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding &mdash; then it can "steal" a lock using this option.
 

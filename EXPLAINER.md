@@ -217,7 +217,7 @@ This data is just a _snapshot_ of the lock manager state at some point in time. 
 
 ### `steal` option to `request()`
 
-If a web application detects an unrecoverable state - for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding - it can "steal" a lock by passing this option to `request()`. When specified, any held locks for the resource will be released (and the _released promise_ of such locks will resolve with `AbortError`), and the request will be granted, preempting any queued requests for it. This should only be used in exceptional cases; any code running in tabs that assume they hold the lock will continue to execute, violating any guarantee of exclusive access to the resource.
+If a web application detects an unrecoverable state - for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding - it can "steal" a lock by passing this option to `request()`. When specified, any held locks for the resource will be released (and the _released promise_ of such locks will reject with `AbortError`), and the request will be granted, preempting any queued requests for it. This should only be used in exceptional cases; any code running in tabs that assume they hold the lock will continue to execute, violating any guarantee of exclusive access to the resource.
 
 Discussion about this controversial option is at: https://github.com/w3c/web-locks/issues/23
 
