@@ -5,10 +5,10 @@
   <title>Web Locks API</title>
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version 3f621ba99, updated Mon Jul 28 15:38:36 2025 -0700" name="generator">
+  <meta content="Bikeshed version e0b165ae4, updated Mon Nov 2 15:16:49 2026 -0800" name="generator">
   <link href="https://www.w3.org/TR/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="a61a77307d2a0b0928320a2ff9c897b7658a9e2e" name="revision">
+  <meta content="f8d59f6cb05f574229d3e2272d54a0e9c9b8afc8" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -327,7 +327,7 @@ pre .property::before, pre .property::after {
 </style>
 <style>/* Boilerplate: style-counters */
 body {
-    counter-reset: example figure issue;
+    counter-reset: example figure issue table;
 }
 .issue {
     counter-increment: issue;
@@ -344,7 +344,7 @@ body {
 }
 .invalid.example:not(.no-marker)::before,
 .illegal.example:not(.no-marker)::before {
-    content: "Invalid Example" counter(example);
+    content: "Invalid Example " counter(example);
 }
 
 figcaption {
@@ -352,6 +352,13 @@ figcaption {
 }
 figcaption:not(.no-marker)::before {
     content: "Figure " counter(figure) " ";
+}
+
+figure.table figcaption {
+    counter-increment: table;
+}
+figure.table figcaption:not(.no-marker)::before {
+    content: "Table " counter(table) " ";
 }
 </style>
 <style>/* Boilerplate: style-dfn-panel */
@@ -377,14 +384,17 @@ figcaption:not(.no-marker)::before {
     height: auto;
     max-height: 500px;
     overflow: auto;
+    margin: 0;
     padding: 0.5em 0.75em;
     font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
     background: var(--dfnpanel-bg);
     color: var(--dfnpanel-text);
     border: outset 0.2em;
     white-space: normal; /* in case it's moved into a pre */
+    inset: auto;
+    position-area: bottom span-right;
+    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
 }
-.dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
 .dfn-panel > b { display: block; }
 .dfn-panel a { color: var(--dfnpanel-text); }
@@ -404,6 +414,9 @@ figcaption:not(.no-marker)::before {
 .dfn-panel.activated {
     display: inline-block;
     position: fixed;
+    position-area: none;
+    top: auto;
+    right: auto;
     left: 8px;
     bottom: 2em;
     margin: 0 auto;
@@ -460,7 +473,8 @@ figcaption:not(.no-marker)::before {
     opacity: 1;
 }
 
-.dfn-paneled[role="button"] { cursor: help; }
+.dfn-paneled { cursor: help; }
+.dfn-paneled > .dfn-panelbutton { all: unset; }
 
 .highlighted {
     animation: target-fade 3s;
@@ -576,11 +590,10 @@ a[href].issue-return {
 	vertical-align: top;
 }
 .mdn-anno > .feature {
-	margin-top: 20px;
+	margin-top: 6px;
 }
 .mdn-anno > .feature:not(:first-of-type) {
 	border-top: 1px solid #999;
-	margin-top: 6px;
 	padding-top: 2px;
 }
 .mdn-anno > .feature > .less-than-two-engines-text {
@@ -938,6 +951,30 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     c-[vm] { color: #cb4b16 } /* Name.Variable.Magic */
     c-[il] { color: #657b83 } /* Literal.Number.Integer.Long */
 }
+
+@media print {
+    /* Darken colors for print that would otherwise print too faintly */
+    c-[c]  { color: #555555 } /* Comment */
+    c-[d]  { color: #555555 } /* Comment.Multiline */
+    c-[cp] { color: #555555 } /* Comment.Preproc */
+    c-[c1] { color: #555555 } /* Comment.Single */
+    c-[cs] { color: #555555 } /* Comment.Special */
+    c-[o]  { color: #222222 } /* Operator */
+    c-[p]  { color: #222222 } /* Punctuation */
+    c-[ow] { color: #222222 } /* Operator.Word */
+    c-[s]  { color: #664400 } /* Literal.String */
+    c-[t]  { color: #664400 } /* Literal.String.Single */
+    c-[u]  { color: #664400 } /* Literal.String.Double */
+    c-[sb] { color: #664400 } /* Literal.String.Backtick */
+    c-[sc] { color: #664400 } /* Literal.String.Char */
+    c-[sd] { color: #664400 } /* Literal.String.Doc */
+    c-[se] { color: #664400 } /* Literal.String.Escape */
+    c-[sh] { color: #664400 } /* Literal.String.Heredoc */
+    c-[si] { color: #664400 } /* Literal.String.Interpol */
+    c-[sx] { color: #664400 } /* Literal.String.Other */
+    c-[sr] { color: #664400 } /* Literal.String.Regex */
+    c-[ss] { color: #664400 } /* Literal.String.Symbol */
+}
 </style>
 <style>/* Boilerplate: style-var-click-highlighting */
 /*
@@ -988,9 +1025,9 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
     <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
 </a>
 </p>
-   <h1 class="p-name no-ref" id="title">Web Locks API</h1>
+   <h1 class="no-ref p-name" id="title">Web Locks API</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>,
-    <time class="dt-updated" datetime="2025-09-24">24 September 2025</time></p>
+    <time class="dt-updated" datetime="2026-11-09">9 November 2026</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1005,22 +1042,22 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
       <dd><a href="https://github.com/w3c/web-locks/issues/">GitHub</a>
       <dd><a href="#issues-index">Inline In Spec</a>
       <dt class="editor">Editor:
-      <dd class="editor p-author h-card vcard" data-editor-id="107856"><a class="p-name fn u-email email" href="mailto:krosylight@mozilla.com">Kagami Rosylight</a> (<a class="p-org org" href="https://www.mozilla.org/">Mozilla</a>)
+      <dd class="editor h-card p-author vcard" data-editor-id="107856"><a class="email fn p-name u-email" href="mailto:krosylight@mozilla.com">Kagami Rosylight</a> (<a class="org p-org" href="https://www.mozilla.org/">Mozilla</a>)
       <dt class="editor">Former Editor:
-      <dd class="editor p-author h-card vcard" data-editor-id="61302"><a class="p-name fn u-email email" href="mailto:jsbell@google.com">Joshua Bell</a> (<a class="p-org org" href="https://google.com">Google Inc.</a>)
+      <dd class="editor h-card p-author vcard" data-editor-id="61302"><a class="email fn p-name u-email" href="mailto:jsbell@google.com">Joshua Bell</a> (<a class="org p-org" href="https://google.com">Google Inc.</a>)
      </dl>
     </div>
    </details>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2025 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply.
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © 2026 <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/" rel="license" title="W3C Software and Document License">permissive document license</a> rules apply.
 </p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
-   <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
+   <h2 class="heading no-num no-ref no-toc settled" id="abstract"><span class="content">Abstract</span></h2>
    <p>This document defines a web platform API that allows script to asynchronously acquire a lock over a resource, hold it while work is performed, then release it. While held, no other script in the origin can acquire a lock over the same resource. This allows contexts (windows, workers) within a web application to coordinate the usage of resources.</p>
   </div>
-  <h2 class="no-num no-toc no-ref heading settled" id="sotd"><span class="content">Status of this document</span></h2>
+  <h2 class="heading no-num no-ref no-toc settled" id="sotd"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
    <p>
 	This document was published by the <a href="https://www.w3.org/groups/wg/webapps">Web Applications Working Group</a> as an Editor’s Draft.
@@ -1049,8 +1086,8 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
   </div>
   <div data-fill-with="at-risk"></div>
   <nav data-fill-with="table-of-contents" id="toc">
-   <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
-   <ol class="toc" role="directory">
+   <h2 class="no-num no-ref no-toc" id="contents">Table of Contents</h2>
+   <ol class="toc">
     <li>
      <a href="#introduction"><span class="secno">1</span> <span class="content">Introduction</span></a>
      <ol class="toc">
@@ -1118,7 +1155,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
      <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
      <ol class="toc">
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
-      <li><a href="#informative"><span class="secno"></span> <span class="content">Informative References</span></a>
+      <li><a href="#informative"><span class="secno"></span> <span class="content">Non-Normative References</span></a>
      </ol>
     <li><a href="#idl-index"><span class="secno"></span> <span class="content">IDL Index</span></a>
     <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
@@ -1165,7 +1202,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
 
 
     <p>A basic example of the API usage is as follows:</p>
-<pre class="language-js highlight">navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'my_resource'</c-><c- p>,</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
+<pre class="highlight language-js">navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'my_resource'</c-><c- p>,</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
    <c- c1>// The lock has been acquired.</c->
    <c- k>await</c-> do_something<c- p>();</c->
    <c- k>await</c-> do_something_else<c- p>();</c->
@@ -1173,7 +1210,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
 <c- p>});</c->
 </pre>
     <p>Within an asynchronous function, the request itself can be awaited:</p>
-<pre class="language-js highlight"><c- c1>// Before requesting the lock.</c->
+<pre class="highlight language-js"><c- c1>// Before requesting the lock.</c->
 <c- k>await</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'my_resource'</c-><c- p>,</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
    <c- c1>// The lock has been acquired.</c->
    <c- k>await</c-> do_something<c- p>();</c->
@@ -1185,7 +1222,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
    <h3 class="heading settled" data-level="1.2" id="motivations"><span class="secno">1.2. </span><span class="content">Motivating Use Cases</span><a class="self-link" href="#motivations"></a></h3>
    <p>A web-based document editor stores state in memory for fast access and persists changes (as a series of records) to a storage API such as the <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed Database API 2.0">Indexed Database API</a> for resiliency and offline use, and to a server for cross-device use. When the same document is opened for editing in two tabs the work must be coordinated across tabs, such as allowing only one tab to make changes to or synchronize the document at a time. This requires the tabs to coordinate on which will be actively making changes (and synchronizing the in-memory state with the storage API), knowing when the active tab goes away (navigated, closed, crashed) so that another tab can become active.</p>
    <p>In a data synchronization service, a "primary tab" is designated. This tab is the only one that should be performing some operations (e.g. network sync, cleaning up queued data, etc). It holds a lock and never releases it. Other tabs can attempt to acquire the lock, and such attempts will be queued. If the "primary tab" crashes or is closed then one of the other tabs will get the lock and become the new primary.</p>
-   <p>The <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed Database API 2.0">Indexed Database API</a> defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. Exposing this concept as a primitive allows any Web Platform activity to be scheduled based on resource availability, for example allowing transactions to be composed for other storage types (such as Caches <a data-link-type="biblio" href="#biblio-service-workers" title="Service Workers">[Service-Workers]</a>), across storage types, even across non-storage APIs (e.g. network fetches).</p>
+   <p>The <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed Database API 2.0">Indexed Database API</a> defines a transaction model allowing shared read and exclusive write access across multiple named storage partitions within an origin. Exposing this concept as a primitive allows any Web Platform activity to be scheduled based on resource availability, for example allowing transactions to be composed for other storage types (such as Caches <a data-link-type="biblio" href="#biblio-service-workers" title="Service Workers Nightly">[Service-Workers]</a>), across storage types, even across non-storage APIs (e.g. network fetches).</p>
    <h2 class="heading settled" data-level="2" id="concepts"><span class="secno">2. </span><span class="content">Concepts</span><a class="self-link" href="#concepts"></a></h2>
    <p>For the purposes of this specification:</p>
    <ul>
@@ -1205,7 +1242,7 @@ across <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#agent" id="
 To mimic transaction locking over named stores within a named
 database in <a data-link-type="biblio" href="#biblio-indexeddb-2" title="Indexed Database API 2.0">[IndexedDB-2]</a>, a script might compose resource names as:
 
-<pre class="language-js highlight">encodeURIComponent<c- p>(</c->db_name<c- p>)</c-> <c- o>+</c-> <c- t>'/'</c-> <c- o>+</c-> encodeURIComponent<c- p>(</c->store_name<c- p>)</c->
+<pre class="highlight language-js">encodeURIComponent<c- p>(</c->db_name<c- p>)</c-> <c- o>+</c-> <c- t>'/'</c-> <c- o>+</c-> encodeURIComponent<c- p>(</c->store_name<c- p>)</c->
 </pre>
    </div>
    <p>Resource names starting with U+002D HYPHEN-MINUS (-) are reserved; requesting these will cause an exception.</p>
@@ -1253,7 +1290,7 @@ There are two promises associated with a lock’s lifecycle:
       <li data-md>
        <p>A promise returned by <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager">LockManager</a></code>’s <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request">request()</a></code> method that settles when the lock is released or the request is aborted. This is known as the lock’s <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise">released promise</a>.</p>
      </ul>
-<pre class="language-js highlight"><c- a>const</c-> p1 <c- o>=</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> lock <c- p>=></c-> <c- p>{</c->
+<pre class="highlight language-js"><c- a>const</c-> p1 <c- o>=</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> lock <c- p>=></c-> <c- p>{</c->
   <c- a>const</c-> p2 <c- o>=</c-> <c- ow>new</c-> Promise<c- p>(</c->r <c- p>=></c-> <c- p>{</c->
     <c- c1>// Logic to use lock and resolve promise...</c->
   <c- p>});</c->
@@ -1262,7 +1299,7 @@ There are two promises associated with a lock’s lifecycle:
 </pre>
      <p>In the above example, <code>p1</code> is the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise①">released promise</a> and <code>p2</code> is the <a data-link-type="dfn" href="#lock-concept-waiting-promise" id="ref-for-lock-concept-waiting-promise①">waiting promise</a>.
 Note that in most code the callback would be implemented as an <code>async</code> function and the returned promise would be implicit, as in the following example:</p>
-<pre class="language-js highlight"><c- a>const</c-> p1 <c- o>=</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
+<pre class="highlight language-js"><c- a>const</c-> p1 <c- o>=</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
   <c- c1>// Logic to use lock...</c->
 <c- p>});</c->
 </pre>
@@ -1342,7 +1379,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
    </div>
    <h2 class="heading settled" data-level="3" id="api"><span class="secno">3. </span><span class="content">API</span><a class="self-link" href="#api"></a></h2>
    <h3 class="heading settled" data-level="3.1" id="navigator-mixins"><span class="secno">3.1. </span><span class="content">Navigator Mixins</span><a class="self-link" href="#navigator-mixins"></a></h3>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext"><c- g>SecureContext</c-></a>]
+<pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext"><c- g>SecureContext</c-></a>]
 <c- b>interface</c-> <c- b>mixin</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="navigatorlocks"><code><c- g>NavigatorLocks</c-></code></dfn> {
   <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#lockmanager" id="ref-for-lockmanager①"><c- n>LockManager</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="LockManager" href="#dom-navigatorlocks-locks" id="ref-for-dom-navigatorlocks-locks"><c- g>locks</c-></a>;
 };
@@ -1352,7 +1389,7 @@ Further note that if the callback is not <code>async</code> and returns a non-pr
    <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object①">environment settings object</a> has a <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager②">LockManager</a></code> object.</p>
    <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="NavigatorLocks" data-dfn-type="attribute" data-export id="dom-navigatorlocks-locks"><code>locks</code></dfn> getter’s steps are to return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this" id="ref-for-this">this</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object">relevant settings object</a>’s <code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager③">LockManager</a></code> object.</p>
    <h3 class="heading settled" data-level="3.2" id="api-lock-manager"><span class="secno">3.2. </span><span class="content"><code class="idl"><a data-link-type="idl" href="#lockmanager" id="ref-for-lockmanager④">LockManager</a></code> class</span><a class="self-link" href="#api-lock-manager"></a></h3>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext①"><c- g>SecureContext</c-></a>, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
+<pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext①"><c- g>SecureContext</c-></a>, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="lockmanager"><code><c- g>LockManager</c-></code></dfn> {
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-any" id="ref-for-idl-any"><c- b>any</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-lockmanager-request" id="ref-for-dom-lockmanager-request①"><c- g>request</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager/request(name, callback)" data-dfn-type="argument" data-export id="dom-lockmanager-request-name-callback-name"><code><c- g>name</c-></code></dfn>,
                        <a data-link-type="idl-name" href="#callbackdef-lockgrantedcallback" id="ref-for-callbackdef-lockgrantedcallback"><c- n>LockGrantedCallback</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="LockManager/request(name, callback)" data-dfn-type="argument" data-export id="dom-lockmanager-request-name-callback-callback"><code><c- g>callback</c-></code></dfn>);
@@ -1399,7 +1436,7 @@ the state of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-m
     </dl>
     <p>The returned <var>promise</var> resolves (or rejects) with the result of the callback after the lock is released, or rejects if the request is aborted.</p>
     <p>Example:</p>
-<pre class="language-js highlight"><c- k>try</c-> <c- p>{</c->
+<pre class="highlight language-js"><c- k>try</c-> <c- p>{</c->
   <c- a>const</c-> result <c- o>=</c-> <c- k>await</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
     <c- c1>// The lock is held here.</c->
     <c- k>await</c-> do_something<c- p>();</c->
@@ -1422,7 +1459,7 @@ Multiple tabs/workers can hold a lock for the same resource in "<code class="idl
       <p>The most common use for this is to allow multiple readers to access a resource simultaneously but prevent changes.
 Once reader locks are released a single exclusive writer can acquire the lock to make changes, followed by another exclusive writer or more shared readers.</p>
     </dl>
-<pre class="language-js highlight"><c- k>await</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> <c- p>{</c->mode<c- o>:</c-> <c- t>'shared'</c-><c- p>},</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
+<pre class="highlight language-js"><c- k>await</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> <c- p>{</c->mode<c- o>:</c-> <c- t>'shared'</c-><c- p>},</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
   <c- c1>// Lock is held here. Other contexts might also hold the lock in shared mode,</c->
   <c- c1>// but no other contexts will hold the lock in exclusive mode.</c->
 <c- p>});</c->
@@ -1432,7 +1469,7 @@ Once reader locks are released a single exclusive writer can acquire the lock to
      <dd data-md>
       <p>If the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-ifavailable" id="ref-for-dom-lockoptions-ifavailable">ifAvailable</a></code> option is <code>true</code>, then the lock is only granted if it can be without additional waiting. Note that this is still not <em>synchronous</em>; in many user agents this will require cross-process communication to see if the lock can be granted. If the lock cannot be granted, the callback is invoked with <code>null</code>. (Since this is expected, the request is <em>not</em> rejected.)</p>
     </dl>
-<pre class="language-js highlight"><c- k>await</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> <c- p>{</c->ifAvailable<c- o>:</c-> <c- kc>true</c-><c- p>},</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
+<pre class="highlight language-js"><c- k>await</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'resource'</c-><c- p>,</c-> <c- p>{</c->ifAvailable<c- o>:</c-> <c- kc>true</c-><c- p>},</c-> <c- k>async</c-> lock <c- p>=></c-> <c- p>{</c->
   <c- k>if</c-> <c- p>(</c-><c- o>!</c->lock<c- p>)</c-> <c- p>{</c->
     <c- c1>// Didn't get it. Maybe take appropriate action.</c->
     <c- k>return</c-><c- p>;</c->
@@ -1445,7 +1482,7 @@ Once reader locks are released a single exclusive writer can acquire the lock to
      <dd data-md>
       <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-signal" id="ref-for-dom-lockoptions-signal">signal</a></code> option can be set to an <code class="idl"><a data-link-type="idl" href="https://dom.spec.whatwg.org/#abortsignal" id="ref-for-abortsignal①">AbortSignal</a></code>. This allows aborting a lock request, for example if the request is not granted in a timely manner:</p>
     </dl>
-<pre class="language-js highlight"><c- a>const</c-> controller <c- o>=</c-> <c- ow>new</c-> AbortController<c- p>();</c->
+<pre class="highlight language-js"><c- a>const</c-> controller <c- o>=</c-> <c- ow>new</c-> AbortController<c- p>();</c->
 setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c-> <c- mf>200</c-><c- p>);</c-> <c- c1>// Wait at most 200ms.</c->
 
 <c- k>try</c-> <c- p>{</c->
@@ -1463,7 +1500,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     <dl>
      <dt data-md><var>options</var> . steal
      <dd data-md>
-      <p>If the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal">steal</a></code> option is <code>true</code>, then any held locks for the resource will be released (and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise④">released promise</a> of such locks will resolve with <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror①">AbortError</a></code>), and the request will be granted, preempting any queued requests for it.</p>
+      <p>If the <code class="idl"><a data-link-type="idl" href="#dom-lockoptions-steal" id="ref-for-dom-lockoptions-steal">steal</a></code> option is <code>true</code>, then any held locks for the resource will be released (and the <a data-link-type="dfn" href="#lock-concept-released-promise" id="ref-for-lock-concept-released-promise④">released promise</a> of such locks will reject with <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror①">AbortError</a></code>), and the request will be granted, preempting any queued requests for it.</p>
       <p>If a web application detects an unrecoverable state — for example, some coordination point like a Service Worker determines that a tab holding a lock is no longer responding — then it can "steal" a lock using this option.</p>
     </dl>
    </div>
@@ -1511,7 +1548,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
       <p>The <code class="idl"><a data-link-type="idl" href="#dom-lockmanager-query" id="ref-for-dom-lockmanager-query③">query()</a></code> method can be used to produce a snapshot of the <a data-link-type="dfn" href="#lock-manager" id="ref-for-lock-manager⑦">lock manager</a> state for an origin, which allows a web application to introspect its usage of locks, for logging or debugging purposes.</p>
       <p>The returned promise resolves to <var>state</var>, a plain-old-data structure (i.e. JSON-like data) with this form:</p>
     </dl>
-<pre class="language-js highlight"><c- p>{</c->
+<pre class="highlight language-js"><c- p>{</c->
   held<c- o>:</c-> <c- p>[</c->
     <c- p>{</c-> name<c- o>:</c-> <c- u>"resource1"</c-><c- p>,</c-> mode<c- o>:</c-> <c- u>"exclusive"</c-><c- p>,</c->
       clientId<c- o>:</c-> <c- u>"8b1e730c-7405-47db-9265-6ee7c73ac153"</c-> <c- p>},</c->
@@ -1551,7 +1588,7 @@ setTimeout<c- p>(()</c-> <c- p>=></c-> controller<c- p>.</c->abort<c- p>(),</c->
     </ol>
    </div>
    <h3 class="heading settled" data-level="3.3" id="api-lock"><span class="secno">3.3. </span><span class="content"><code class="idl"><a data-link-type="idl" href="#lock" id="ref-for-lock②">Lock</a></code> class</span><a class="self-link" href="#api-lock"></a></h3>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext②"><c- g>SecureContext</c-></a>, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
+<pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext" id="ref-for-SecureContext②"><c- g>SecureContext</c-></a>, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=(<c- n>Window</c->,<c- n>Worker</c->)]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="lock"><code><c- g>Lock</c-></code></dfn> {
   <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString④"><c- b>DOMString</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="DOMString" href="#dom-lock-name" id="ref-for-dom-lock-name"><c- g>name</c-></a>;
   <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#enumdef-lockmode" id="ref-for-enumdef-lockmode②"><c- n>LockMode</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="LockMode" href="#dom-lock-mode" id="ref-for-dom-lock-mode"><c- g>mode</c-></a>;
@@ -1804,14 +1841,14 @@ An example of how deadlocks can be encountered through the use of this API is as
 
 
     <p>Script 1:</p>
-<pre class="language-js highlight">navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'A'</c-><c- p>,</c-> <c- k>async</c-> a <c- p>=></c-> <c- p>{</c->
+<pre class="highlight language-js">navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'A'</c-><c- p>,</c-> <c- k>async</c-> a <c- p>=></c-> <c- p>{</c->
   <c- k>await</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'B'</c-><c- p>,</c-> <c- k>async</c-> b <c- p>=></c-> <c- p>{</c->
     <c- c1>// do stuff with A and B</c->
   <c- p>});</c->
 <c- p>});</c->
 </pre>
     <p>Script 2:</p>
-<pre class="language-js highlight">navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'B'</c-><c- p>,</c-> <c- k>async</c-> b <c- p>=></c-> <c- p>{</c->
+<pre class="highlight language-js">navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'B'</c-><c- p>,</c-> <c- k>async</c-> b <c- p>=></c-> <c- p>{</c->
   <c- k>await</c-> navigator<c- p>.</c->locks<c- p>.</c->request<c- p>(</c-><c- t>'A'</c-><c- p>,</c-> <c- k>async</c-> a <c- p>=></c-> <c- p>{</c->
     <c- c1>// do stuff with A and B</c->
   <c- p>});</c->
@@ -1825,7 +1862,7 @@ An example of how deadlocks can be encountered through the use of this API is as
 
 
     <p>A helper function such as the following could be used to request multiple locks in a consistent order.</p>
-<pre class="language-js highlight"><c- k>async</c-> <c- a>function</c-> requestMultiple<c- p>(</c->resources<c- p>,</c-> callback<c- p>)</c-> <c- p>{</c->
+<pre class="highlight language-js"><c- k>async</c-> <c- a>function</c-> requestMultiple<c- p>(</c->resources<c- p>,</c-> callback<c- p>)</c-> <c- p>{</c->
   <c- a>const</c-> sortedResources <c- o>=</c-> <c- p>[...</c->resources<c- p>];</c->
   sortedResources<c- p>.</c->sort<c- p>();</c-> <c- c1>// Always request in the same order.</c->
 
@@ -1923,8 +1960,8 @@ authoring tool used to create this document, and for his general
 authoring advice.</p>
   </main>
   <div data-fill-with="conformance">
-   <h2 class="no-ref no-num heading settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
-   <h3 class="no-ref no-num heading settled" id="w3c-conventions"><span class="content">Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
+   <h2 class="heading no-num no-ref settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
+   <h3 class="heading no-num no-ref settled" id="w3c-conventions"><span class="content">Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
    <p>Conformance requirements are expressed
     with a combination of descriptive assertions
     and RFC 2119 terminology.
@@ -1959,7 +1996,7 @@ authoring advice.</p>
     </p>
    <p class="note" role="note">Note, this is an informative note.</p>
    <section>
-    <h3 class="no-ref no-num heading settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
+    <h3 class="heading no-num no-ref settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
     <p>Requirements phrased in the imperative as part of algorithms
     (such as "strip any leading space characters"
     or "return false and abort these steps")
@@ -1979,8 +2016,8 @@ authoring advice.</p>
    </section>
   </div>
   <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
-  <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
-  <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
+  <h2 class="heading no-num no-ref settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
+  <h3 class="heading no-num no-ref settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
    <li><a href="#abort-the-request">abort the request</a><span>, in § 4.3</span>
    <li>
@@ -2067,7 +2104,7 @@ authoring advice.</p>
    <li><a href="#lock-concept-waiting-promise">waiting promise</a><span>, in § 2.4</span>
    <li><a href="#web-locks-tasks-source">web locks tasks source</a><span>, in § 2</span>
   </ul>
-  <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
+  <h3 class="heading no-num no-ref settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
@@ -2166,8 +2203,8 @@ authoring advice.</p>
      <li><span class="dfn-paneled" id="4013a022">this</span>
     </ul>
   </ul>
-  <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
-  <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
+  <h2 class="heading no-num no-ref settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
+  <h3 class="heading no-num no-ref settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
@@ -2182,15 +2219,15 @@ authoring advice.</p>
    <dt id="biblio-webidl">[WEBIDL]
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
   </dl>
-  <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
+  <h3 class="heading no-num no-ref settled" id="informative"><span class="content">Non-Normative References</span><a class="self-link" href="#informative"></a></h3>
   <dl>
    <dt id="biblio-indexeddb-2">[IndexedDB-2]
    <dd>Ali Alabbas; Joshua Bell. <a href="https://w3c.github.io/IndexedDB/"><cite>Indexed Database API 2.0</cite></a>. URL: <a href="https://w3c.github.io/IndexedDB/">https://w3c.github.io/IndexedDB/</a>
    <dt id="biblio-service-workers">[Service-Workers]
-   <dd>Yoshisato Yanagisawa; Monica CHINTALA. <a href="https://w3c.github.io/ServiceWorker/"><cite>Service Workers</cite></a>. URL: <a href="https://w3c.github.io/ServiceWorker/">https://w3c.github.io/ServiceWorker/</a>
+   <dd>Monica CHINTALA; Yoshisato Yanagisawa. <a href="https://w3c.github.io/ServiceWorker/"><cite>Service Workers Nightly</cite></a>. URL: <a href="https://w3c.github.io/ServiceWorker/">https://w3c.github.io/ServiceWorker/</a>
   </dl>
-  <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
-<pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>]
+  <h2 class="heading no-num no-ref settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
+<pre class="def highlight idl">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>]
 <c- b>interface</c-> <c- b>mixin</c-> <a href="#navigatorlocks"><code><c- g>NavigatorLocks</c-></code></a> {
   <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#lockmanager"><c- n>LockManager</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="LockManager" href="#dom-navigatorlocks-locks"><c- g>locks</c-></a>;
 };
@@ -2237,135 +2274,31 @@ authoring advice.</p>
 };
 
 </pre>
-  <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
+  <h2 class="heading no-num no-ref settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Refine the integration with <a data-link-type="biblio" href="#biblio-storage" title="Storage Standard">[Storage]</a> here, including how to get the lock manager properly from the given environment. <a class="issue-return" href="#issue-73644ca1" title="Jump to section">↵</a></div>
    <div class="issue"> This is currently only for workers and is vaguely defined, since there is no normative way to run steps on worker termination. <a class="issue-return" href="#issue-9062c3e0" title="Jump to section">↵</a></div>
   </div>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-lock-mode">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-lock-mode" data-mdn="v1|API/Lock/mode|9|96,15.4,69,@!,79,@?,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Lock/mode" title="The mode read-only property of the Lock interface returns the access mode passed to LockManager.request() when the lock was requested. The mode is either &quot;exclusive&quot; (the default) or &quot;shared&quot;.">Lock/mode</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>96+</span></span><span class="safari yes"><span>Safari</span><span>15.4+</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
-     <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-lock-name">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-lock-name" data-mdn="v1|API/Lock/name|9|96,15.4,69,@!,79,@?,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Lock/name" title="The name read-only property of the Lock interface returns the name passed to LockManager.request selected when the lock was requested.">Lock/name</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>96+</span></span><span class="safari yes"><span>Safari</span><span>15.4+</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
-     <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="api-lock">
+  <details class="mdn-anno unpositioned" data-anno-for="api-lock" data-mdn="v1|API/Lock|9|96,15.4,69,@!,79,@?,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Lock" title="The Lock interface of the Web Locks API provides the name and mode of a lock. This may be a newly requested lock that is received in the callback to LockManager.request(), or a record of an active or queued lock returned by LockManager.query().">Lock</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>96+</span></span><span class="safari yes"><span>Safari</span><span>15.4+</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
-     <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="api-lock-manager-query">
+  <details class="mdn-anno unpositioned" data-anno-for="api-lock-manager-query" data-mdn="v1|API/LockManager/query|9|96,15.4,69,@!,79,@?,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/LockManager/query" title="The query() method of the LockManager interface returns a Promise that resolves with an object containing information about held and pending locks.">LockManager/query</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>96+</span></span><span class="safari yes"><span>Safari</span><span>15.4+</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
-     <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="api-lock-manager-request">
+  <details class="mdn-anno unpositioned" data-anno-for="api-lock-manager-request" data-mdn="v1|API/LockManager/request|9|96,15.4,69,@!,79,@?,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/LockManager/request" title="The request() method of the LockManager interface requests a Lock object with parameters specifying its name and characteristics. The requested Lock is passed to a callback, while the function itself returns a Promise that resolves with undefined.">LockManager/request</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>96+</span></span><span class="safari yes"><span>Safari</span><span>15.4+</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
-     <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="api-lock-manager">
+  <details class="mdn-anno unpositioned" data-anno-for="api-lock-manager" data-mdn="v1|API/LockManager|9|96,15.4,69,@!,79,@?,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/LockManager" title="The LockManager interface of the Web Locks API provides methods for requesting a new Lock object and querying for an existing Lock object. To get an instance of LockManager, call navigator.locks.">LockManager</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>96+</span></span><span class="safari yes"><span>Safari</span><span>15.4+</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
-     <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-navigatorlocks-locks">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-navigatorlocks-locks" data-mdn="v1|API/Navigator/locks|9|96,15.4,69,@!,79,@?,-,@!,@!,@!,@!,@!,@!,~API/WorkerNavigator/locks|9|96,15.4,69,@!,79,@?,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/locks" title="The locks read-only property of the Navigator interface returns a LockManager object which provides methods for requesting a new Lock object and querying for an existing Lock object.">Navigator/locks</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>96+</span></span><span class="safari yes"><span>Safari</span><span>15.4+</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
-     <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/WorkerNavigator/locks" title="The locks read-only property of the WorkerNavigator interface returns a LockManager object which provides methods for requesting a new Lock object and querying for an existing Lock object.">WorkerNavigator/locks</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>96+</span></span><span class="safari yes"><span>Safari</span><span>15.4+</span></span><span class="chrome yes"><span>Chrome</span><span>69+</span></span>
-     <hr>
-     <span class="opera no"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="safari_ios no"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="webview_android no"><span>Android WebView</span><span>?</span></span><span class="samsunginternet_android no"><span>Samsung Internet</span><span>?</span></span><span class="opera_android no"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
 <script>/* Boilerplate: script-dom-helper */
 "use strict";
@@ -2705,16 +2638,6 @@ let dfnPanelData = {
 
 document.addEventListener("DOMContentLoaded", ()=>{
     genAllDfnPanels();
-
-    document.body.addEventListener("click", (e) => {
-        // If not handled already, just hide all dfn panels.
-        hideAllDfnPanels();
-    });
-});
-
-window.addEventListener("resize", () => {
-    // Pin any visible dfn panel
-    queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>positionDfnPanel(el));
 });
 
 function genAllDfnPanels() {
@@ -2726,16 +2649,17 @@ function genAllDfnPanels() {
             continue;
         }
         dfn.panelData = panelData;
-        insertDfnPopupAction(dfn);
+        genDfnPanel(dfn, panelData);
     }
 }
 
 function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
-    const dfnPanel = mk.aside({
-        class: "dfn-panel on",
+    const dfnPanel = mk.dialog({
+        class: "dfn-panel",
         id: `infopanel-for-${dfnID}`,
+        popover: "hint",
         "data-for": dfnID,
-        "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
+        "aria-labelledby": `infopaneltitle-for-${dfnID}`,
         },
         mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
             `Info about the '${dfnText}' ${external?"external":""} reference.`),
@@ -2767,106 +2691,34 @@ function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
         event.stopPropagation();
         refocusOnTarget(event);
     });
-    dfnPanel.addEventListener('keydown', (event) => {
-        if(event.keyCode == 27) { // Escape key
-            hideDfnPanel({dfnPanel});
-            event.stopPropagation();
-            event.preventDefault();
+
+    dfnPanel.addEventListener('toggle', event=>{
+        if(event.newState == "closed") {
+            unpinDfnPanel(dfnPanel);
         }
     });
 
     dfnPanel.dfn = dfn;
     dfn.dfnPanel = dfnPanel;
+    dfn.after(dfnPanel);
+    const button = mk.button(
+        {
+            class:"dfn-panelbutton",
+            "popovertarget":dfnPanel.id
+        },
+        ...dfn.childNodes
+    );
+    dfn.append(button);
     return dfnPanel;
-}
-
-
-
-function hideAllDfnPanels() {
-    // Delete the currently-active dfn panel.
-    queryAll(".dfn-panel").forEach(dfnPanel=>hideDfnPanel({dfnPanel}));
-}
-
-function showDfnPanel(dfn) {
-    hideAllDfnPanels(); // Only display one at a time.
-
-    dfn.setAttribute("aria-expanded", "true");
-
-    const dfnPanel = genDfnPanel(dfn, dfn.panelData);
-
-    // Give the dfn a unique tabindex, and then
-    // give all the tabbable panel bits successive indexes.
-    let tabIndex = 100;
-    dfn.tabIndex = tabIndex++;
-    const tabbable = dfnPanel.querySelectorAll(":is(a, button)");
-    for (const el of tabbable) {
-        el.tabIndex = tabIndex++;
-    }
-
-    append(document.body, dfnPanel);
-    positionDfnPanel(dfnPanel);
-}
-
-function positionDfnPanel(dfnPanel) {
-    const dfn = dfnPanel.dfn;
-    const dfnPos = getBounds(dfn);
-    dfnPanel.style.top = dfnPos.bottom + "px";
-    dfnPanel.style.left = dfnPos.left + "px";
-
-    const panelPos = dfnPanel.getBoundingClientRect();
-    const panelMargin = 8;
-    const maxRight = document.body.parentNode.clientWidth - panelMargin;
-    if (panelPos.right > maxRight) {
-        const overflowAmount = panelPos.right - maxRight;
-        const newLeft = Math.max(panelMargin, dfnPos.left - overflowAmount);
-        dfnPanel.style.left = newLeft + "px";
-    }
 }
 
 function pinDfnPanel(dfnPanel) {
     // Switch it to "activated" state, which pins it.
     dfnPanel.classList.add("activated");
-    dfnPanel.style.position = "fixed";
-    dfnPanel.style.left = null;
-    dfnPanel.style.top = null;
 }
 
-function hideDfnPanel({dfn, dfnPanel}) {
-    if(!dfnPanel) dfnPanel = dfn.dfnPanel;
-    if(!dfn) dfn = dfnPanel.dfn;
-    dfn.dfnPanel = undefined;
-    dfnPanel.dfn = undefined;
-    dfn.setAttribute("aria-expanded", "false");
-    dfn.tabIndex = undefined;
-    dfnPanel.remove()
-}
-
-function toggleDfnPanel(dfn) {
-    if(dfn.dfnPanel) {
-        hideDfnPanel(dfn);
-    } else {
-        showDfnPanel(dfn);
-    }
-}
-
-function insertDfnPopupAction(dfn) {
-    dfn.setAttribute('role', 'button');
-    dfn.setAttribute('aria-expanded', 'false')
-    dfn.tabIndex = 0;
-    dfn.classList.add('has-dfn-panel');
-    dfn.addEventListener('click', (event) => {
-        toggleDfnPanel(dfn);
-        event.stopPropagation();
-    });
-    dfn.addEventListener('keypress', (event) => {
-        const kc = event.keyCode;
-        // 32->Space, 13->Enter
-        if(kc == 32 || kc == 13) {
-            toggleDfnPanel(dfn);
-            event.stopPropagation();
-            event.preventDefault();
-        }
-    });
+function unpinDfnPanel(dfnPanel) {
+    dfnPanel.classList.remove("activated");
 }
 
 function refocusOnTarget(event) {
@@ -2876,21 +2728,6 @@ function refocusOnTarget(event) {
         // This is needed after browser scrolls to the destination.
         target.focus();
     });
-}
-
-// TODO: shared util
-// Returns the root-level absolute position {left and top} of element.
-function getBounds(el, relativeTo=document.body) {
-    const relativeRect = relativeTo.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    const top = elRect.top - relativeRect.top;
-    const left = elRect.left - relativeRect.left;
-    return {
-        top,
-        left,
-        bottom: top + elRect.height,
-        right: left + elRect.width,
-    }
 }
 
 function scrollToTargetAndHighlight(event) {
@@ -3083,6 +2920,213 @@ function genLinkingSyntaxes(dfn) {
         )
     ];
 }
+}
+</script>
+<script>/* Boilerplate: script-mdn-anno */
+"use strict";
+{
+'use strict';
+// File copied from https://github.com/whatwg/whatwg.org/blob/main/resources.whatwg.org/standard-mdn-annos.js
+
+// Builds MDN annotation panels on demand from the compact `data-mdn` attribute written by
+// the spec generator (wattsi's EncodeMDNAnnotations; Bikeshed's mdnspeclinks.py builds its
+// panels eagerly for now). Only the wire format is shared: the browser labels, the
+// engine-support strings and the render grouping all live here.
+//
+// Archived commit snapshots load this file forever, so every format version this script
+// has ever understood has to keep working. Evolve the format by adding a branch in
+// `hydrate`, never by redefining a version that has already shipped.
+
+const MDN_URL = 'https://developer.mozilla.org/en-US/docs/Web/';
+const CANIUSE_URL = 'https://caniuse.com/#feat=';
+
+// Render groups, in the order they appear in a panel, separated by <hr>.
+const CURRENT_ENGINES = 0;
+const BORROWED_ENGINES = 1;
+const RETIRED_ENGINES = 2;
+const MOBILE = 3;
+const NON_BROWSER = 4;
+const GROUP_COUNT = 5;
+
+// Cell slots, in the order they appear in `data-mdn`. APPEND-ONLY: a new browser goes at
+// the end and is never inserted, so that old data still lines up and old copies of this
+// script can keep ignoring the cells they don't know about. `group` is what decides where
+// a row is rendered, so appending to this list doesn't constrain where the row shows up.
+const SLOTS = [
+  { id: 'firefox', label: 'Firefox', group: CURRENT_ENGINES },
+  { id: 'safari', label: 'Safari', group: CURRENT_ENGINES },
+  { id: 'chrome', label: 'Chrome', group: CURRENT_ENGINES },
+  { id: 'opera', label: 'Opera', group: BORROWED_ENGINES, mirrors: 'Chrome' },
+  { id: 'edge_blink', label: 'Edge', group: BORROWED_ENGINES },
+  { id: 'edge', label: 'Edge (Legacy)', group: RETIRED_ENGINES },
+  { id: 'ie', label: 'IE', group: RETIRED_ENGINES },
+  { id: 'firefox_android', label: 'Firefox for Android', group: MOBILE, mirrors: 'Firefox' },
+  { id: 'safari_ios', label: 'iOS Safari', group: MOBILE, mirrors: 'Safari' },
+  { id: 'chrome_android', label: 'Chrome for Android', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'webview_android', label: 'Android WebView', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'samsunginternet_android', label: 'Samsung Internet', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'opera_android', label: 'Opera Mobile', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'nodejs', label: 'Node.js', group: NON_BROWSER },
+];
+
+// One mnemonic character per engine-support note.
+const LEVELS = {
+  '0': { class: 'less-than-two-engines-text', text: 'In no current engines.' },
+  '1': { class: 'less-than-two-engines-text', text: 'In only one current engine.' },
+  '9': { class: 'all-engines-text', text: 'In all current engines.' },
+  's': { class: 'less-than-two-engines-text', text: 'Support in one engine under other name.' },
+  'S': { class: 'less-than-two-engines-text', text: 'Support in some engines under other name.' },
+  'v': { class: 'less-than-two-engines-text', text: 'Prefixed support in one engine.' },
+  'V': { class: 'less-than-two-engines-text', text: 'Prefixed support in some engines.' },
+  'p': { class: 'less-than-two-engines-text', text: 'Partial support in one engine.' },
+  'P': { class: 'less-than-two-engines-text', text: 'Partial support in some engines.' },
+};
+
+// Leading character of a cell, qualifying how the version after it should be read. `flag`
+// is whether to mark the version with 🔰 as well as explaining it in a tooltip.
+const CAVEATS = {
+  '*': { flag: true, title: () => 'Partial implementation.' },
+  '^': { flag: true, title: () => 'Requires setting a user preference or runtime flag.' },
+  '$': { flag: true, title: () => 'Requires a prefix or alternative name.' },
+  // Mirrored support is far too common to flag every occurrence; the tooltip is enough.
+  '@': { flag: false, title: (slot) => `Support is mirrored from ${slot.mirrors ?? 'the upstream browser'}.` },
+};
+
+const FLAG = '\u{1F530}'; // 🔰, marks a version that comes with a caveat
+const EN_DASH = '–';
+
+function element(name, attributes, ...children) {
+  const node = document.createElement(name);
+  for (const [attribute, value] of Object.entries(attributes)) {
+    if (value !== undefined) {
+      node.setAttribute(attribute, value);
+    }
+  }
+  node.append(...children);
+  return node;
+}
+
+function splitOnce(string, separator) {
+  const at = string.indexOf(separator);
+  return at === -1 ? [string, undefined] : [string.slice(0, at), string.slice(at + 1)];
+}
+
+// A version body says both whether the browser supports the feature and since when.
+function readVersion(body) {
+  if (body === '?') {
+    return { state: 'unknown', version: '?' };
+  }
+  if (body === '-') {
+    return { state: 'no', version: 'None' };
+  }
+  if (body === '!') {
+    return { state: 'yes', version: 'Yes' };
+  }
+  if (body.startsWith('=')) {
+    // A version that will never be superseded, so no trailing "+".
+    return { state: 'yes', version: body.slice(1) };
+  }
+  const [added, removed] = body.split('-');
+  if (removed !== undefined) {
+    return { state: 'no', version: added + EN_DASH + removed };
+  }
+  return { state: 'yes', version: added + '+' };
+}
+
+function readCell(cell, slot) {
+  const caveat = CAVEATS[cell[0]];
+  const { state, version } = readVersion(caveat ? cell.slice(1) : cell);
+  return {
+    state,
+    version: caveat?.flag ? `${FLAG} ${version}` : version,
+    title: caveat?.title(slot),
+  };
+}
+
+// A browser row is the browser's name in one cell and its version in the next. The logo
+// comes from CSS, keyed off the browser id in the row's class.
+function browserRow(slot, cell) {
+  const { state, version, title } = readCell(cell, slot);
+  return element('span', { class: `${slot.id} ${state}` },
+    element('span', {}, slot.label),
+    element('span', { title }, version));
+}
+
+// The caniuse row has a single cell instead, since its logo needs no label beside it.
+function caniuseRow(field) {
+  const [feature, title] = splitOnce(field, ',');
+  const link = element('a', { href: CANIUSE_URL + feature, title }, 'caniuse.com table');
+  return element('span', { class: 'caniuse' }, element('span', {}, link));
+}
+
+function supportTable(cells, caniuse) {
+  const groups = Array.from({ length: GROUP_COUNT }, () => []);
+  SLOTS.forEach((slot, slotIndex) => {
+    // An empty cell means this browser gets no row at all. Cells beyond SLOTS are
+    // browsers added after this copy of the script was written; ignore them.
+    if (cells[slotIndex]) {
+      groups[slot.group].push(browserRow(slot, cells[slotIndex]));
+    }
+  });
+  if (caniuse !== undefined) {
+    groups.push([caniuseRow(caniuse)]);
+  }
+
+  const table = element('div', { class: 'support' });
+  for (const rows of groups.filter((rows) => rows.length > 0)) {
+    if (table.hasChildNodes()) {
+      table.append(element('hr', {}));
+    }
+    table.append(...rows);
+  }
+  return table;
+}
+
+function featurePanel(record) {
+  const [slug, level, cells, caniuse] = record.split('|');
+
+  const article = element('a', { href: MDN_URL + slug }, slug.slice(slug.indexOf('/') + 1));
+  const panel = element('div', { class: 'feature' }, element('p', {}, article));
+
+  if (level in LEVELS) {
+    panel.append(element('p', { class: LEVELS[level].class }, LEVELS[level].text));
+  }
+  if (cells) {
+    panel.append(supportTable(cells.split(','), caniuse));
+  }
+  return panel;
+}
+
+function hydrate(anno) {
+  const [version, features] = splitOnce(anno.dataset.mdn, '|');
+  delete anno.dataset.mdn; // Only ever hydrate a panel once.
+
+  if (version !== 'v1') {
+    console.warn(`Unsupported MDN annotation data version "${version}".`, anno);
+    return;
+  }
+  anno.append(...features.split('~').map(featurePanel));
+}
+
+function hydrateIfNeeded(node) {
+  if (node instanceof Element && node.matches('.mdn-anno[data-mdn]')) {
+    hydrate(node);
+  }
+}
+
+// A click on the summary arrives before the browser opens the <details>, so hydrating
+// from it means the panel never flashes empty. That covers pointers and the keyboard,
+// since activating a summary dispatches a click either way.
+document.addEventListener('click', (event) => {
+  if (event.target instanceof Element) {
+    hydrateIfNeeded(event.target.closest('summary')?.parentElement);
+  }
+}, true);
+
+// And `toggle` is the catch-all for a panel opened some other way, such as find-in-page
+// or a fragment navigation into it. It fires a task after the state has already changed,
+// and it doesn't bubble, so it has to be a capture listener.
+document.addEventListener('toggle', (event) => hydrateIfNeeded(event.target), true);
 }
 </script>
 <script>/* Boilerplate: script-position-annos */
