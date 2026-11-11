@@ -777,8 +777,11 @@ A helper function such as the following could be used to request multiple locks 
 
 ```js
 async function requestMultiple(resources, callback) {
-  const sortedResources = [...resources];
+  const sortedResources = [...new Set(resources)];
   sortedResources.sort(); // Always request in the same order.
+
+  if (sortedResources.length === 0)
+    return await callback([]);
 
   async function requestNext(locks) {
     return await navigator.locks.request(sortedResources.shift(), async lock => {
