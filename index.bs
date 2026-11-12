@@ -614,7 +614,7 @@ To <dfn>request a lock</dfn> with |promise|, |agent|, |clientId|, |manager|, |ca
     1. Otherwise, run these steps:
         1. If |ifAvailable| is true and |request| is not [=grantable=]:
             1. [=parallel queue/Enqueue the following steps=] on |callback|'s [=/relevant settings object=]'s [=environment settings object/responsible event loop=]:
-                1. Let |r| be the result of [=invoking=] |callback| with `null` as the only argument.
+                1. Let |r| be the result of [=invoking=] |callback| with `null`.
                 1. [=/Resolve=] |promise| with |r|.
             1. Return.
         1. [=queue/Enqueue=] |request| in |queue|.
