@@ -478,7 +478,7 @@ try {
 }
 ```
 
-        If an abort is signalled before the lock is granted, then the request promise will reject with an {{AbortError}}.
+        If an abort is signalled before the lock is granted, then the request promise will reject with the signal’s [=AbortSignal/abort reason=].
         Once the lock has been granted, the signal is ignored.
 
 
