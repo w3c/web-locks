@@ -8,7 +8,7 @@
   <meta content="Bikeshed version e0b165ae4, updated Mon Nov 2 15:16:49 2026 -0800" name="generator">
   <link href="https://www.w3.org/TR/web-locks/" rel="canonical">
   <link href="logo-lock.svg" rel="icon">
-  <meta content="9aa6045f29ad78bf7ee395638c8bebd21ae0c38c" name="revision">
+  <meta content="8d30e742834c5d217a48180c1f899acde9e343f3" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -1640,13 +1640,18 @@ To <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="request-a-lock
         <p>Otherwise, run these steps:</p>
         <ol>
          <li data-md>
-          <p>If <var>ifAvailable</var> is true and <var>request</var> is not <a data-link-type="dfn" href="#grantable" id="ref-for-grantable">grantable</a>,
- then <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
+          <p>If <var>ifAvailable</var> is true and <var>request</var> is not <a data-link-type="dfn" href="#grantable" id="ref-for-grantable">grantable</a>:</p>
           <ol>
            <li data-md>
-            <p>Let <var>r</var> be the result of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#invoke-a-callback-function" id="ref-for-invoke-a-callback-function">invoking</a> <var>callback</var> with <code>null</code> as the only argument.</p>
+            <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#enqueue-the-following-steps" id="ref-for-enqueue-the-following-steps⑤">Enqueue the following steps</a> on <var>callback</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#relevant-settings-object" id="ref-for-relevant-settings-object③">relevant settings object</a>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-event-loop" id="ref-for-responsible-event-loop">responsible event loop</a>:</p>
+            <ol>
+             <li data-md>
+              <p>Let <var>r</var> be the result of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#invoke-a-callback-function" id="ref-for-invoke-a-callback-function">invoking</a> <var>callback</var> with <code>null</code>.</p>
+             <li data-md>
+              <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve①">Resolve</a> <var>promise</var> with <var>r</var>.</p>
+            </ol>
            <li data-md>
-            <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve①">Resolve</a> <var>promise</var> with <var>r</var> and abort these steps.</p>
+            <p>Return.</p>
           </ol>
          <li data-md>
           <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#queue-enqueue" id="ref-for-queue-enqueue">Enqueue</a> <var>request</var> in <var>queue</var>.</p>
