@@ -249,12 +249,7 @@ Preventing deadlocks requires care. One approach is to always acquire multiple l
 
 ```js
 async function requestMultiple(resources, callback) {
-  const sortedResources = [...new Set(resources)];
-  sortedResources.sort(); // always request in the same order
-
-  if (sortedResources.length === 0) {
-    return await callback();
-  }
+  const sortedResources = [...new Set(resources)].sort(); // always request in the same order
 
   async function requestNext() {
     return await navigator.locks.request(sortedResources.shift(), async lock => {
